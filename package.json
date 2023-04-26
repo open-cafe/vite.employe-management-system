@@ -13,13 +13,20 @@
     "format": "prettier --write \"./*/.{js,jsx,ts,tsx,css,md,json}\" --config ./.prettierrc.cjs"
   },
   "dependencies": {
-    
+    "@emotion/react": "^11.10.6",
+    "@emotion/styled": "^11.10.6",
+    "@mui/icons-material": "^5.11.16",
+    "@mui/material": "^5.12.2",
+    "@tanstack/react-query": "^4.29.5",
+    "axios": "^1.3.6",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-jsx-a11y": "^6.7.1",
+    "js-cookie": "^3.0.5",
     "prettier": "^2.8.8",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.10.0"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.16.5",
