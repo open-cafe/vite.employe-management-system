@@ -1,5 +1,16 @@
+import { BrowserRouter,Route,Routes } from "react-router-dom"
+import Dashboard from "./layout/MainLayout/Sidebar/SideBar";
+
+
 function App() {
-  return <div>Hello world</div>;
+  return (
+    <BrowserRouter>
+    <Routes>
+    <Route path="/" element={<Dashboard />} />
+
+    </Routes>
+    </BrowserRouter>
+  );
 }
 
 export default App;
