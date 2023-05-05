@@ -1,14 +1,10 @@
-import { BrowserRouter,Route,Routes } from "react-router-dom"
-import Dashboard from "./layout/MainLayout/Sidebar/SideBar";
+import Routes from '@/containers/index';
 
-
+import { BrowserRouter } from 'react-router-dom';
 function App() {
   return (
     <BrowserRouter>
-    <Routes>
-    <Route path="/" element={<Dashboard />} />
-
-    </Routes>
+      <Routes />
     </BrowserRouter>
   );
 }
