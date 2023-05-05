@@ -44,6 +44,7 @@ const Login = () => {
           <TextField
             margin="normal"
             id="password"
+            color="primary"
             name="password"
             label="Password"
             type="password"
@@ -59,13 +60,14 @@ const Login = () => {
             type="submit"
             fullWidth
             variant="contained"
+            color="secondary"
             sx={{ mt: 3, mb: 2 }}
           >
             Log In
           </Button>
           <Grid container>
             <Grid item xs>
-              <Link href="#" variant="body2">
+              <Link href="#" color="#000" variant="body2">
                 Forgot password?
               </Link>
             </Grid>
