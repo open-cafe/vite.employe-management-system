@@ -1,7 +1,12 @@
 import { Navigate, Outlet } from 'react-router-dom';
+import { useContext } from 'react';
+// import { AuthContext } from '@/context/authContext';
+import { cookieName } from '@/constants/environment';
+import { getCookie } from '@/utils/authCookies';
 const PrivateRoutes = () => {
-  const auth = localStorage.getItem('auth');
-  if (auth != 'authenticated') {
+  const token = getCookie(cookieName);
+  // const { token } = useContext(AuthContext);
+  if (token) {
     return <Outlet />;
   } else {
     return <Navigate replace to="/login" />;
