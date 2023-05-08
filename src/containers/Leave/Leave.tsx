@@ -5,7 +5,7 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
-import axios from 'axios';
+import axios from '../../config/axios'
 import { useQuery } from '@tanstack/react-query';
 import { TableHead } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
@@ -45,15 +45,12 @@ interface Leave{
   reason:string;
   endDate:Date;
 }
-const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiMDdmMTJiNS1kYTZlLTQyYTEtODk0OC1mZDE5MWFmY2UxYjIiLCJpYXQiOjE2ODM0NjI0MDIsImV4cCI6MTY4MzU0ODgwMn0.hr4a7qIn_rRnTHCU_QN9zl7B2OVKBWjRSJVj8Q5sSPI';
-const config = {
-  headers: { Authorization: `Bearer ${token}` }
-};
+
  
 
 const fetchLeaves=() =>{
   return axios
-  .get(`http://localhost:3000/leave`,config)
+  .get(`http://localhost:3000/leave`)
   .then(({ data }) => data);
 
 }
