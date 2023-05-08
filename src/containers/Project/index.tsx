@@ -27,6 +27,7 @@ const columns: Column[] = [
 ];
 
 interface Project {
+  project_id: string;
   project_name: string;
   description: string;
 }
@@ -45,30 +46,43 @@ const Project = () => {
     fetchProject
   );
   if (isSuccess) {
-    console.log(data);
+    const projectDetail = data.data.data;
+    return (
+      <Paper sx={{ width: '100%' }}>
+        <TableContainer sx={{ maxHeight: 440 }}>
+          <Table stickyHeader aria-label="sticky table">
+            <TableHead>
+              <TableRow>
+                {columns.map((column) => (
+                  <TableCell
+                    key={column.id}
+                    align={column.align}
+                    style={{ top: 57, minWidth: column.minWidth }}
+                  >
+                    {column.label}
+                  </TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {projectDetail.map((project: Project) => {
+                return (
+                  <TableRow hover role="checkbox" key={project.projectId}>
+                    <TableCell sx={{ minWidth: 170 }}>
+                      {project?.project_name}
+                    </TableCell>
+                    <TableCell sx={{ minWidth: 100 }}>
+                      {project?.description}
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Paper>
+    );
   }
-  return (
-    <Paper sx={{ width: '100%' }}>
-      <TableContainer sx={{ maxHeight: 440 }}>
-        <Table stickyHeader aria-label="sticky table">
-          <TableHead>
-            <TableRow>
-              {columns.map((column) => (
-                <TableCell
-                  key={column.id}
-                  align={column.align}
-                  style={{ top: 57, minWidth: column.minWidth }}
-                >
-                  {column.label}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody></TableBody>
-        </Table>
-      </TableContainer>
-    </Paper>
-  );
 };
 
 export default Project;
