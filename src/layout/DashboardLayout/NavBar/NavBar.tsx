@@ -3,14 +3,17 @@ import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
 import { Button, Grid } from '@mui/material';
-import { useContext } from 'react';
-import { AuthContext } from '@/context/authContext';
+import { useNavigate } from 'react-router-dom';
+import { cookieName } from '@/constants/environment';
+import { deleteCookie } from '@/utils/authCookies';
 
 export default function NavBar() {
-  const { clearAuthToken } = useContext(AuthContext);
+  const routeChange = () => {
+    deleteCookie(cookieName);
+    navigate(`login`);
+  };
+  const navigate = useNavigate();
   return (
     <Box sx={{ position: 'relative' }}>
       <AppBar position="static">
@@ -26,7 +29,7 @@ export default function NavBar() {
                 color="secondary"
                 variant="contained"
                 style={{ color: 'black' }}
-                onClick={clearAuthToken}
+                onClick={routeChange}
               >
                 Log out
               </Button>

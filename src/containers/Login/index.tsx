@@ -3,8 +3,6 @@ import {
   Avatar,
   Box,
   Button,
-  Checkbox,
-  FormControlLabel,
   Link,
   TextField,
   Typography,
@@ -18,47 +16,34 @@ import axios from '../../config/axios';
 import { cookieName } from '../../constants/environment';
 import { useState, useContext } from 'react';
 import LoginLayout from '@/layout/LoginLayout';
-import { AuthContext } from '@/context/authContext';
+import useAuth from '@/hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
-  const { token, setAuthToken } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const { loginAction, loginLoading } = useAuth();
   const [enteredEmail, setEnteredEmail] = useState('');
   const [enteredPassword, setEnteredPassword] = useState('');
-  const [rememberMe, setRememberMe] = useState(false);
 
-  const emailChangeHandler: React.ChangeEventHandler<HTMLInputElement> = (
-    event
-  ) => {
-    setEnteredEmail(event.target.value);
-  };
-
-  const passwordChangeHandler: React.ChangeEventHandler<HTMLInputElement> = (
-    event: any
-  ) => {
-    setEnteredPassword(event.target.value);
-  };
-
-  const rememberMeChangeHandler = (event: any) => {
-    setRememberMe(event.target.checked);
-  };
-
-  const handleSubmit = async (event: any) => {
-    event.preventDefault();
+  const handleSubmit = async () => {
     const loginCredentials = {
       email: enteredEmail,
       password: enteredPassword,
-      rememberMe: rememberMe,
     };
-    console.log(loginCredentials);
     try {
-      const response = await axios.post('/user/login', loginCredentials);
-      // setCookie(cookieName, response.data.data.access_token);
-      setAuthToken(response.data.data.access_token);
-
-      console.log(response);
+      loginAction(loginCredentials, {
+        onSuccess: (data) => {
+          if (data) {
+            setCookie(cookieName, data.data.data.access_token);
+            navigate(`/`);
+          }
+        },
+        onError: (data) => {
+          console.log('err', data);
+        },
+      });
       setEnteredEmail('');
       setEnteredPassword('');
-      setRememberMe(false);
     } catch (error) {
       console.log(error);
     }
@@ -91,12 +76,7 @@ const Login = () => {
               <Typography component="h1" variant="h5">
                 Log In
               </Typography>
-              <Box
-                component="form"
-                sx={{ mt: 1 }}
-                onSubmit={handleSubmit}
-                noValidate
-              >
+              <Box>
                 <TextField
                   margin="normal"
                   id="email"
@@ -104,7 +84,7 @@ const Login = () => {
                   label="Email Address"
                   autoComplete="email"
                   value={enteredEmail}
-                  onChange={emailChangeHandler}
+                  onChange={(e) => setEnteredEmail(e.target.value)}
                   autoFocus
                   fullWidth
                   required
@@ -117,22 +97,17 @@ const Login = () => {
                   type="password"
                   autoComplete="current-password"
                   value={enteredPassword}
-                  onChange={passwordChangeHandler}
+                  onChange={(e) => setEnteredPassword(e.target.value)}
                   fullWidth
                   required
                 />
-                <FormControlLabel
-                  control={<Checkbox value="remember" color="primary" />}
-                  onChange={rememberMeChangeHandler}
-                  value={rememberMe}
-                  label="Remember me"
-                />
+
                 <Button
                   type="submit"
                   fullWidth
                   variant="contained"
                   sx={{ mt: 3, mb: 2 }}
-                  onClick={handleSubmit}
+                  onClick={() => handleSubmit()}
                 >
                   Log In
                 </Button>
