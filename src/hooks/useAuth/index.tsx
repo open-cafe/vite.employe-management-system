@@ -3,7 +3,7 @@ import { loginUser } from './request';
 
 const useAuth = () => {
   const { mutate: loginAction, isLoading: loginLoading } = useMutation({
-    mutationFn: (body: Object) => loginUser(body),
+    mutationFn: (body: { email: string; password: string }) => loginUser(body),
   });
   return { loginAction, loginLoading };
 };

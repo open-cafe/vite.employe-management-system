@@ -6,14 +6,12 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
 //import axios from 'axios';
-import axios from '../../config/axios'
+import axios from '../../config/axios';
 import { useQuery } from '@tanstack/react-query';
 import { TableFooter, TableHead } from '@mui/material';
 
-
-
 interface Column {
-  id: 'name' | 'designation' | 'phone' | 'hireDate' ;
+  id: 'name' | 'designation' | 'phone' | 'hireDate';
   label: string;
   minWidth?: number;
   align?: 'right';
@@ -27,7 +25,7 @@ const columns: Column[] = [
     id: 'phone',
     label: 'Contct Number',
     minWidth: 170,
-    align: 'right', 
+    align: 'right',
   },
   {
     id: 'hireDate',
@@ -35,96 +33,77 @@ const columns: Column[] = [
     minWidth: 170,
     align: 'right',
   },
-  
 ];
 
-interface Employees{
-  employeeId:string;
+interface Employees {
+  employeeId: string;
   name: string;
   designation: string;
-  phone:string;
-  hireDate:Date;
+  phone: string;
+  hireDate: Date;
 }
 
-
-
-const fetchEmployees=() =>{
+const fetchEmployees = () => {
   return axios
-  .get(`http://localhost:3000/employees`)
-  .then(({ data }) => data)
-  .catch(err => console.error(err));
+    .get(`http://localhost:3000/employees`)
+    .then(({ data }) => data)
+    .catch((err) => console.error(err));
+};
 
-}
-
-
-
-const Employees= ()=> {
-  const  {isSuccess, data, isLoading, isError}=useQuery(
+const Employees = () => {
+  const { isSuccess, data, isLoading, isError } = useQuery(
     ['employees'],
-  
-  
-    fetchEmployees) 
-    if (isSuccess) {
-      const employeeDetail=data.data.data
-  
-      return (
-        <Paper >
-          <TableContainer >
-            <Table stickyHeader aria-label="sticky table">            
-          
+
+    fetchEmployees
+  );
+  if (isSuccess) {
+    const employeeDetail = data.data.data;
+
+    return (
+      <Paper>
+        <TableContainer>
+          <Table stickyHeader aria-label="sticky table">
             <TableHead>
-              
-            <TableRow>
-              <TableCell align="center" >
-                Employee Details
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              {columns.map((column) => (
-                <TableCell
-                  key={column.id}
-                  align={column.align}
-                  style={{ top: 57, minWidth: column.minWidth }}
-                >
-                  {column.label}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-              <TableBody>
-             
-              {employeeDetail
-              .map((employees:Employees) => {
-                
+              <TableRow>
+                <TableCell align="center">Employee Details</TableCell>
+              </TableRow>
+              <TableRow>
+                {columns.map((column) => (
+                  <TableCell
+                    key={column.id}
+                    align={column.align}
+                    style={{ top: 57, minWidth: column.minWidth }}
+                  >
+                    {column.label}
+                  </TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {employeeDetail.map((employees: Employees) => {
                 return (
-                  <TableRow hover role="checkbox"  key={employees.employeeId}>
-                    <TableCell sx={{minWidth:170}}>
-                    {employees?.name}
+                  <TableRow hover role="checkbox" key={employees.employeeId}>
+                    <TableCell sx={{ minWidth: 170 }}>
+                      {employees?.name}
                     </TableCell>
-                    <TableCell sx={{minWidth:100}}>
-                    {employees?.designation}
+                    <TableCell sx={{ minWidth: 100 }}>
+                      {employees?.designation}
                     </TableCell>
-                    <TableCell align='right' sx={{minWidth:170}}>
-                    {employees?.phone}
+                    <TableCell align="right" sx={{ minWidth: 170 }}>
+                      {employees?.phone}
                     </TableCell>
-                    <TableCell align='right' sx={{minWidth:170}}>
-                    {employees?.hireDate?.toLocaleString().slice(0,10)}
+                    <TableCell align="right" sx={{ minWidth: 170 }}>
+                      {employees?.hireDate?.toLocaleString().slice(0, 10)}
                     </TableCell>
-                    
                   </TableRow>
                 );
               })}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          
-        </Paper>
-      );
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Paper>
+    );
+  }
+};
 
-     
-    }
-
-  
-}
-
-export default Employees
+export default Employees;

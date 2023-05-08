@@ -5,7 +5,7 @@ import PrivateRoutes from '@/components/PrivateRoutes';
 import PublicRoutes from '@/components/PublicRoutes';
 import Dashboard from './Dashboard';
 import DashboardLayout from '@/layout/DashboardLayout';
-import  Employees  from './Employee/Employees';
+import Employees from './Employee/Employees';
 import Leave from './Leave/Leave';
 import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
@@ -24,7 +24,6 @@ const Router: FC = () => {
           <Route path="leave" element={<Leave />} />
           <Route path="leavedetail" element={<LeaveDetails />} />
           <Route path="checkinout" element={<CheckInOut />} />
-
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>

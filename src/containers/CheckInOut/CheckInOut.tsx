@@ -5,14 +5,12 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
-import axios from '../../config/axios'
+import axios from '../../config/axios';
 import { useQuery } from '@tanstack/react-query';
 import { TableFooter, TableHead } from '@mui/material';
 
-
-
 interface Column {
-  id: 'name' |  'phone' | 'check_in_time' | 'check_out_time' | 'current_date';
+  id: 'name' | 'phone' | 'check_in_time' | 'check_out_time' | 'current_date';
   label: string;
   minWidth?: number;
   align?: 'right';
@@ -26,7 +24,7 @@ const columns: Column[] = [
     id: 'check_in_time',
     label: 'Checkin Time',
     minWidth: 125,
-    align: 'right', 
+    align: 'right',
   },
   {
     id: 'check_out_time',
@@ -40,112 +38,89 @@ const columns: Column[] = [
     minWidth: 135,
     align: 'right',
   },
-  
 ];
-interface Employees{
-  employeeId:string;
+interface Employees {
+  employeeId: string;
   name: string;
   designation: string;
-  phone:string;
-  hireDate:Date;
+  phone: string;
+  hireDate: Date;
 }
 
-interface CheckInOut{
-  
+interface CheckInOut {
   name: string;
-  phone:string;
-  checkinTime:Date;
-  checkoutTime:Date;
-  timeId:string;
-  employee:Employees;
-  currenDate:Date;
-  
+  phone: string;
+  checkinTime: Date;
+  checkoutTime: Date;
+  timeId: string;
+  employee: Employees;
+  currenDate: Date;
 }
 
-
-
-const fetchCheckInOut=() =>{
-  
+const fetchCheckInOut = () => {
   return axios
-  .get(`http://localhost:3000/checkinout`)
-  .then(({ data }) => data)
-  .catch(err => console.error(err));
+    .get(`http://localhost:3000/checkinout`)
+    .then(({ data }) => data)
+    .catch((err) => console.error(err));
+};
 
-}
-
-
-
-const CheckInOut:any= ()=> {
-  const  {isSuccess, data, isLoading, isError}=useQuery(
+const CheckInOut: any = () => {
+  const { isSuccess, data, isLoading, isError } = useQuery(
     ['checkinout'],
-    fetchCheckInOut) 
+    fetchCheckInOut
+  );
 
-    if (isSuccess) {
-      const checkinoutDetail=data.data.data
+  if (isSuccess) {
+    const checkinoutDetail = data.data.data;
 
-      return (
-        <Paper >
-          <TableContainer >
-            <Table stickyHeader aria-label="sticky table">            
-          
+    return (
+      <Paper>
+        <TableContainer>
+          <Table stickyHeader aria-label="sticky table">
             <TableHead>
-              
-            <TableRow>
-              <TableCell align="center" >
-                Checkinout Details
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              {columns.map((column) => (
-                <TableCell
-                  key={column.id}
-                  align={column.align}
-                  style={{ top: 57, minWidth: column.minWidth }}
-                >
-                  {column.label}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-              <TableBody>
-             
-              {checkinoutDetail
-              .map((check:CheckInOut) => {
-                
+              <TableRow>
+                <TableCell align="center">Checkinout Details</TableCell>
+              </TableRow>
+              <TableRow>
+                {columns.map((column) => (
+                  <TableCell
+                    key={column.id}
+                    align={column.align}
+                    style={{ top: 57, minWidth: column.minWidth }}
+                  >
+                    {column.label}
+                  </TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {checkinoutDetail.map((check: CheckInOut) => {
                 return (
-                  <TableRow hover role="checkbox"  key={check.timeId}>
-                    <TableCell sx={{minWidth:170}}>
-                    {check?.employee.name}
+                  <TableRow hover role="checkbox" key={check.timeId}>
+                    <TableCell sx={{ minWidth: 170 }}>
+                      {check?.employee.name}
                     </TableCell>
-                    <TableCell sx={{minWidth:100}}>
-                    {check?.employee.phone}
+                    <TableCell sx={{ minWidth: 100 }}>
+                      {check?.employee.phone}
                     </TableCell>
-                    <TableCell align='right' sx={{minWidth:170}}>
-                    {check?.checkinTime.toLocaleString().slice(11,16)}
-                    
+                    <TableCell align="right" sx={{ minWidth: 170 }}>
+                      {check?.checkinTime.toLocaleString().slice(11, 16)}
                     </TableCell>
-                    <TableCell align='right' sx={{minWidth:170}}>
-                    {check?.checkoutTime.toLocaleString().slice(11,16)}
-                 
+                    <TableCell align="right" sx={{ minWidth: 170 }}>
+                      {check?.checkoutTime.toLocaleString().slice(11, 16)}
                     </TableCell>
-                    <TableCell align='right' sx={{minWidth:170}}>
-                    {check?.currenDate.toLocaleString().slice(0,10)}
+                    <TableCell align="right" sx={{ minWidth: 170 }}>
+                      {check?.currenDate.toLocaleString().slice(0, 10)}
                     </TableCell>
-                    
                   </TableRow>
                 );
               })}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          
-        </Paper>
-      );
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Paper>
+    );
+  }
+};
 
-     
-    }
-
-  
-}
-
-export default CheckInOut
+export default CheckInOut;

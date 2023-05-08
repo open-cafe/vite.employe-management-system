@@ -85,7 +85,6 @@ const Login = () => {
                   autoComplete="email"
                   value={enteredEmail}
                   onChange={(e) => setEnteredEmail(e.target.value)}
-                  autoFocus
                   fullWidth
                   required
                 />
