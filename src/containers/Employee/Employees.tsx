@@ -55,7 +55,7 @@ const Employees= ()=> {
  
     if (isSuccess) {
       const employeeDetail=data?.data.data.data
-      console.log(employeeDetail)
+      
   
       return (
         <Paper >
