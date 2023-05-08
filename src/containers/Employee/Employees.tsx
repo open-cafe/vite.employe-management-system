@@ -58,7 +58,7 @@ const fetchEmployees=() =>{
 
 
 
-const Employees:any= ()=> {
+const Employees= ()=> {
   const  {isSuccess, data, isLoading, isError}=useQuery(
     ['employees'],
   
@@ -69,7 +69,7 @@ const Employees:any= ()=> {
   
       return (
         <Paper >
-          <TableContainer sx={{ }}>
+          <TableContainer >
             <Table stickyHeader aria-label="sticky table">            
           
             <TableHead>

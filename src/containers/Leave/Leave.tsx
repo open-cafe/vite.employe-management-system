@@ -56,7 +56,7 @@ const fetchLeaves=() =>{
 }
 
 
-const Leave:any= ()=> {
+const Leave= ()=> {
   const navigate=useNavigate()
   const navigateToConfirmed= (leave:Leave) =>{
     navigate(`/leavedetail`, { state: leave});
@@ -72,7 +72,7 @@ const Leave:any= ()=> {
     
       return (
         <Paper sx={{ width: '100%' }}>
-          <TableContainer sx={{ }}>
+          <TableContainer >
             <Table stickyHeader aria-label="sticky table">            
            
                 <TableHead>

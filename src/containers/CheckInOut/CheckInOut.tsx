@@ -42,14 +42,23 @@ const columns: Column[] = [
   },
   
 ];
+interface Employees{
+  employeeId:string;
+  name: string;
+  designation: string;
+  phone:string;
+  hireDate:Date;
+}
 
 interface CheckInOut{
   
   name: string;
   phone:string;
-  checkInTime:Date;
-  checkOutTime:Date;
-  timeId:string
+  checkinTime:Date;
+  checkoutTime:Date;
+  timeId:string;
+  employee:Employees;
+  currenDate:Date;
   
 }
 
@@ -73,13 +82,10 @@ const CheckInOut:any= ()=> {
 
     if (isSuccess) {
       const checkinoutDetail=data.data.data
-      console.log(checkinoutDetail[0])
-   
-     
-    
+
       return (
         <Paper >
-          <TableContainer sx={{ }}>
+          <TableContainer >
             <Table stickyHeader aria-label="sticky table">            
           
             <TableHead>
@@ -105,7 +111,7 @@ const CheckInOut:any= ()=> {
               <TableBody>
              
               {checkinoutDetail
-              .map((check:any) => {
+              .map((check:CheckInOut) => {
                 
                 return (
                   <TableRow hover role="checkbox"  key={check.timeId}>
@@ -116,10 +122,12 @@ const CheckInOut:any= ()=> {
                     {check?.employee.phone}
                     </TableCell>
                     <TableCell align='right' sx={{minWidth:170}}>
-                    {check?.checkinTime.toLocaleString().slice(11,19)}
+                    {check?.checkinTime.toLocaleString().slice(11,16)}
+                    
                     </TableCell>
                     <TableCell align='right' sx={{minWidth:170}}>
-                    {check?.checkoutTime.toLocaleString().slice(11,19)}
+                    {check?.checkoutTime.toLocaleString().slice(11,16)}
+                 
                     </TableCell>
                     <TableCell align='right' sx={{minWidth:170}}>
                     {check?.currenDate.toLocaleString().slice(0,10)}
@@ -129,7 +137,6 @@ const CheckInOut:any= ()=> {
                 );
               })}
               </TableBody>
-              <TableFooter></TableFooter>
             </Table>
           </TableContainer>
           
