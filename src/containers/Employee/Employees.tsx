@@ -9,6 +9,7 @@ import TableRow from '@mui/material/TableRow';
 import axios from '../../config/axios';
 import { useQuery } from '@tanstack/react-query';
 import { TableFooter, TableHead } from '@mui/material';
+import useEmployee from '@/hooks/useEmployee';
 
 interface Column {
   id: 'name' | 'designation' | 'phone' | 'hireDate';
@@ -43,21 +44,11 @@ interface Employees {
   hireDate: Date;
 }
 
-const fetchEmployees = () => {
-  return axios
-    .get(`http://localhost:3000/employees`)
-    .then(({ data }) => data)
-    .catch((err) => console.error(err));
-};
-
 const Employees = () => {
-  const { isSuccess, data, isLoading, isError } = useQuery(
-    ['employees'],
+  const { isSuccess, data, employeeLoading } = useEmployee();
 
-    fetchEmployees
-  );
   if (isSuccess) {
-    const employeeDetail = data.data.data;
+    const employeeDetail = data?.data.data.data;
 
     return (
       <Paper>
