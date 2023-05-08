@@ -8,35 +8,33 @@ import { Box } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import { useNavigate } from 'react-router-dom';
 
-
-
-export const mainListItems = (
-  <React.Fragment>
-    
-  
-  </React.Fragment>
-);
-
+export const mainListItems = <React.Fragment></React.Fragment>;
 
 const SideBar = () => {
-  const navigate=useNavigate()
+  const navigate = useNavigate();
   return (
     <List component="nav" sx={{ backgroundColor: 'darkcyan', height: '100vh' }}>
-    <Grid container direction="column" justifyContent="center" alignItems="center" sx={{ paddingTop: 8 }}>
-      <Grid item xs={6}>
-      <ListItemButton onClick={()=>navigate('employee')} >
-      <ListItemText primary="Employees" />
-    </ListItemButton>
-    <ListItemButton onClick={()=>navigate('leave')}>
-      <ListItemText  primary="Leave" />
-    </ListItemButton>
-    <ListItemButton>
-      <ListItemText primary="Project" />
-    </ListItemButton>
+      <Grid
+        container
+        direction="column"
+        justifyContent="center"
+        alignItems="center"
+        sx={{ paddingTop: 8 }}
+      >
+        <Grid item xs={6}>
+          <ListItemButton onClick={() => navigate('employee')}>
+            <ListItemText primary="Employees" />
+          </ListItemButton>
+          <ListItemButton onClick={() => navigate('leave')}>
+            <ListItemText primary="Leave" />
+          </ListItemButton>
+          <ListItemButton onClick={() => navigate('project')}>
+            <ListItemText primary="Project" />
+          </ListItemButton>
+        </Grid>
       </Grid>
-    </Grid>
-  </List>
-  )
-}
+    </List>
+  );
+};
 
-export default SideBar
+export default SideBar;
