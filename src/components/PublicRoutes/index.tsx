@@ -1,8 +1,10 @@
 import { Navigate, Outlet } from 'react-router-dom';
+import { useContext } from 'react';
+import { AuthContext } from '@/context/authContext';
 
 const PublicRoutes = () => {
-  const auth = localStorage.getItem('auth');
-  if (auth === 'authenticated') {
+  const { token } = useContext(AuthContext);
+  if (token) {
     return <Navigate replace to="/" />;
   } else {
     return <Outlet />;
