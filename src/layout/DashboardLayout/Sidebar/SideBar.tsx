@@ -33,6 +33,9 @@ const SideBar = () => {
     <ListItemButton>
       <ListItemText primary="Project" />
     </ListItemButton>
+    <ListItemButton onClick={()=>navigate('checkinout')}>
+      <ListItemText primary="CheckInOut" />
+    </ListItemButton>
       </Grid>
     </Grid>
   </List>

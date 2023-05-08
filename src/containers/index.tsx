@@ -6,10 +6,12 @@ import PublicRoutes from '@/components/PublicRoutes';
 import Dashboard from './Dashboard';
 import Login from './Login';
 import DashboardLayout from '@/layout/DashboardLayout';
-import  Employees  from './Employees';
-import Leave from './Leave';
+import  Employees  from './Employee/Employees';
+import Leave from './Leave/Leave';
 import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
+import LeaveDetails from './Leave/LeaveDetails';
+import CheckInOut from './CheckInOut/CheckInOut';
 
 const Router: FC = () => {
   // Add Routes for different pages
@@ -19,6 +21,9 @@ const Router: FC = () => {
         <Route index element={<Dashboard/>}/>
         <Route path="employee" element={<Employees/>}/>
         <Route path="leave" element={<Leave/>}/>
+        <Route path="leavedetail" element={<LeaveDetails/>}/>
+        <Route path="checkinout" element={<CheckInOut/>}/>
+
         </Route>
       <Route path="/" element={<PrivateRoutes />}>
         <Route path="*" element={<Navigate to="/" replace />} />
