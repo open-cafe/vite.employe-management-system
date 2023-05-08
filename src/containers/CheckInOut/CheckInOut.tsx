@@ -8,6 +8,7 @@ import TableRow from '@mui/material/TableRow';
 import axios from '../../config/axios';
 import { useQuery } from '@tanstack/react-query';
 import { TableFooter, TableHead } from '@mui/material';
+import useCheckInOut from '@/hooks/useCheckinout';
 
 interface Column {
   id: 'name' | 'phone' | 'check_in_time' | 'check_out_time' | 'current_date';
@@ -57,21 +58,11 @@ interface CheckInOut {
   currenDate: Date;
 }
 
-const fetchCheckInOut = () => {
-  return axios
-    .get(`http://localhost:3000/checkinout`)
-    .then(({ data }) => data)
-    .catch((err) => console.error(err));
-};
-
-const CheckInOut: any = () => {
-  const { isSuccess, data, isLoading, isError } = useQuery(
-    ['checkinout'],
-    fetchCheckInOut
-  );
+const CheckInOut = () => {
+  const { isSuccess, data, checkinoutLoading } = useCheckInOut();
 
   if (isSuccess) {
-    const checkinoutDetail = data.data.data;
+    const checkinoutDetail = data?.data.data.data;
 
     return (
       <Paper>
