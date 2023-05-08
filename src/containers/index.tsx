@@ -5,9 +5,12 @@ import PrivateRoutes from '@/components/PrivateRoutes';
 import PublicRoutes from '@/components/PublicRoutes';
 import Dashboard from './Dashboard';
 import DashboardLayout from '@/layout/DashboardLayout';
-import Employees from './Employees';
-import Leave from './Leave';
+import Employees from './Employee/Employees';
+import Leave from './Leave/Leave';
 import Project from './Project';
+import LeaveDetails from './Leave/LeaveDetails';
+import CheckInOut from './CheckInOut/CheckInOut';
+
 import Login from './Login/index';
 
 const Router: FC = () => {
@@ -19,6 +22,8 @@ const Router: FC = () => {
           <Route path="employee" element={<Employees />} />
           <Route path="leave" element={<Leave />} />
           <Route path="project" element={<Project />} />
+          <Route path="leavedetail" element={<LeaveDetails />} />
+          <Route path="checkinout" element={<CheckInOut />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
