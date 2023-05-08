@@ -11,7 +11,7 @@ import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
 
 interface Column {
-  id: 'name' | 'designation' | 'phone' | 'hireDate' ;
+  id: 'name' | 'designation' | 'phone' | 'hireDate';
   label: string;
   minWidth?: number;
   align?: 'right';
@@ -25,7 +25,7 @@ const columns: Column[] = [
     id: 'phone',
     label: 'Contct Number',
     minWidth: 170,
-    align: 'right', 
+    align: 'right',
   },
   {
     id: 'hireDate',
@@ -33,39 +33,33 @@ const columns: Column[] = [
     minWidth: 170,
     align: 'right',
   },
-  
 ];
 
-interface Employees{
+interface Employees {
   name: string;
   designation: string;
-  phone:string;
-  hireDate:Date;
+  phone: string;
+  hireDate: Date;
 }
 
-const fetchEmployees=():Promise<Employees[]> =>{
-  return axios
-  .get(`http://localhost:3000/employees`)
-  .then(({ data }) => data);
+const fetchEmployees = (): Promise<Employees[]> => {
+  return axios.get(`http://localhost:3000/employees`).then(({ data }) => data);
+};
 
-}
-
-
-
-const Employees= ()=> {
-  const  {isSuccess, data, isLoading, isError}=useQuery(
+const Employees = () => {
+  const { isSuccess, data, isLoading, isError } = useQuery(
     ['employees'],
-  
-  
-    fetchEmployees) 
-    if (isSuccess) {
-     console.log(data[0])
-    }
+
+    fetchEmployees
+  );
+  if (isSuccess) {
+    console.log(data[0]);
+  }
 
   return (
     <Paper sx={{ width: '100%' }}>
       <TableContainer sx={{ maxHeight: 440 }}>
-        <Table stickyHeader aria-label="sticky table">            
+        <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
               {columns.map((column) => (
@@ -79,14 +73,11 @@ const Employees= ()=> {
               ))}
             </TableRow>
           </TableHead>
-          <TableBody>
-            
-          </TableBody>
+          <TableBody></TableBody>
         </Table>
       </TableContainer>
-      
     </Paper>
   );
-}
+};
 
-export default Employees
+export default Employees;
