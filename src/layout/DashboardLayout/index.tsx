@@ -2,7 +2,7 @@ import React, { ReactChildren, ReactNode } from 'react';
 import NavBar from './NavBar/NavBar';
 import MainLayout from '../MainLayout'
 import SideBar from './Sidebar/SideBar';
-import { Box } from '@mui/material';
+
 import Grid from '@mui/material/Grid';
 import { Outlet } from 'react-router-dom';
 
