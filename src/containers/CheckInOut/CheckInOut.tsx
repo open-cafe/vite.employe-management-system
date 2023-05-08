@@ -107,7 +107,6 @@ const CheckInOut:any= ()=> {
               ))}
             </TableRow>
           </TableHead>
-           
               <TableBody>
              
               {checkinoutDetail

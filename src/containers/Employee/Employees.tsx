@@ -91,7 +91,6 @@ const Employees= ()=> {
               ))}
             </TableRow>
           </TableHead>
-           
               <TableBody>
              
               {employeeDetail
@@ -116,7 +115,6 @@ const Employees= ()=> {
                 );
               })}
               </TableBody>
-              <TableFooter></TableFooter>
             </Table>
           </TableContainer>
           
