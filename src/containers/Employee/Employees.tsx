@@ -43,7 +43,7 @@ interface Employees {
   hireDate: Date;
 }
 
-const Employees: any = () => {
+const Employees: React.FC = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const { isSuccess, data, employeeLoading } = useEmployee(
@@ -71,59 +71,67 @@ const Employees: any = () => {
     const total = data?.data.data;
 
     return (
-      <Paper>
-        <TableContainer>
-          <Table stickyHeader aria-label="sticky table">
-            <TableHead>
-              <TableRow>
-                <TableCell align="center">Employee Details</TableCell>
-              </TableRow>
-              <TableRow>
-                {columns.map((column) => (
-                  <TableCell
-                    key={column.id}
-                    align={column.align}
-                    style={{ top: 57, minWidth: column.minWidth }}
-                  >
-                    {column.label}
-                  </TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {employeeDetail &&
-                employeeDetail.map((employees: Employees) => {
-                  return (
-                    <TableRow hover role="checkbox" key={employees.employeeId}>
-                      <TableCell sx={{ minWidth: 170 }}>
-                        {employees?.name}
-                      </TableCell>
-                      <TableCell sx={{ minWidth: 100 }}>
-                        {employees?.designation}
-                      </TableCell>
-                      <TableCell align="right" sx={{ minWidth: 170 }}>
-                        {employees?.phone}
-                      </TableCell>
-                      <TableCell align="right" sx={{ minWidth: 170 }}>
-                        {employees?.hireDate?.toLocaleString().slice(0, 10)}
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[10]}
-          component="div"
-          count={total.total}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </Paper>
+      <>
+        <Paper>
+          <TableContainer>
+            <Table stickyHeader aria-label="sticky table">
+              <TableHead>
+                <TableRow>
+                  <TableCell align="center">Employee Details</TableCell>
+                </TableRow>
+                <TableRow>
+                  {columns.map((column) => (
+                    <TableCell
+                      key={column.id}
+                      align={column.align}
+                      style={{ top: 57, minWidth: column.minWidth }}
+                    >
+                      {column.label}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {employeeDetail &&
+                  employeeDetail.map((employees: Employees) => {
+                    return (
+                      <TableRow
+                        hover
+                        role="checkbox"
+                        key={employees.employeeId}
+                      >
+                        <TableCell sx={{ minWidth: 170 }}>
+                          {employees?.name}
+                        </TableCell>
+                        <TableCell sx={{ minWidth: 100 }}>
+                          {employees?.designation}
+                        </TableCell>
+                        <TableCell align="right" sx={{ minWidth: 170 }}>
+                          {employees?.phone}
+                        </TableCell>
+                        <TableCell align="right" sx={{ minWidth: 170 }}>
+                          {employees?.hireDate?.toLocaleString().slice(0, 10)}
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <TablePagination
+            rowsPerPageOptions={[10]}
+            component="div"
+            count={total.total}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </Paper>
+      </>
     );
+  } else {
+    return <></>;
   }
 };
 

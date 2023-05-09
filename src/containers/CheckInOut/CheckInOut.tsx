@@ -58,7 +58,7 @@ interface CheckInOut {
   currenDate: Date;
 }
 
-const CheckInOut: any = () => {
+const CheckInOut: React.FC = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const { isSuccess, data, checkinoutLoading } = useCheckInOut(
@@ -144,6 +144,8 @@ const CheckInOut: any = () => {
         />
       </Paper>
     );
+  } else {
+    return <></>;
   }
 };
 
