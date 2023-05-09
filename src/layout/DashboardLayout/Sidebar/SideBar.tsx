@@ -25,8 +25,11 @@ const SideBar = () => {
           <ListItemButton onClick={() => navigate('leave')}>
             <ListItemText primary="Leave" />
           </ListItemButton>
-          <ListItemButton>
+          <ListItemButton onClick={() => navigate('project')}>
             <ListItemText primary="Project" />
+          </ListItemButton>
+          <ListItemButton onClick={() => navigate('tag')}>
+            <ListItemText primary="Tag" />
           </ListItemButton>
           <ListItemButton onClick={() => navigate('checkinout')}>
             <ListItemText primary="CheckInOut" />
