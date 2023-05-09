@@ -44,7 +44,7 @@ interface Leave {
   endDate: Date;
 }
 
-const Leave = () => {
+const Leave: React.FC = () => {
   const navigate = useNavigate();
   const navigateToConfirmed = (leave: Leave) => {
     navigate(`/leavedetail`, { state: leave });
@@ -105,6 +105,8 @@ const Leave = () => {
         </TableContainer>
       </Paper>
     );
+  } else {
+    return <></>;
   }
 };
 

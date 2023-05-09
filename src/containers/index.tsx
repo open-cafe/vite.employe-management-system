@@ -7,12 +7,11 @@ import Dashboard from './Dashboard';
 import DashboardLayout from '@/layout/DashboardLayout';
 import Employees from './Employee/Employees';
 import Leave from './Leave/Leave';
-import axios from 'axios';
-import { useQuery } from '@tanstack/react-query';
 import LeaveDetails from './Leave/LeaveDetails';
 import CheckInOut from './CheckInOut/CheckInOut';
 
 import Login from './Login/index';
+import AddUser from './AddUser';
 
 const Router: FC = () => {
   return (
@@ -24,6 +23,7 @@ const Router: FC = () => {
           <Route path="leave" element={<Leave />} />
           <Route path="leavedetail" element={<LeaveDetails />} />
           <Route path="checkinout" element={<CheckInOut />} />
+          <Route path="adduser" element={<AddUser />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
