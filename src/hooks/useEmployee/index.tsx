@@ -7,6 +7,7 @@ const useEmployee = () => {
     data,
     isLoading: employeeLoading,
   } = useQuery(['employees'], fetchEmployees);
+
   return { isSuccess, data, employeeLoading };
 };
 
