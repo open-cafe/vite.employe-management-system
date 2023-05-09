@@ -43,7 +43,6 @@ const AddUser = () => {
       addUserAction(userDetails, {
         onSuccess: (data) => {
           if (data) {
-            console.log(data);
             navigate(`/`);
           }
         },
@@ -60,8 +59,6 @@ const AddUser = () => {
 
   return (
     <MainLayout>
-      <CssBaseline />
-
       <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
         <Paper
           variant="outlined"
