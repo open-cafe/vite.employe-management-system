@@ -47,7 +47,7 @@ const fetchLeaves = () => {
   return axios.get(`http://localhost:3000/leave`).then(({ data }) => data);
 };
 
-const Leave = () => {
+const Leave: any = () => {
   const navigate = useNavigate();
   const navigateToConfirmed = (leave: Leave) => {
     navigate(`/leavedetail`, { state: leave });

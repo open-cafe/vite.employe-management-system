@@ -44,7 +44,7 @@ interface Employees {
   hireDate: Date;
 }
 
-const Employees = () => {
+const Employees: any = () => {
   const { isSuccess, data, employeeLoading } = useEmployee();
 
   if (isSuccess) {
