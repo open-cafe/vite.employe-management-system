@@ -17,20 +17,24 @@ const SideBar = () => {
         justifyContent="center"
         alignItems="center"
         sx={{ paddingTop: 8 }}
-      />
-      <Grid item xs={6}>
-        <ListItemButton onClick={() => navigate('employee')}>
-          <ListItemText primary="Employees" />
-        </ListItemButton>
-        <ListItemButton onClick={() => navigate('leave')}>
-          <ListItemText primary="Leave" />
-        </ListItemButton>
-        <ListItemButton onClick={() => navigate('project')}>
-          <ListItemText primary="Project" />
-        </ListItemButton>
-        <ListItemButton onClick={() => navigate('checkinout')}>
-          <ListItemText primary="CheckInOut" />
-        </ListItemButton>
+      >
+        <Grid item xs={6}>
+          <ListItemButton onClick={() => navigate('employee')}>
+            <ListItemText primary="Employees" />
+          </ListItemButton>
+          <ListItemButton onClick={() => navigate('leave')}>
+            <ListItemText primary="Leave" />
+          </ListItemButton>
+          <ListItemButton onClick={() => navigate('project')}>
+            <ListItemText primary="Project" />
+          </ListItemButton>
+          <ListItemButton onClick={() => navigate('tag')}>
+            <ListItemText primary="Tag" />
+          </ListItemButton>
+          <ListItemButton onClick={() => navigate('checkinout')}>
+            <ListItemText primary="CheckInOut" />
+          </ListItemButton>
+        </Grid>
       </Grid>
     </List>
   );

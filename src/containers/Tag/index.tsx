@@ -6,12 +6,12 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import useProject from '@/hooks/useProject';
+import useTag from '@/hooks/useTag';
 // import axios from '../../config/axios';
 // import { useQuery } from '@tanstack/react-query';
 
 interface Column {
-  id: 'project_name' | 'description';
+  id: 'tag_name';
   label: string;
   minWidth?: number;
   align?: 'right';
@@ -19,33 +19,32 @@ interface Column {
 }
 
 const columns: Column[] = [
-  { id: 'project_name', label: 'Project Name', minWidth: 170 },
-  {
-    id: 'description',
-    label: 'Description',
-    minWidth: 150,
-  },
+  { id: 'tag_name', label: 'Tag Name', minWidth: 170 },
+  //   {
+  //     id: 'description',
+  //     label: 'Description',
+  //     minWidth: 150,
+  //   },
 ];
 
-interface Project {
-  projectId: string;
-  projectName: string;
-  description: string;
+interface Tag {
+  tagId: string;
+  tagName: string;
 }
 
-const Project = () => {
-  const { isSuccess, data /*, isLoading, isError */ } = useProject();
+const Tag = () => {
+  const { isSuccess, data /*, isLoading, isError */ } = useTag();
 
   if (isSuccess) {
-    const projectDetail = data?.data.data.data;
-    console.log('datas');
-
+    const TagDetail = data?.data.data.data;
     return (
-      <Paper /* sx={{ width: '100%' }} */>
-        <TableContainer /* sx={{ maxHeight: 440 }} */>
+      <Paper>
+        <TableContainer>
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
-              <TableCell align="center">Project Details</TableCell>
+              <TableRow>
+                <TableCell align="center">Tag Details</TableCell>
+              </TableRow>
               <TableRow>
                 {columns.map((column) => (
                   <TableCell
@@ -59,15 +58,10 @@ const Project = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {projectDetail.map((project: Project) => {
+              {TagDetail?.map((tag: Tag) => {
                 return (
-                  <TableRow hover role="checkbox" key={project.projectId}>
-                    <TableCell sx={{ minWidth: 170 }}>
-                      {project?.projectName}
-                    </TableCell>
-                    <TableCell sx={{ minWidth: 170 }}>
-                      {project?.description}
-                    </TableCell>
+                  <TableRow hover role="checkbox" key={tag.tagId}>
+                    <TableCell sx={{ minWidth: 170 }}>{tag?.tagName}</TableCell>
                   </TableRow>
                 );
               })}
@@ -79,4 +73,4 @@ const Project = () => {
   }
 };
 
-export default Project;
+export default Tag;
