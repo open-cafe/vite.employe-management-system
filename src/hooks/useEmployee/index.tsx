@@ -1,10 +1,16 @@
 import { useQuery } from '@tanstack/react-query';
 import { fetchEmployees } from './request';
 
+const useEmployee = (page: number, pageSize: number) => {
+  const {
+    isSuccess,
+    data,
+    isLoading: employeeLoading,
+  } = useQuery(['employees', page, pageSize], () =>
+    fetchEmployees(page, pageSize)
+  );
 
-const useEmployee = () => {
-    const { isSuccess, data, isLoading: employeeLoading } = useQuery(['employees'], fetchEmployees);
-    return {isSuccess, data, employeeLoading };
-  };
+  return { isSuccess, data, employeeLoading };
+};
 
 export default useEmployee;
