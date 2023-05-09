@@ -5,14 +5,8 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
-import axios from '../../config/axios';
-import { useQuery } from '@tanstack/react-query';
-import {
-  CircularProgress,
-  TableFooter,
-  TableHead,
-  TablePagination,
-} from '@mui/material';
+
+import { TableHead, TablePagination } from '@mui/material';
 import useCheckInOut from '@/hooks/useCheckinout';
 import { useEffect, useState } from 'react';
 

@@ -6,10 +6,9 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
 //import axios from 'axios';
-import axios from '../../config/axios';
-import { useQuery } from '@tanstack/react-query';
-import { TableFooter, TableHead } from '@mui/material';
+import { TableHead, TablePagination } from '@mui/material';
 import useEmployee from '@/hooks/useEmployee';
+import { useEffect, useState } from 'react';
 
 interface Column {
   id: 'name' | 'designation' | 'phone' | 'hireDate';
@@ -45,10 +44,31 @@ interface Employees {
 }
 
 const Employees = () => {
-  const { isSuccess, data, employeeLoading } = useEmployee();
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const { isSuccess, data, employeeLoading } = useEmployee(
+    page + 1,
+    rowsPerPage
+  );
+  const [employeeDetail, setEmployeeDetail] = useState(data?.data.data.data);
+
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
+
+  useEffect(() => {
+    setEmployeeDetail(data?.data.data.data);
+  }, [data]);
 
   if (isSuccess) {
-    const employeeDetail = data?.data.data.data;
+    const total = data?.data.data;
 
     return (
       <Paper>
@@ -71,27 +91,37 @@ const Employees = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {employeeDetail.map((employees: Employees) => {
-                return (
-                  <TableRow hover role="checkbox" key={employees.employeeId}>
-                    <TableCell sx={{ minWidth: 170 }}>
-                      {employees?.name}
-                    </TableCell>
-                    <TableCell sx={{ minWidth: 100 }}>
-                      {employees?.designation}
-                    </TableCell>
-                    <TableCell align="right" sx={{ minWidth: 170 }}>
-                      {employees?.phone}
-                    </TableCell>
-                    <TableCell align="right" sx={{ minWidth: 170 }}>
-                      {employees?.hireDate?.toLocaleString().slice(0, 10)}
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
+              {employeeDetail &&
+                employeeDetail.map((employees: Employees) => {
+                  return (
+                    <TableRow hover role="checkbox" key={employees.employeeId}>
+                      <TableCell sx={{ minWidth: 170 }}>
+                        {employees?.name}
+                      </TableCell>
+                      <TableCell sx={{ minWidth: 100 }}>
+                        {employees?.designation}
+                      </TableCell>
+                      <TableCell align="right" sx={{ minWidth: 170 }}>
+                        {employees?.phone}
+                      </TableCell>
+                      <TableCell align="right" sx={{ minWidth: 170 }}>
+                        {employees?.hireDate?.toLocaleString().slice(0, 10)}
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
             </TableBody>
           </Table>
         </TableContainer>
+        <TablePagination
+          rowsPerPageOptions={[10]}
+          component="div"
+          count={total.total}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
       </Paper>
     );
   }
