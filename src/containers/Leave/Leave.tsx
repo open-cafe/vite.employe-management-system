@@ -9,6 +9,7 @@ import axios from '../../config/axios';
 import { useQuery } from '@tanstack/react-query';
 import { TableHead } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import useLeave from '@/hooks/useLeave';
 
 interface Column {
   id: 'reason' | 'leaveType' | 'startDate' | 'endDate';
@@ -43,23 +44,16 @@ interface Leave {
   endDate: Date;
 }
 
-// const fetchLeaves = () => {
-//   return axios.get(`http://localhost:3000/leave`).then(({ data }) => data);
-// };
-
 const Leave = () => {
   const navigate = useNavigate();
   const navigateToConfirmed = (leave: Leave) => {
     navigate(`/leavedetail`, { state: leave });
   };
 
-  const { isSuccess, data, isLoading, isError } = useQuery(
-    ['leaves'],
-    fetchLeaves
-  );
+  const { isSuccess, data, leaveLoading } = useLeave();
 
   if (isSuccess) {
-    const leaveDetail = data.data.data;
+    const leaveDetail = data?.data.data.data;
 
     return (
       <Paper sx={{ width: '100%' }}>
