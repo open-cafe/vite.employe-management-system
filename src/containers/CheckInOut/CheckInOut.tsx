@@ -5,9 +5,10 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
-import axios from '../../config/axios';
-import { useQuery } from '@tanstack/react-query';
-import { TableFooter, TableHead } from '@mui/material';
+
+import { TableHead, TablePagination } from '@mui/material';
+import useCheckInOut from '@/hooks/useCheckinout';
+import { useEffect, useState } from 'react';
 
 interface Column {
   id: 'name' | 'phone' | 'check_in_time' | 'check_out_time' | 'current_date';
@@ -57,21 +58,34 @@ interface CheckInOut {
   currenDate: Date;
 }
 
-const fetchCheckInOut = () => {
-  return axios
-    .get(`http://localhost:3000/checkinout`)
-    .then(({ data }) => data)
-    .catch((err) => console.error(err));
-};
-
-const CheckInOut: any = () => {
-  const { isSuccess, data, isLoading, isError } = useQuery(
-    ['checkinout'],
-    fetchCheckInOut
+const CheckInOut: React.FC = () => {
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const { isSuccess, data, checkinoutLoading } = useCheckInOut(
+    page + 1,
+    rowsPerPage
+  );
+  const [checkinoutDetail, setCheckInOutDetail] = useState(
+    data?.data.data.data
   );
 
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
+
+  useEffect(() => {
+    setCheckInOutDetail(data?.data.data.data);
+  }, [data]);
+
   if (isSuccess) {
-    const checkinoutDetail = data.data.data;
+    const total = data?.data.data;
 
     return (
       <Paper>
@@ -94,32 +108,44 @@ const CheckInOut: any = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {checkinoutDetail.map((check: CheckInOut) => {
-                return (
-                  <TableRow hover role="checkbox" key={check.timeId}>
-                    <TableCell sx={{ minWidth: 170 }}>
-                      {check?.employee.name}
-                    </TableCell>
-                    <TableCell sx={{ minWidth: 100 }}>
-                      {check?.employee.phone}
-                    </TableCell>
-                    <TableCell align="right" sx={{ minWidth: 170 }}>
-                      {check?.checkinTime.toLocaleString().slice(11, 16)}
-                    </TableCell>
-                    <TableCell align="right" sx={{ minWidth: 170 }}>
-                      {check?.checkoutTime.toLocaleString().slice(11, 16)}
-                    </TableCell>
-                    <TableCell align="right" sx={{ minWidth: 170 }}>
-                      {check?.currenDate.toLocaleString().slice(0, 10)}
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
+              {checkinoutDetail &&
+                checkinoutDetail.map((check: CheckInOut) => {
+                  return (
+                    <TableRow hover role="checkbox" key={check.timeId}>
+                      <TableCell sx={{ minWidth: 170 }}>
+                        {check.employee.name}
+                      </TableCell>
+                      <TableCell sx={{ minWidth: 100 }}>
+                        {check.employee.phone}
+                      </TableCell>
+                      <TableCell align="right" sx={{ minWidth: 170 }}>
+                        {check.checkinTime.toLocaleString().slice(11, 16)}
+                      </TableCell>
+                      <TableCell align="right" sx={{ minWidth: 170 }}>
+                        {check.checkoutTime.toLocaleString().slice(11, 16)}
+                      </TableCell>
+                      <TableCell align="right" sx={{ minWidth: 170 }}>
+                        {check.currenDate.toLocaleString().slice(0, 10)}
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
             </TableBody>
           </Table>
         </TableContainer>
+        <TablePagination
+          rowsPerPageOptions={[10]}
+          component="div"
+          count={total.total}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
       </Paper>
     );
+  } else {
+    return <></>;
   }
 };
 
