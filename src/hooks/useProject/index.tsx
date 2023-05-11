@@ -3,11 +3,12 @@ import { fetchProject } from './request';
 
 const useProject = (page: number, limit: number) => {
   const {
-    isSuccess,
-    data,
+    isSuccess: projectSuccess,
+    data: projectData,
     isLoading: projectLoading,
+    isError: projectError,
   } = useQuery(['project', page, limit], () => fetchProject(page, limit));
-  return { isSuccess, data, projectLoading };
+  return { projectSuccess, projectData, projectLoading, projectError };
 };
 
 export default useProject;

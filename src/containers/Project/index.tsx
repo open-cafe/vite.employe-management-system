@@ -7,10 +7,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import useProject from '@/hooks/useProject';
-import { TablePagination, TableSortLabel } from '@mui/material';
-
-// import axios from '../../config/axios';
-// import { useQuery } from '@tanstack/react-query';
+import { CircularProgress, TablePagination, Box } from '@mui/material';
 
 interface Column {
   id: 'project_name' | 'description';
@@ -38,9 +35,11 @@ interface Project {
 const Project = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const { isSuccess, data } = useProject(page + 1, rowsPerPage);
+  const { projectLoading, projectData, projectError } = useProject(
+    page + 1,
+    rowsPerPage
+  );
 
-  const [projectDetail, setProjectDetail] = useState(data?.data.data.data);
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
@@ -52,64 +51,82 @@ const Project = () => {
     setPage(0);
   };
 
-  useEffect(() => {
-    setProjectDetail(data?.data.data.data);
-  }, [data]);
-
-  if (isSuccess) {
-    const total = data?.data.data;
-
+  if (projectLoading) {
     return (
-      <Paper /* sx={{ width: '100%' }} */>
-        <TableContainer /* sx={{ maxHeight: 440 }} */>
-          <Table stickyHeader aria-label="sticky table">
-            <TableHead>
-              <TableRow>
-                <TableCell align="center">Project Details</TableCell>
-              </TableRow>
-
-              <TableRow>
-                {columns.map((column) => (
-                  <TableCell
-                    key={column.id}
-                    align={column.align}
-                    style={{ top: 57, minWidth: column.minWidth }}
-                  >
-                    {column.label}
-                  </TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-
-            <TableBody>
-              {projectDetail &&
-                projectDetail.map((project: Project) => {
-                  return (
-                    <TableRow hover role="checkbox" key={project.projectId}>
-                      <TableCell sx={{ minWidth: 170 }}>
-                        {project?.projectName}
-                      </TableCell>
-                      <TableCell sx={{ minWidth: 100 }}>
-                        {project?.description}
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[10]}
-          component="div"
-          count={total.total}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </Paper>
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="100vh"
+      >
+        <CircularProgress />
+      </Box>
     );
   }
+  if (projectError) {
+    console.log(projectError);
+  }
+
+  const total = projectData?.data.data;
+  const projectDetail = projectData?.data.data.data;
+
+  return (
+    <Paper /* sx={{ width: '100%' }} */>
+      <TableContainer /* sx={{ maxHeight: 440 }} */>
+        <Table stickyHeader aria-label="sticky table">
+          <TableHead>
+            <TableRow>
+              <TableCell align="center">Project Details</TableCell>
+            </TableRow>
+
+            <TableRow>
+              {columns.map((column) => (
+                <TableCell
+                  key={column.id}
+                  align={column.align}
+                  style={{ top: 57, minWidth: column.minWidth }}
+                >
+                  {column.label}
+                </TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+
+          <TableBody>
+            {projectDetail.length ? (
+              projectDetail.map((project: Project) => {
+                return (
+                  <TableRow hover role="checkbox" key={project.projectId}>
+                    <TableCell sx={{ minWidth: 170 }}>
+                      {project?.projectName}
+                    </TableCell>
+                    <TableCell sx={{ minWidth: 100 }}>
+                      {project?.description}
+                    </TableCell>
+                  </TableRow>
+                );
+              })
+            ) : (
+              <TableRow>
+                <TableCell align="center" colSpan={2}>
+                  No Project Found
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <TablePagination
+        rowsPerPageOptions={[10]}
+        component="div"
+        count={total.total}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />
+    </Paper>
+  );
 };
 
 export default Project;
