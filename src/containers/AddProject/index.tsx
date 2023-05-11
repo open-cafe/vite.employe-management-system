@@ -26,7 +26,7 @@ const AddProject = () => {
       addProjectAction(projectDetails, {
         onSuccess: (data) => {
           if (data) {
-            navigate(`/`);
+            navigate(`/project`);
           }
         },
         onError: (data) => {
