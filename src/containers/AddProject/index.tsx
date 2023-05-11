@@ -22,22 +22,19 @@ const AddProject = () => {
       projectName: enteredProject,
       description: description,
     };
-    try {
-      addProjectAction(projectDetails, {
-        onSuccess: (data) => {
-          if (data) {
-            navigate(`/project`);
-          }
-        },
-        onError: (data) => {
-          console.log('err', data);
-        },
-      });
-      setEnteredProject('');
-      setDescription('');
-    } catch (error) {
-      console.log(error);
-    }
+
+    addProjectAction(projectDetails, {
+      onSuccess: (data) => {
+        if (data) {
+          navigate(`/project`);
+        }
+      },
+      onError: (data) => {
+        console.log('err', data);
+      },
+    });
+    setEnteredProject('');
+    setDescription('');
   };
 
   return (
