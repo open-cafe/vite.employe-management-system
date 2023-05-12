@@ -25,7 +25,6 @@ const Router: FC = () => {
           <Route path="employee" element={<Employees />} />
           <Route path="leave" element={<Leave />} />
           <Route path="project" element={<Project />} />
-          <Route path="tag" element={<Tag />} />
 
           <Route path="leavedetail" element={<LeaveDetails />} />
           <Route path="checkinout" element={<CheckInOut />} />
