@@ -51,80 +51,79 @@ const Project = () => {
     setPage(0);
   };
 
-  if (projectLoading) {
-    return (
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        height="100vh"
-      >
-        <CircularProgress />
-      </Box>
-    );
-  }
-  if (projectError) {
-    console.log(projectError);
-  }
-
-  const total = projectData?.data.data;
-  const projectDetail = projectData?.data.data.data;
+  const total = projectData?.data?.data;
+  const projectDetail = projectData?.data?.data?.data;
 
   return (
     <Paper /* sx={{ width: '100%' }} */>
-      <TableContainer /* sx={{ maxHeight: 440 }} */>
-        <Table stickyHeader aria-label="sticky table">
-          <TableHead>
-            <TableRow>
-              <TableCell align="center">Project Details</TableCell>
-            </TableRow>
+      {projectLoading ? (
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          margin="auto"
+        >
+          <CircularProgress />
+        </Box>
+      ) : projectError ? (
+        <div>{projectError}</div>
+      ) : (
+        <>
+          <TableContainer /* sx={{ maxHeight: 440 }} */>
+            <Table stickyHeader aria-label="sticky table">
+              <TableHead>
+                <TableRow>
+                  <TableCell align="center">Project Details</TableCell>
+                </TableRow>
 
-            <TableRow>
-              {columns.map((column) => (
-                <TableCell
-                  key={column.id}
-                  align={column.align}
-                  style={{ top: 57, minWidth: column.minWidth }}
-                >
-                  {column.label}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-
-          <TableBody>
-            {projectDetail.length ? (
-              projectDetail.map((project: Project) => {
-                return (
-                  <TableRow hover role="checkbox" key={project.projectId}>
-                    <TableCell sx={{ minWidth: 170 }}>
-                      {project?.projectName}
+                <TableRow>
+                  {columns.map((column) => (
+                    <TableCell
+                      key={column.id}
+                      align={column.align}
+                      style={{ top: 57, minWidth: column.minWidth }}
+                    >
+                      {column.label}
                     </TableCell>
-                    <TableCell sx={{ minWidth: 100 }}>
-                      {project?.description}
+                  ))}
+                </TableRow>
+              </TableHead>
+
+              <TableBody>
+                {projectDetail.length ? (
+                  projectDetail.map((project: Project) => {
+                    return (
+                      <TableRow hover role="checkbox" key={project.projectId}>
+                        <TableCell sx={{ minWidth: 170 }}>
+                          {project?.projectName}
+                        </TableCell>
+                        <TableCell sx={{ minWidth: 100 }}>
+                          {project?.description}
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })
+                ) : (
+                  <TableRow>
+                    <TableCell align="center" colSpan={2}>
+                      No Project Found
                     </TableCell>
                   </TableRow>
-                );
-              })
-            ) : (
-              <TableRow>
-                <TableCell align="center" colSpan={2}>
-                  No Project Found
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[10]}
-        component="div"
-        count={total.total}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <TablePagination
+            rowsPerPageOptions={[10]}
+            component="div"
+            count={total.total}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </>
+      )}
     </Paper>
   );
 };
