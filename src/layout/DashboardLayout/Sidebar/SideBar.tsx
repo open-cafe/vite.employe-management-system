@@ -10,7 +10,7 @@ export const mainListItems = <React.Fragment></React.Fragment>;
 const SideBar = () => {
   const navigate = useNavigate();
   return (
-    <List component="nav" sx={{ backgroundColor: 'darkcyan', height: '100vh' }}>
+    <List component="nav" sx={{ backgroundColor: '#ED81AD', height: '100vh' }}>
       <Grid
         container
         direction="column"
@@ -27,9 +27,6 @@ const SideBar = () => {
           </ListItemButton>
           <ListItemButton onClick={() => navigate('project')}>
             <ListItemText primary="Project" />
-          </ListItemButton>
-          <ListItemButton onClick={() => navigate('tag')}>
-            <ListItemText primary="Tag" />
           </ListItemButton>
           <ListItemButton onClick={() => navigate('checkinout')}>
             <ListItemText primary="CheckInOut" />

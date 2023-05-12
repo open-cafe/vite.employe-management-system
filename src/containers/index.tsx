@@ -14,6 +14,7 @@ import CheckInOut from './CheckInOut/CheckInOut';
 
 import Login from './Login/index';
 import AddUser from './AddUser';
+import AddProject from './AddProject';
 
 const Router: FC = () => {
   return (
@@ -24,11 +25,11 @@ const Router: FC = () => {
           <Route path="employee" element={<Employees />} />
           <Route path="leave" element={<Leave />} />
           <Route path="project" element={<Project />} />
-          <Route path="tag" element={<Tag />} />
 
           <Route path="leavedetail" element={<LeaveDetails />} />
           <Route path="checkinout" element={<CheckInOut />} />
           <Route path="adduser" element={<AddUser />} />
+          <Route path="addproject" element={<AddProject />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
