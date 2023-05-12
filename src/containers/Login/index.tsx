@@ -11,7 +11,6 @@ import {
 } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import { setCookie } from '../../utils/authCookies';
-import axios from '../../config/axios';
 
 import { cookieName } from '../../constants/environment';
 import { useState, useContext } from 'react';
@@ -51,31 +50,22 @@ const Login = () => {
 
   return (
     <LoginLayout>
-      <Grid item xs={2} sm={3} md={4} lg={4.5}></Grid>
-      <Grid item xs={8} sm={6} md={4} lg={3}>
-        <Card
-          variant="outlined"
-          sx={{
-            marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
-          <Avatar sx={{ m: 1 }}>
+      <Card
+        variant="outlined"
+        sx={{
+          m: 'auto',
+          mt: '10%',
+          maxWidth: '400px',
+          borderRadius: '20px',
+          p: '30px',
+        }}
+      >
+        <Box>
+          <Avatar sx={{ m: 'auto', background: '#FFA086' }}>
             <LockOutlined />
           </Avatar>
           <CardContent>
-            <Box
-              sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-              }}
-            >
-              <Typography component="h1" variant="h5">
-                Log In
-              </Typography>
+            <Box>
               <Box>
                 <TextField
                   margin="normal"
@@ -120,8 +110,8 @@ const Login = () => {
               </Box>
             </Box>
           </CardContent>
-        </Card>
-      </Grid>
+        </Box>
+      </Card>
     </LoginLayout>
   );
 };
