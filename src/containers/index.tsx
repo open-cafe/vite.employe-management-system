@@ -8,13 +8,14 @@ import DashboardLayout from '@/layout/DashboardLayout';
 import Employees from './Employee/Employees';
 import Leave from './Leave/Leave';
 import Project from './Project';
-import Tag from './Tag';
+
 import LeaveDetails from './Leave/LeaveDetails';
 import CheckInOut from './CheckInOut/CheckInOut';
 
 import Login from './Login/index';
 import AddUser from './AddUser';
 import AddProject from './AddProject';
+import AddProjectAssignment from './AddProjectAssignment';
 
 const Router: FC = () => {
   return (
@@ -30,6 +31,10 @@ const Router: FC = () => {
           <Route path="checkinout" element={<CheckInOut />} />
           <Route path="adduser" element={<AddUser />} />
           <Route path="addproject" element={<AddProject />} />
+          <Route
+            path="addprojectassignment"
+            element={<AddProjectAssignment />}
+          />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
