@@ -21,6 +21,20 @@ interface ProjectAndEmployee {
   name: string;
 }
 
+interface Project {
+  projectId: string;
+  projectName: string;
+  description: string;
+  status: string;
+}
+
+interface Employee {
+  employeeId: string;
+  name: string;
+  designation: string;
+  phone: string;
+}
+
 const AddProjectAssignment = () => {
   const navigate = useNavigate();
   const { addProjectAssignmentAction, addProjectLoading } =
@@ -66,16 +80,13 @@ const AddProjectAssignment = () => {
     setEnteredProject('');
     setEnteredEmployee('');
   };
-  const projectName = allProjectData?.data?.data.map((project: any) => {
+  const projectName = allProjectData?.data?.data.map((project: Project) => {
     return { label: project.projectName, id: project.projectId };
   });
 
-  const employeeName = allEmployeeData?.data?.data.map((employee: any) => {
+  const employeeName = allEmployeeData?.data?.data.map((employee: Employee) => {
     return { label: employee.name, id: employee.employeeId };
   });
-
-  // if (allProjectDataLoading || allEmployeeDataLoading)
-  //   return <div>Loading...</div>;
 
   return (
     <MainLayout>
@@ -102,7 +113,7 @@ const AddProjectAssignment = () => {
               <Autocomplete
                 sx={{ mt: 2 }}
                 disablePortal
-                id="combo-box-demo"
+                id="project-combo-box"
                 options={projectName}
                 fullWidth
                 renderInput={(params) => (
@@ -114,7 +125,7 @@ const AddProjectAssignment = () => {
               <Autocomplete
                 sx={{ mt: 2 }}
                 disablePortal
-                id="combo-box-demo"
+                id="employee-combo-box"
                 options={employeeName}
                 fullWidth
                 renderInput={(params) => (

@@ -10,7 +10,7 @@ import useProject from '@/hooks/useProject';
 import { CircularProgress, TablePagination, Box } from '@mui/material';
 
 interface Column {
-  id: 'project_name' | 'description';
+  id: 'project_name' | 'description' | 'status';
   label: string;
   minWidth?: number;
   align?: 'right';
@@ -24,12 +24,18 @@ const columns: Column[] = [
     label: 'Description',
     minWidth: 150,
   },
+  {
+    id: 'status',
+    label: 'Status',
+    minWidth: 170,
+  },
 ];
 
 interface Project {
   projectId: string;
   projectName: string;
   description: string;
+  status: string;
 }
 
 const Project = () => {
@@ -99,6 +105,9 @@ const Project = () => {
                         </TableCell>
                         <TableCell sx={{ minWidth: 100 }}>
                           {project?.description}
+                        </TableCell>
+                        <TableCell sx={{ minWidth: 100 }}>
+                          {project?.status}
                         </TableCell>
                       </TableRow>
                     );
