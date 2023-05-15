@@ -6,7 +6,12 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
 //import axios from 'axios';
-import { TableHead, TablePagination } from '@mui/material';
+import {
+  Box,
+  CircularProgress,
+  TableHead,
+  TablePagination,
+} from '@mui/material';
 import useEmployee from '@/hooks/useEmployee';
 import { useEffect, useState } from 'react';
 
@@ -46,7 +51,7 @@ interface Employees {
 const Employees: React.FC = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const { isSuccess, data, employeeLoading } = useEmployee(
+  const { employeeError, data, employeeLoading } = useEmployee(
     page + 1,
     rowsPerPage
   );
@@ -67,12 +72,23 @@ const Employees: React.FC = () => {
     setEmployeeDetail(data?.data.data.data);
   }, [data]);
 
-  if (isSuccess) {
-    const total = data?.data.data;
+  const total = data?.data.data;
 
-    return (
-      <>
-        <Paper>
+  return (
+    <Paper>
+      {employeeLoading ? (
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          margin="auto"
+        >
+          <CircularProgress />
+        </Box>
+      ) : employeeError ? (
+        <div>{employeeError}</div>
+      ) : (
+        <>
           <TableContainer>
             <Table stickyHeader aria-label="sticky table">
               <TableHead>
@@ -127,12 +143,10 @@ const Employees: React.FC = () => {
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
-        </Paper>
-      </>
-    );
-  } else {
-    return <></>;
-  }
+        </>
+      )}
+    </Paper>
+  );
 };
 
 export default Employees;
