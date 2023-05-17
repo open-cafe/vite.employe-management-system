@@ -5,6 +5,13 @@ import { useLocation } from 'react-router-dom';
 import useProjectAssignments from '@/hooks/useProjectAssignments';
 import { Box, CircularProgress } from '@mui/material';
 
+interface ProjectAssignments {
+  projectAssignmentId: string;
+  employee: {
+    name: string;
+  };
+}
+
 export default function projectDetail() {
   const { state } = useLocation();
   const {
@@ -46,7 +53,7 @@ export default function projectDetail() {
           </Typography>
           <div>
             {projectAssignmentData?.data?.data?.data?.map(
-              (projectAssignment: any) => (
+              (projectAssignment: ProjectAssignments) => (
                 <div key={projectAssignment.projectAssignmentId}>
                   <div>{projectAssignment?.employee?.name}</div>
                 </div>
