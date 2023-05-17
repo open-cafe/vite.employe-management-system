@@ -72,7 +72,8 @@ const projectDetail = () => {
 
   return (
     <Card sx={{ minWidth: 275, height: '100%' }}>
-      {projectAssignmentLoading || allEmployeeDataLoading ? (
+      {projectAssignmentError && <div>Error...=</div>}
+      {!projectAssignmentError && projectAssignmentLoading && (
         <Box
           display="flex"
           justifyContent="center"
@@ -81,57 +82,62 @@ const projectDetail = () => {
         >
           <CircularProgress />
         </Box>
-      ) : projectAssignmentError ? (
-        <div>Error...=</div>
-      ) : (
-        <CardContent>
-          <Typography
-            sx={{ fontSize: 25, fontFamily: 'monospace', fontWeight: 'bold' }}
-            color="text.secondary"
-            gutterBottom
-          >
-            Name : {state.projectName}
-          </Typography>
-          <Typography sx={{ fontSize: 18 }} color="text.secondary" gutterBottom>
-            Status : {state.status}
-          </Typography>
-          <Typography sx={{ mb: 1.5 }} color="text.secondary">
-            Description : {state.description}
-          </Typography>
-          <Typography sx={{ mb: 1.5 }} color="text.secondary">
-            Emoloyees Assigned to this Project:
-          </Typography>
-          <Autocomplete
-            sx={{ mt: 2, width: 300, mb: 2 }}
-            disablePortal
-            id="employee-combo-box"
-            options={employeeName}
-            fullWidth
-            renderInput={(params) => (
-              <TextField {...params} label="Employee" value={params.id} />
-            )}
-            onChange={handleEmployeeChange}
-            isOptionEqualToValue={(option, value) => option.id === value.id}
-          />
-          <Button
-            variant="contained"
-            onClick={() => {
-              handleSubmit();
-            }}
-          >
-            Add Employee
-          </Button>
-          <div>
-            {projectAssignmentData?.data?.data?.data?.map(
-              (projectAssignment: ProjectAssignments) => (
-                <div key={projectAssignment.projectAssignmentId}>
-                  <div>{projectAssignment?.employee?.name}</div>
-                </div>
-              )
-            )}
-          </div>
-        </CardContent>
       )}
+      {!projectAssignmentError &&
+        !projectAssignmentLoading &&
+        projectAssignmentData && (
+          <CardContent>
+            <Typography
+              sx={{ fontSize: 25, fontFamily: 'monospace', fontWeight: 'bold' }}
+              color="text.secondary"
+              gutterBottom
+            >
+              Name : {state.projectName}
+            </Typography>
+            <Typography
+              sx={{ fontSize: 18 }}
+              color="text.secondary"
+              gutterBottom
+            >
+              Status : {state.status}
+            </Typography>
+            <Typography sx={{ mb: 1.5 }} color="text.secondary">
+              Description : {state.description}
+            </Typography>
+            <Typography sx={{ mb: 1.5 }} color="text.secondary">
+              Emoloyees Assigned to this Project:
+            </Typography>
+            <Autocomplete
+              sx={{ mt: 2, width: 300, mb: 2 }}
+              disablePortal
+              id="employee-combo-box"
+              options={employeeName}
+              fullWidth
+              renderInput={(params) => (
+                <TextField {...params} label="Employee" value={params.id} />
+              )}
+              onChange={handleEmployeeChange}
+              isOptionEqualToValue={(option, value) => option.id === value.id}
+            />
+            <Button
+              variant="contained"
+              onClick={() => {
+                handleSubmit();
+              }}
+            >
+              Add Employee
+            </Button>
+            <div>
+              {projectAssignmentData?.data?.data?.data?.map(
+                (projectAssignment: ProjectAssignments) => (
+                  <div key={projectAssignment.projectAssignmentId}>
+                    <div>{projectAssignment?.employee?.name}</div>
+                  </div>
+                )
+              )}
+            </div>
+          </CardContent>
+        )}
     </Card>
   );
 };
