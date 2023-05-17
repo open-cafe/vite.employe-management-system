@@ -7,7 +7,12 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import useProject from '@/hooks/useProject';
-import { CircularProgress, TablePagination, Box } from '@mui/material';
+import {
+  CircularProgress,
+  TablePagination,
+  Box,
+  Typography,
+} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 interface Column {
@@ -80,20 +85,26 @@ const Project: React.FC = () => {
         <div>{projectError}</div>
       ) : (
         <>
-          <TableContainer /* sx={{ maxHeight: 440 }} */>
-            <Table stickyHeader aria-label="sticky table">
+          <div>
+            <Typography
+              sx={{ fontFamily: 'monospace', fontWeight: 'bold' }}
+              variant="h4"
+              color="inherit"
+              align="center"
+            >
+              Project List
+            </Typography>
+          </div>
+          <TableContainer sx={{ height: '85vh' }}>
+            <Table
+              stickyHeader
+              aria-label="sticky table"
+              sx={{ height: 'max-content' }}
+            >
               <TableHead>
                 <TableRow>
-                  <TableCell align="center">Project Details</TableCell>
-                </TableRow>
-
-                <TableRow>
                   {columns.map((column) => (
-                    <TableCell
-                      key={column.id}
-                      align={column.align}
-                      style={{ top: 57, minWidth: column.minWidth }}
-                    >
+                    <TableCell key={column.id} align={column.align}>
                       {column.label}
                     </TableCell>
                   ))}

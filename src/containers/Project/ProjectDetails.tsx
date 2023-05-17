@@ -11,8 +11,7 @@ interface ProjectAssignments {
     name: string;
   };
 }
-
-export default function projectDetail() {
+const projectDetail = () => {
   const { state } = useLocation();
   const {
     projectAssignmentLoading,
@@ -64,4 +63,5 @@ export default function projectDetail() {
       )}
     </Card>
   );
-}
+};
+export default projectDetail;
