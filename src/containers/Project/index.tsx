@@ -8,6 +8,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import useProject from '@/hooks/useProject';
 import { CircularProgress, TablePagination, Box } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 interface Column {
   id: 'project_name' | 'description' | 'status';
@@ -38,7 +39,11 @@ interface Project {
   status: string;
 }
 
-const Project = () => {
+const Project: React.FC = () => {
+  const navigate = useNavigate();
+  const navigateToConfirmed = (project: Project) => {
+    navigate(`/projectdetail`, { state: project });
+  };
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const { projectLoading, projectData, projectError } = useProject(
@@ -99,7 +104,12 @@ const Project = () => {
                 {projectDetail.length ? (
                   projectDetail.map((project: Project) => {
                     return (
-                      <TableRow hover role="checkbox" key={project.projectId}>
+                      <TableRow
+                        onClick={() => navigateToConfirmed(project)}
+                        hover
+                        role="checkbox"
+                        key={project.projectId}
+                      >
                         <TableCell sx={{ minWidth: 170 }}>
                           {project?.projectName}
                         </TableCell>

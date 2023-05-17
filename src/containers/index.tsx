@@ -16,6 +16,7 @@ import Login from './Login/index';
 import AddUser from './AddUser';
 import AddProject from './AddProject';
 import AddProjectAssignment from './AddProjectAssignment';
+import ProjectDetails from './Project/ProjectDetails';
 
 const Router: FC = () => {
   return (
@@ -30,6 +31,7 @@ const Router: FC = () => {
           <Route path="leavedetail" element={<LeaveDetails />} />
           <Route path="checkinout" element={<CheckInOut />} />
           <Route path="adduser" element={<AddUser />} />
+          <Route path="projectdetail" element={<ProjectDetails />} />
           <Route path="addproject" element={<AddProject />} />
           <Route
             path="addprojectassignment"
