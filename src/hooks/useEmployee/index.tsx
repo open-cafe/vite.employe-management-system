@@ -3,14 +3,14 @@ import { fetchEmployees } from './request';
 
 const useEmployee = (page: number, pageSize: number) => {
   const {
-    isSuccess,
+    isError: employeeError,
     data,
     isLoading: employeeLoading,
   } = useQuery(['employees', page, pageSize], () =>
     fetchEmployees(page, pageSize)
   );
 
-  return { isSuccess, data, employeeLoading };
+  return { employeeError, data, employeeLoading };
 };
 
 export default useEmployee;
