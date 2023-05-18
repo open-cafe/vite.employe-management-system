@@ -1,16 +1,31 @@
-import { LockOutlined, Password } from '@mui/icons-material';
 import { Link, useNavigate } from 'react-router-dom';
-import { Box, Button, TextField, Card, CardContent } from '@mui/material';
+import {
+  Box,
+  Button,
+  TextField,
+  Card,
+  CardContent,
+  Snackbar,
+  Alert,
+} from '@mui/material';
 
 import { useState } from 'react';
 import LoginLayout from '@/layout/LoginLayout';
 import useSendResetEmail from '@/hooks/useSendResetEmail';
 
 const ResetPassowrdMailForm = () => {
-  const navigate = useNavigate();
-
   const [enteredEmail, setEnteredEmail] = useState('');
+  const [alertOpen, setAlertOpen] = useState(false);
+  const [alertSeverity, setAlertSeverity] = useState<
+    'success' | 'error' | 'info' | 'warning'
+  >('success');
+  const [alertMessage, setAlertMessage] = useState('');
+
   const { emailSendChangeAction, emailSendLoading } = useSendResetEmail();
+
+  const handleAlertClose = () => {
+    setAlertOpen(false);
+  };
 
   const handleSubmit = async () => {
     const sendEmailCredentials = {
@@ -19,10 +34,14 @@ const ResetPassowrdMailForm = () => {
     try {
       emailSendChangeAction(sendEmailCredentials, {
         onSuccess: () => {
-          console.log('email sent');
+          setAlertSeverity('success');
+          setAlertMessage('Email has been sent successfully!');
+          setAlertOpen(true);
         },
         onError: (data) => {
-          console.log('err', data);
+          setAlertSeverity('error');
+          setAlertMessage('An error occurred while sending the email.');
+          setAlertOpen(true);
         },
       });
       setEnteredEmail('');
@@ -30,6 +49,7 @@ const ResetPassowrdMailForm = () => {
       console.log(error);
     }
   };
+
   return (
     <LoginLayout>
       <Card
@@ -72,6 +92,20 @@ const ResetPassowrdMailForm = () => {
           </CardContent>
         </Box>
       </Card>
+
+      <Snackbar
+        open={alertOpen}
+        autoHideDuration={6000}
+        onClose={handleAlertClose}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+      >
+        <Alert onClose={handleAlertClose} severity={alertSeverity}>
+          {alertMessage}
+        </Alert>
+      </Snackbar>
     </LoginLayout>
   );
 };
