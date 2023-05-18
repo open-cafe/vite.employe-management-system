@@ -93,7 +93,7 @@ const ResetPassword = () => {
                 sx={CommonStyles.button}
                 onClick={() => handleSubmit()}
               >
-                Reset Passowrd
+                Reset Password
               </Button>
             </Box>
           </Box>

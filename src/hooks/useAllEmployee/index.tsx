@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { fetchAllEmployee } from './result';
+import { fetchAllEmployee } from './request';
 
 const useAllEmployee = () => {
   const { data: allEmployeeData, isLoading: allEmployeeDataLoading } = useQuery(
