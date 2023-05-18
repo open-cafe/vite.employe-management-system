@@ -1,6 +1,7 @@
 import { cookieName } from '@/constants/environment';
 import { deleteCookie } from '../../utils/authCookies';
-import useChangePassword from '@/hooks/useChangePassword';
+import useResetPassword from '@/hooks/useResetPassword';
+import queryString from 'query-string';
 
 import {
   Box,
@@ -11,36 +12,42 @@ import {
   CardContent,
 } from '@mui/material';
 
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
-const ChangePassword = () => {
-  const [oldPassword, setoldPassword] = useState('');
+const ResetPassword = () => {
   const [newPassword, setnewPassword] = useState('');
   const [confrmPassword, setconfirmPassword] = useState('');
-  const { passwordChangeAction, passwordchangeLoading } = useChangePassword();
+  const [token, setToken] = useState<string | null>(null);
 
-  const navigate = useNavigate();
+  const { resetPasswordChangeAction, resetPasswordchangeLoading } =
+    useResetPassword();
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const tokenValue = urlParams.get('token');
+    setToken(tokenValue);
+
+    console.log(token);
+  }, []);
+
   const handleSubmit = async () => {
-    const changePassowrdCredentials = {
-      oldPassword: oldPassword,
-      newPassword: newPassword,
+    const resetPassowrdCredentials = {
+      password: newPassword,
+      token: token as string,
     };
 
     if (newPassword === confrmPassword) {
       try {
-        passwordChangeAction(changePassowrdCredentials, {
+        resetPasswordChangeAction(resetPassowrdCredentials, {
           onSuccess: (data) => {
-            if (data) {
-              deleteCookie(cookieName);
-            }
             navigate('/login');
           },
           onError: (data) => {
             console.log('err', data);
           },
         });
-        setoldPassword('');
+
         setnewPassword('');
         setconfirmPassword('');
       } catch (error) {
@@ -50,6 +57,9 @@ const ChangePassword = () => {
       console.log('confrim password is not equal to new password');
     }
   };
+
+  const navigate = useNavigate();
+
   return (
     <>
       <Card
@@ -69,20 +79,9 @@ const ChangePassword = () => {
             }}
           >
             <Typography component="h1" variant="h5">
-              Change password
+              Reset password
             </Typography>
             <Box>
-              <TextField
-                margin="normal"
-                id="oldpassword"
-                name="oldpassword"
-                label="Old Password"
-                type="password"
-                value={oldPassword}
-                onChange={(e) => setoldPassword(e.target.value)}
-                fullWidth
-                required
-              />
               <TextField
                 margin="normal"
                 id="newPassword"
@@ -115,7 +114,7 @@ const ChangePassword = () => {
                 sx={{ mt: 3, mb: 2 }}
                 onClick={() => handleSubmit()}
               >
-                Change Passowrd
+                Reset Passowrd
               </Button>
             </Box>
           </Box>
@@ -125,4 +124,4 @@ const ChangePassword = () => {
   );
 };
 
-export default ChangePassword;
+export default ResetPassword;

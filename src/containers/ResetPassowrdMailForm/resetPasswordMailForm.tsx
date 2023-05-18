@@ -1,52 +1,35 @@
 import { LockOutlined, Password } from '@mui/icons-material';
 import { Link, useNavigate } from 'react-router-dom';
-import {
-  Avatar,
-  Box,
-  Button,
-  TextField,
-  Typography,
-  Card,
-  CardContent,
-} from '@mui/material';
-import Grid from '@mui/material/Grid';
-import { setCookie } from '../../utils/authCookies';
+import { Box, Button, TextField, Card, CardContent } from '@mui/material';
 
-import { cookieName } from '../../constants/environment';
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import LoginLayout from '@/layout/LoginLayout';
-import useAuth from '@/hooks/useAuth';
+import useSendResetEmail from '@/hooks/useSendResetEmail';
 
-const Login = () => {
+const ResetPassowrdMailForm = () => {
   const navigate = useNavigate();
-  const { loginAction, loginLoading } = useAuth();
+
   const [enteredEmail, setEnteredEmail] = useState('');
-  const [enteredPassword, setEnteredPassword] = useState('');
+  const { emailSendChangeAction, emailSendLoading } = useSendResetEmail();
 
   const handleSubmit = async () => {
-    const loginCredentials = {
+    const sendEmailCredentials = {
       email: enteredEmail,
-      password: enteredPassword,
     };
     try {
-      loginAction(loginCredentials, {
-        onSuccess: (data) => {
-          if (data) {
-            setCookie(cookieName, data.data.data.access_token);
-            navigate(`/`);
-          }
+      emailSendChangeAction(sendEmailCredentials, {
+        onSuccess: () => {
+          console.log('email sent');
         },
         onError: (data) => {
           console.log('err', data);
         },
       });
       setEnteredEmail('');
-      setEnteredPassword('');
     } catch (error) {
       console.log(error);
     }
   };
-
   return (
     <LoginLayout>
       <Card
@@ -60,9 +43,6 @@ const Login = () => {
         }}
       >
         <Box>
-          <Avatar sx={{ m: 'auto', background: '#FFA086' }}>
-            <LockOutlined />
-          </Avatar>
           <CardContent>
             <Box>
               <Box>
@@ -77,18 +57,6 @@ const Login = () => {
                   fullWidth
                   required
                 />
-                <TextField
-                  margin="normal"
-                  id="password"
-                  name="password"
-                  label="Password"
-                  type="password"
-                  autoComplete="current-password"
-                  value={enteredPassword}
-                  onChange={(e) => setEnteredPassword(e.target.value)}
-                  fullWidth
-                  required
-                />
 
                 <Button
                   type="submit"
@@ -97,13 +65,8 @@ const Login = () => {
                   sx={{ mt: 3, mb: 2 }}
                   onClick={() => handleSubmit()}
                 >
-                  Log In
+                  Send Email
                 </Button>
-                <Grid container>
-                  <Grid item xs>
-                    <Link to="/sendresetpasswordmail">Forgot password?</Link>
-                  </Grid>
-                </Grid>
               </Box>
             </Box>
           </CardContent>
@@ -113,4 +76,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default ResetPassowrdMailForm;

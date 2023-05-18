@@ -16,6 +16,8 @@ import Login from './Login/index';
 import AddUser from './AddUser';
 import ChangePassword from './Employee/ChangePassword';
 import AddProject from './AddProject';
+import ResetPasswordMailForm from './ResetPassowrdMailForm/resetPasswordMailForm';
+import ResetPassword from './ResetPassword';
 
 const Router: FC = () => {
   return (
@@ -37,6 +39,11 @@ const Router: FC = () => {
       </Route>
       <Route path="/" element={<PublicRoutes />}>
         <Route path="/login" element={<Login />} />
+        <Route
+          path="/sendresetpasswordmail"
+          element={<ResetPasswordMailForm />}
+        />
+        <Route path="/resetpassword" element={<ResetPassword />} />
       </Route>
     </Routes>
   );
