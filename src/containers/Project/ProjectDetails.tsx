@@ -7,7 +7,9 @@ import {
   Autocomplete,
   Box,
   Button,
+  Chip,
   CircularProgress,
+  Stack,
   TextField,
 } from '@mui/material';
 import { Employee, ProjectAndEmployee } from '../AddProjectAssignment';
@@ -70,6 +72,10 @@ const projectDetail = () => {
   });
   console.log('state', state);
 
+  const handleDelete = () => {
+    console.info('You clicked the delete icon.');
+  };
+
   return (
     <Card sx={{ minWidth: 275, height: '100%' }}>
       {projectAssignmentError && <div>Error...=</div>}
@@ -104,9 +110,7 @@ const projectDetail = () => {
             <Typography sx={{ mb: 1.5 }} color="text.secondary">
               Description : {state.description}
             </Typography>
-            <Typography sx={{ mb: 1.5 }} color="text.secondary">
-              Emoloyees Assigned to this Project:
-            </Typography>
+
             <Autocomplete
               sx={{ mt: 2, width: 300, mb: 2 }}
               disablePortal
@@ -124,18 +128,25 @@ const projectDetail = () => {
               onClick={() => {
                 handleSubmit();
               }}
+              sx={{ mb: 2 }}
             >
               Add Employee
             </Button>
-            <div>
+            <Typography sx={{ mb: 1.5 }} color="text.secondary">
+              Emp loyees Assigned to this Project:
+            </Typography>
+            <Stack direction="row" spacing={2}>
               {projectAssignmentData?.data?.data?.data?.map(
                 (projectAssignment: ProjectAssignments) => (
                   <div key={projectAssignment.projectAssignmentId}>
-                    <div>{projectAssignment?.employee?.name}</div>
+                    <Chip
+                      label={projectAssignment?.employee?.name}
+                      onDelete={handleDelete}
+                    />
                   </div>
                 )
               )}
-            </div>
+            </Stack>
           </CardContent>
         )}
     </Card>
