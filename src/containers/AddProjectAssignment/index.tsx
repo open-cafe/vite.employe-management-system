@@ -16,7 +16,7 @@ import useAddProjectAssignment from '@/hooks/useAddProjectAssignment';
 import useAllProject from '@/hooks/useAllProject';
 import useAllEmployee from '@/hooks/useAllEmployee';
 
-interface ProjectAndEmployee {
+export interface ProjectAndEmployee {
   id: string;
   name: string;
 }
@@ -28,7 +28,7 @@ interface Project {
   status: string;
 }
 
-interface Employee {
+export interface Employee {
   employeeId: string;
   name: string;
   designation: string;

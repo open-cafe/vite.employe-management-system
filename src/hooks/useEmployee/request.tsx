@@ -1,4 +1,3 @@
-import { AxiosResponse } from 'axios';
 import axios from '../../config/axios';
 
 export const fetchEmployees = async (page: number, pageSize: number) => {
