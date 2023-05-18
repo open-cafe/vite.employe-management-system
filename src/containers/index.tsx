@@ -14,7 +14,10 @@ import CheckInOut from './CheckInOut/CheckInOut';
 
 import Login from './Login/index';
 import AddUser from './AddUser';
+import ChangePassword from './Employee/ChangePassword';
 import AddProject from './AddProject';
+import ResetPasswordMailForm from './ResetPassowrdMailForm/resetPasswordMailForm';
+import ResetPassword from './ResetPassword';
 import AddProjectAssignment from './AddProjectAssignment';
 import ProjectDetails from './Project/ProjectDetails';
 
@@ -31,6 +34,7 @@ const Router: FC = () => {
           <Route path="leavedetail" element={<LeaveDetails />} />
           <Route path="checkinout" element={<CheckInOut />} />
           <Route path="adduser" element={<AddUser />} />
+          <Route path="changepassword" element={<ChangePassword />} />
           <Route path="projectdetail" element={<ProjectDetails />} />
           <Route path="addproject" element={<AddProject />} />
           <Route
@@ -42,6 +46,11 @@ const Router: FC = () => {
       </Route>
       <Route path="/" element={<PublicRoutes />}>
         <Route path="/login" element={<Login />} />
+        <Route
+          path="/sendresetpasswordmail"
+          element={<ResetPasswordMailForm />}
+        />
+        <Route path="/resetpassword" element={<ResetPassword />} />
       </Route>
     </Routes>
   );

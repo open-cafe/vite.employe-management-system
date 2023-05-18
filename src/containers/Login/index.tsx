@@ -1,9 +1,9 @@
 import { LockOutlined, Password } from '@mui/icons-material';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   Avatar,
   Box,
   Button,
-  Link,
   TextField,
   Typography,
   Card,
@@ -16,7 +16,6 @@ import { cookieName } from '../../constants/environment';
 import { useState, useContext } from 'react';
 import LoginLayout from '@/layout/LoginLayout';
 import useAuth from '@/hooks/useAuth';
-import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -102,9 +101,7 @@ const Login = () => {
                 </Button>
                 <Grid container>
                   <Grid item xs>
-                    <Link href="#" variant="body2">
-                      Forgot password?
-                    </Link>
+                    <Link to="/sendresetpasswordmail">Forgot password?</Link>
                   </Grid>
                 </Grid>
               </Box>
