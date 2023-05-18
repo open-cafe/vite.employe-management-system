@@ -19,6 +19,7 @@ import AddProject from './AddProject';
 import ResetPasswordMailForm from './ResetPassowrdMailForm/resetPasswordMailForm';
 import ResetPassword from './ResetPassword';
 import AddProjectAssignment from './AddProjectAssignment';
+import ProjectDetails from './Project/ProjectDetails';
 
 const Router: FC = () => {
   return (
@@ -34,6 +35,7 @@ const Router: FC = () => {
           <Route path="checkinout" element={<CheckInOut />} />
           <Route path="adduser" element={<AddUser />} />
           <Route path="changepassword" element={<ChangePassword />} />
+          <Route path="projectdetail" element={<ProjectDetails />} />
           <Route path="addproject" element={<AddProject />} />
           <Route
             path="addprojectassignment"

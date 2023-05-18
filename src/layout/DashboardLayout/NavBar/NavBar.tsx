@@ -3,10 +3,11 @@ import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import { Button, Grid } from '@mui/material';
+import { Button, Grid, IconButton } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { cookieName } from '@/constants/environment';
 import { deleteCookie } from '@/utils/authCookies';
+import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 
 export default function NavBar() {
   const routeChange = () => {
@@ -25,14 +26,9 @@ export default function NavBar() {
               </Typography>
             </Grid>
             <Grid item xs={12} sm={1} md={1} lg={1} xl={1}>
-              <Button
-                color="secondary"
-                variant="contained"
-                style={{ color: 'black' }}
-                onClick={routeChange}
-              >
-                Log out
-              </Button>
+              <IconButton style={{ color: 'black' }} onClick={routeChange}>
+                <LogoutOutlinedIcon />
+              </IconButton>
             </Grid>
           </Grid>
         </Toolbar>
