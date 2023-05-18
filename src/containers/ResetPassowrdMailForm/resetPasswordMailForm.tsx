@@ -12,6 +12,7 @@ import {
 import { useState } from 'react';
 import LoginLayout from '@/layout/LoginLayout';
 import useSendResetEmail from '@/hooks/useSendResetEmail';
+import ResetFormStyles from '@/style/ResetForm.style';
 
 const ResetPassowrdMailForm = () => {
   const [enteredEmail, setEnteredEmail] = useState('');
@@ -31,37 +32,25 @@ const ResetPassowrdMailForm = () => {
     const sendEmailCredentials = {
       email: enteredEmail,
     };
-    try {
-      emailSendChangeAction(sendEmailCredentials, {
-        onSuccess: () => {
-          setAlertSeverity('success');
-          setAlertMessage('Email has been sent successfully!');
-          setAlertOpen(true);
-        },
-        onError: (data) => {
-          setAlertSeverity('error');
-          setAlertMessage('An error occurred while sending the email.');
-          setAlertOpen(true);
-        },
-      });
-      setEnteredEmail('');
-    } catch (error) {
-      console.log(error);
-    }
+
+    emailSendChangeAction(sendEmailCredentials, {
+      onSuccess: () => {
+        setAlertSeverity('success');
+        setAlertMessage('Email has been sent successfully!');
+        setAlertOpen(true);
+      },
+      onError: (data) => {
+        setAlertSeverity('error');
+        setAlertMessage('An error occurred while sending the email.');
+        setAlertOpen(true);
+      },
+    });
+    setEnteredEmail('');
   };
 
   return (
     <LoginLayout>
-      <Card
-        variant="outlined"
-        sx={{
-          m: 'auto',
-          mt: '10%',
-          maxWidth: '400px',
-          borderRadius: '20px',
-          p: '30px',
-        }}
-      >
+      <Card variant="outlined" sx={ResetFormStyles.card}>
         <Box>
           <CardContent>
             <Box>
@@ -82,7 +71,7 @@ const ResetPassowrdMailForm = () => {
                   type="submit"
                   fullWidth
                   variant="contained"
-                  sx={{ mt: 3, mb: 2 }}
+                  sx={ResetFormStyles.button}
                   onClick={() => handleSubmit()}
                 >
                   Send Email
@@ -99,10 +88,10 @@ const ResetPassowrdMailForm = () => {
         onClose={handleAlertClose}
         anchorOrigin={{
           vertical: 'top',
-          horizontal: 'right',
+          horizontal: 'center',
         }}
       >
-        <Alert onClose={handleAlertClose} severity={alertSeverity}>
+        <Alert onClose={handleAlertClose} severity="success">
           {alertMessage}
         </Alert>
       </Snackbar>

@@ -1,7 +1,4 @@
-import { cookieName } from '@/constants/environment';
-import { deleteCookie } from '../../utils/authCookies';
 import useResetPassword from '@/hooks/useResetPassword';
-import queryString from 'query-string';
 
 import {
   Box,
@@ -14,6 +11,7 @@ import {
 
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import CommonStyles from '@/style/Common.styles';
 
 const ResetPassword = () => {
   const [newPassword, setnewPassword] = useState('');
@@ -27,8 +25,6 @@ const ResetPassword = () => {
     const urlParams = new URLSearchParams(window.location.search);
     const tokenValue = urlParams.get('token');
     setToken(tokenValue);
-
-    console.log(token);
   }, []);
 
   const handleSubmit = async () => {
@@ -38,21 +34,17 @@ const ResetPassword = () => {
     };
 
     if (newPassword === confrmPassword) {
-      try {
-        resetPasswordChangeAction(resetPassowrdCredentials, {
-          onSuccess: (data) => {
-            navigate('/login');
-          },
-          onError: (data) => {
-            console.log('err', data);
-          },
-        });
+      resetPasswordChangeAction(resetPassowrdCredentials, {
+        onSuccess: (data) => {
+          navigate('/login');
+        },
+        onError: (data) => {
+          console.log('err', data);
+        },
+      });
 
-        setnewPassword('');
-        setconfirmPassword('');
-      } catch (error) {
-        console.log(error);
-      }
+      setnewPassword('');
+      setconfirmPassword('');
     } else {
       console.log('confrim password is not equal to new password');
     }
@@ -62,22 +54,9 @@ const ResetPassword = () => {
 
   return (
     <>
-      <Card
-        variant="outlined"
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-        }}
-      >
+      <Card variant="outlined" sx={CommonStyles.cardandbutton}>
         <CardContent>
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-            }}
-          >
+          <Box sx={CommonStyles.cardandbutton}>
             <Typography component="h1" variant="h5">
               Reset password
             </Typography>
@@ -111,7 +90,7 @@ const ResetPassword = () => {
                 type="submit"
                 fullWidth
                 variant="contained"
-                sx={{ mt: 3, mb: 2 }}
+                sx={CommonStyles.button}
                 onClick={() => handleSubmit()}
               >
                 Reset Passowrd

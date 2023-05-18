@@ -1,6 +1,7 @@
 import { cookieName } from '@/constants/environment';
 import { deleteCookie } from '../../utils/authCookies';
 import useChangePassword from '@/hooks/useChangePassword';
+import CommonStyles from '@/style/Common.styles';
 
 import {
   Box,
@@ -21,6 +22,7 @@ const ChangePassword = () => {
   const { passwordChangeAction, passwordchangeLoading } = useChangePassword();
 
   const navigate = useNavigate();
+
   const handleSubmit = async () => {
     const changePassowrdCredentials = {
       oldPassword: oldPassword,
@@ -28,46 +30,29 @@ const ChangePassword = () => {
     };
 
     if (newPassword === confrmPassword) {
-      try {
-        passwordChangeAction(changePassowrdCredentials, {
-          onSuccess: (data) => {
-            if (data) {
-              deleteCookie(cookieName);
-            }
-            navigate('/login');
-          },
-          onError: (data) => {
-            console.log('err', data);
-          },
-        });
-        setoldPassword('');
-        setnewPassword('');
-        setconfirmPassword('');
-      } catch (error) {
-        console.log(error);
-      }
+      passwordChangeAction(changePassowrdCredentials, {
+        onSuccess: (data) => {
+          if (data) {
+            deleteCookie(cookieName);
+          }
+          navigate('/login');
+        },
+        onError: (data) => {
+          console.log('err', data);
+        },
+      });
+      setoldPassword('');
+      setnewPassword('');
+      setconfirmPassword('');
     } else {
       console.log('confrim password is not equal to new password');
     }
   };
   return (
     <>
-      <Card
-        variant="outlined"
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-        }}
-      >
+      <Card variant="outlined" sx={CommonStyles.cardandbutton}>
         <CardContent>
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-            }}
-          >
+          <Box sx={CommonStyles.cardandbutton}>
             <Typography component="h1" variant="h5">
               Change password
             </Typography>
@@ -112,7 +97,7 @@ const ChangePassword = () => {
                 type="submit"
                 fullWidth
                 variant="contained"
-                sx={{ mt: 3, mb: 2 }}
+                sx={CommonStyles.button}
                 onClick={() => handleSubmit()}
               >
                 Change Passowrd
