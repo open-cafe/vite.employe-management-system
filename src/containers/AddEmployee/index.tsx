@@ -1,4 +1,4 @@
-import { Button, TextField, Typography } from '@mui/material';
+import { Button, Grid, TextField, Typography } from '@mui/material';
 import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import MainLayout from '@/layout/MainLayout';
@@ -76,25 +76,34 @@ const AddEmployee = () => {
             fullWidth
             required
           />
-          <TextField
-            margin="normal"
-            id="phone"
-            name="phone"
-            label="Phone Number *"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            variant="outlined"
-            fullWidth
-            required
-          />
-          <TextField
-            name="hireDate"
-            label="Hire Date"
-            value={hireDate}
-            onChange={(e) => setHireDate(e.target.value)}
-            // error={!isValidDateString} // assuming you have a variable to check the validity
-            // helperText={!isValidDateString ? 'Invalid date format' : ''}
-          />
+          <Grid container spacing={4}>
+            <Grid item xs={6}>
+              <TextField
+                margin="normal"
+                id="phone"
+                name="phone"
+                label="Phone Number "
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                variant="outlined"
+                fullWidth
+                required
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                margin="normal"
+                name="hireDate"
+                type="date"
+                label="Hire Date"
+                value={hireDate}
+                onChange={(e) => setHireDate(e.target.value)}
+                defaultValue={'new Date()'}
+                fullWidth
+                required
+              />
+            </Grid>
+          </Grid>
           <Button
             type="submit"
             fullWidth
