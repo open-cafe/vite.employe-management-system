@@ -7,10 +7,16 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import useProject from '@/hooks/useProject';
-import { CircularProgress, TablePagination, Box } from '@mui/material';
+import {
+  CircularProgress,
+  TablePagination,
+  Box,
+  Typography,
+} from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 interface Column {
-  id: 'project_name' | 'description';
+  id: 'project_name' | 'description' | 'status';
   label: string;
   minWidth?: number;
   align?: 'right';
@@ -24,15 +30,25 @@ const columns: Column[] = [
     label: 'Description',
     minWidth: 150,
   },
+  {
+    id: 'status',
+    label: 'Status',
+    minWidth: 170,
+  },
 ];
 
 interface Project {
   projectId: string;
   projectName: string;
   description: string;
+  status: string;
 }
 
-const Project = () => {
+const Project: React.FC = () => {
+  const navigate = useNavigate();
+  const navigateToConfirmed = (project: Project) => {
+    navigate(`/projectdetail`, { state: project });
+  };
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const { projectLoading, projectData, projectError } = useProject(
@@ -69,20 +85,26 @@ const Project = () => {
         <div>{projectError}</div>
       ) : (
         <>
-          <TableContainer /* sx={{ maxHeight: 440 }} */>
-            <Table stickyHeader aria-label="sticky table">
+          <div>
+            <Typography
+              sx={{ fontFamily: 'monospace', fontWeight: 'bold' }}
+              variant="h4"
+              color="inherit"
+              align="center"
+            >
+              Project List
+            </Typography>
+          </div>
+          <TableContainer sx={{ height: '85vh' }}>
+            <Table
+              stickyHeader
+              aria-label="sticky table"
+              sx={{ height: 'max-content' }}
+            >
               <TableHead>
                 <TableRow>
-                  <TableCell align="center">Project Details</TableCell>
-                </TableRow>
-
-                <TableRow>
                   {columns.map((column) => (
-                    <TableCell
-                      key={column.id}
-                      align={column.align}
-                      style={{ top: 57, minWidth: column.minWidth }}
-                    >
+                    <TableCell key={column.id} align={column.align}>
                       {column.label}
                     </TableCell>
                   ))}
@@ -93,12 +115,20 @@ const Project = () => {
                 {projectDetail.length ? (
                   projectDetail.map((project: Project) => {
                     return (
-                      <TableRow hover role="checkbox" key={project.projectId}>
+                      <TableRow
+                        onClick={() => navigateToConfirmed(project)}
+                        hover
+                        role="checkbox"
+                        key={project.projectId}
+                      >
                         <TableCell sx={{ minWidth: 170 }}>
                           {project?.projectName}
                         </TableCell>
                         <TableCell sx={{ minWidth: 100 }}>
                           {project?.description}
+                        </TableCell>
+                        <TableCell sx={{ minWidth: 100 }}>
+                          {project?.status}
                         </TableCell>
                       </TableRow>
                     );

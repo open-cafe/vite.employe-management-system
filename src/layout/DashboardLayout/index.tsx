@@ -5,6 +5,7 @@ import SideBar from './Sidebar/SideBar';
 
 import Grid from '@mui/material/Grid';
 import { Outlet } from 'react-router-dom';
+import { Box } from '@mui/material';
 
 interface DashboardLayoutPops {
   children: ReactNode;
@@ -19,7 +20,9 @@ const DashboardLayout = () => {
         </Grid>
         <Grid item xs={6} md={11}>
           <NavBar />
-          <Outlet />
+          <Box sx={{ height: `calc(100% - 48px)` }}>
+            <Outlet />
+          </Box>
         </Grid>
       </Grid>
     </MainLayout>

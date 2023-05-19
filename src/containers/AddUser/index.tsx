@@ -1,25 +1,8 @@
-import { LockOutlined, Password } from '@mui/icons-material';
-import {
-  Avatar,
-  Box,
-  Button,
-  Link,
-  TextField,
-  Typography,
-  Card,
-  CardContent,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-} from '@mui/material';
-import { setCookie } from '../../utils/authCookies';
+import { Button, TextField, Typography, MenuItem } from '@mui/material';
 
-import { cookieName } from '../../constants/environment';
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import MainLayout from '@/layout/MainLayout';
-
-import CssBaseline from '@mui/material/CssBaseline';
 import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';
 import useAddUser from '@/hooks/useAddUser';
