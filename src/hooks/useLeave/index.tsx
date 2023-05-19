@@ -3,11 +3,11 @@ import { fetchLeave } from './request';
 
 const useLeave = (page: number, pageSize: number) => {
   const {
-    isSuccess,
+    isError: leaveError,
     data,
     isLoading: leaveLoading,
   } = useQuery(['leaves', page, pageSize], () => fetchLeave(page, pageSize));
-  return { isSuccess, data, leaveLoading };
+  return { leaveError, data, leaveLoading };
 };
 
 export default useLeave;
