@@ -14,15 +14,21 @@ import {
 } from '@mui/material';
 import { Employee, ProjectAndEmployee } from '../AddProjectAssignment';
 import useAllEmployee from '@/hooks/useAllEmployee';
-import { SyntheticEvent, useState } from 'react';
+import { SyntheticEvent, useEffect, useState } from 'react';
 import useAddProjectAssignment from '@/hooks/useAddProjectAssignment';
 import { useQueryClient } from '@tanstack/react-query';
+import useSaveEmployeeAssign from '@/hooks/useSaveEmployeeAssign';
 
 interface ProjectAssignments {
   projectAssignmentId: string;
   employee: {
     name: string;
+    employeeId: string;
   };
+}
+interface AddEmployee {
+  id: string;
+  label: string;
 }
 const projectDetail = () => {
   const queryClient = useQueryClient();
@@ -35,13 +41,34 @@ const projectDetail = () => {
   const { allEmployeeData, allEmployeeDataLoading } = useAllEmployee();
 
   const { addProjectAssignmentAction } = useAddProjectAssignment();
+  const [addEmployee, setAddEmployee] = useState<string[]>([]);
+  const [addEmployeeById, setAddEmployeeById] = useState<string[]>([]);
+  useEffect(() => {
+    setAddEmployee(
+      projectAssignmentData?.data?.data?.data?.map(
+        (data: ProjectAssignments) => data?.employee?.name
+      )
+    );
+    setAddEmployeeById(
+      projectAssignmentData?.data?.data?.data?.map(
+        (data: ProjectAssignments) => data?.employee?.employeeId
+      )
+    );
+  }, [projectAssignmentData]);
+
+  const { saveEmployeeAction } = useSaveEmployeeAssign();
 
   const [enteredEmployee, setEnteredEmployee] = useState<string | null>('');
 
   const handleEmployeeChange = (
     event: SyntheticEvent<Element, Event>,
-    value: ProjectAndEmployee | null
+    value: AddEmployee | null
   ) => {
+    setAddEmployee(value ? [...addEmployee, value.label] : addEmployee);
+    setAddEmployeeById(
+      value ? [...addEmployeeById, value.id] : addEmployeeById
+    );
+
     if (value) setEnteredEmployee(value.id);
     else setEnteredEmployee('');
   };
@@ -67,14 +94,31 @@ const projectDetail = () => {
     setEnteredEmployee('');
   };
 
+  const save = () => {
+    const projectAssignmentDetails = {
+      projectId: state.projectId,
+      employeeId: addEmployeeById || [''],
+    };
+    saveEmployeeAction(projectAssignmentDetails, {
+      onSuccess: (data) => {
+        if (data) {
+          // add toast later
+          queryClient.invalidateQueries(['project-assignment']);
+          console.log('success', data);
+        }
+      },
+      onError: (data) => {
+        console.log('err', data);
+      },
+    });
+    setEnteredEmployee('');
+  };
+
   const employeeName = allEmployeeData?.data?.data.map((employee: Employee) => {
     return { label: employee.name, id: employee.employeeId };
   });
-  console.log('state', state);
 
-  const handleDelete = () => {
-    console.info('You clicked the delete icon.');
-  };
+  // console.log('state', employeeName);
 
   return (
     <Card sx={{ minWidth: 275, height: '100%' }}>
@@ -91,8 +135,10 @@ const projectDetail = () => {
       )}
       {!projectAssignmentError &&
         !projectAssignmentLoading &&
+        !allEmployeeDataLoading &&
         projectAssignmentData && (
           <CardContent>
+            {}
             <Typography
               sx={{ fontSize: 25, fontFamily: 'monospace', fontWeight: 'bold' }}
               color="text.secondary"
@@ -133,10 +179,10 @@ const projectDetail = () => {
               Add Employee
             </Button>
             <Typography sx={{ mb: 1.5 }} color="text.secondary">
-              Emp loyees Assigned to this Project:
+              Employees Assigned to this Project:
             </Typography>
             <Stack direction="row" spacing={2}>
-              {projectAssignmentData?.data?.data?.data?.map(
+              {/* {projectAssignmentData?.data?.data?.data?.map(
                 (projectAssignment: ProjectAssignments) => (
                   <div key={projectAssignment.projectAssignmentId}>
                     <Chip
@@ -145,8 +191,38 @@ const projectDetail = () => {
                     />
                   </div>
                 )
-              )}
+              )} */}
+
+              {addEmployee?.map((employeeData) => (
+                <div key={employeeData}>
+                  <Chip
+                    label={employeeData}
+                    onDelete={() => {
+                      console.log('employeeData', employeeData);
+                      setAddEmployee((addEmployee) =>
+                        addEmployee.filter(
+                          (employee) => employee !== employeeData
+                        )
+                      );
+                      setAddEmployeeById((addEmployeeById) =>
+                        addEmployeeById.filter(
+                          (employee) => employee !== employeeData
+                        )
+                      );
+                    }}
+                  />
+                </div>
+              ))}
             </Stack>
+            <Button
+              variant="contained"
+              onClick={() => {
+                save();
+              }}
+              sx={{ mt: 2 }}
+            >
+              Save
+            </Button>
           </CardContent>
         )}
     </Card>
