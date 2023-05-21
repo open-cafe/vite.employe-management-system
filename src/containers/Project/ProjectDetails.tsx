@@ -12,10 +12,9 @@ import {
   Stack,
   TextField,
 } from '@mui/material';
-import { Employee, ProjectAndEmployee } from '../AddProjectAssignment';
+import { Employee } from '../AddProjectAssignment';
 import useAllEmployee from '@/hooks/useAllEmployee';
 import { SyntheticEvent, useEffect, useState } from 'react';
-import useAddProjectAssignment from '@/hooks/useAddProjectAssignment';
 import { useQueryClient } from '@tanstack/react-query';
 import useSaveEmployeeAssign from '@/hooks/useSaveEmployeeAssign';
 
@@ -40,64 +39,60 @@ const projectDetail = () => {
   } = useProjectAssignments(state.projectId, 1, 10);
   const { allEmployeeData, allEmployeeDataLoading } = useAllEmployee();
 
-  const { addProjectAssignmentAction } = useAddProjectAssignment();
-  const [addEmployee, setAddEmployee] = useState<string[]>([]);
-  const [addEmployeeById, setAddEmployeeById] = useState<string[]>([]);
+  // const [addEmployee, setAddEmployee] = useState<string[]>([]);
+  // const [addEmployeeById, setAddEmployeeById] = useState<string[]>([]);
+
+  const [allProjectAssignmentEmployees, setAllProjectAssignmentEmployees] =
+    useState<any>([]);
   useEffect(() => {
-    setAddEmployee(
+    // setAddEmployee(
+    //   projectAssignmentData?.data?.data?.data?.map(
+    //     (data: ProjectAssignments) => data?.employee?.name
+    //   )
+    // );
+    // setAddEmployeeById(
+    //   projectAssignmentData?.data?.data?.data?.map(
+    //     (data: ProjectAssignments) => data?.employee?.employeeId
+    //   )
+    // );
+    setAllProjectAssignmentEmployees(
       projectAssignmentData?.data?.data?.data?.map(
-        (data: ProjectAssignments) => data?.employee?.name
-      )
-    );
-    setAddEmployeeById(
-      projectAssignmentData?.data?.data?.data?.map(
-        (data: ProjectAssignments) => data?.employee?.employeeId
+        (projectAssignment: ProjectAssignments) => {
+          return {
+            name: projectAssignment?.employee?.name,
+            id: projectAssignment?.employee?.employeeId,
+          };
+        }
       )
     );
   }, [projectAssignmentData]);
 
   const { saveEmployeeAction } = useSaveEmployeeAssign();
 
-  const [enteredEmployee, setEnteredEmployee] = useState<string | null>('');
-
   const handleEmployeeChange = (
     event: SyntheticEvent<Element, Event>,
     value: AddEmployee | null
   ) => {
-    setAddEmployee(value ? [...addEmployee, value.label] : addEmployee);
-    setAddEmployeeById(
-      value ? [...addEmployeeById, value.id] : addEmployeeById
+    // setAddEmployee(value ? [...addEmployee, value.label] : addEmployee);
+    // setAddEmployeeById(
+    //   value ? [...addEmployeeById, value.id] : addEmployeeById
+    // );
+    setAllProjectAssignmentEmployees(
+      value
+        ? [
+            ...allProjectAssignmentEmployees,
+            { name: value.label, id: value.id },
+          ]
+        : allProjectAssignmentEmployees
     );
-
-    if (value) setEnteredEmployee(value.id);
-    else setEnteredEmployee('');
-  };
-
-  const handleSubmit = async () => {
-    const projectAssignmentDetails = {
-      projectId: state.projectId,
-      employeeId: enteredEmployee || '',
-    };
-
-    addProjectAssignmentAction(projectAssignmentDetails, {
-      onSuccess: (data) => {
-        if (data) {
-          // add toast later
-          queryClient.invalidateQueries(['project-assignment']);
-          console.log('success', data);
-        }
-      },
-      onError: (data) => {
-        console.log('err', data);
-      },
-    });
-    setEnteredEmployee('');
   };
 
   const save = () => {
     const projectAssignmentDetails = {
       projectId: state.projectId,
-      employeeId: addEmployeeById || [''],
+      employeeId: allProjectAssignmentEmployees?.map(
+        (employee: any) => employee.id
+      ),
     };
     saveEmployeeAction(projectAssignmentDetails, {
       onSuccess: (data) => {
@@ -111,14 +106,11 @@ const projectDetail = () => {
         console.log('err', data);
       },
     });
-    setEnteredEmployee('');
   };
 
   const employeeName = allEmployeeData?.data?.data.map((employee: Employee) => {
     return { label: employee.name, id: employee.employeeId };
   });
-
-  // console.log('state', employeeName);
 
   return (
     <Card sx={{ minWidth: 275, height: '100%' }}>
@@ -161,54 +153,45 @@ const projectDetail = () => {
               sx={{ mt: 2, width: 300, mb: 2 }}
               disablePortal
               id="employee-combo-box"
-              options={employeeName}
+              options={employeeName?.filter(
+                (item: any) =>
+                  !allProjectAssignmentEmployees?.some((obj: any) => {
+                    return obj.name === item.label;
+                  })
+              )}
               fullWidth
               renderInput={(params) => (
                 <TextField {...params} label="Employee" value={params.id} />
               )}
               onChange={handleEmployeeChange}
-              isOptionEqualToValue={(option, value) => option.id === value.id}
-            />
-            <Button
-              variant="contained"
-              onClick={() => {
-                handleSubmit();
+              isOptionEqualToValue={(option, value) => {
+                return true;
               }}
-              sx={{ mb: 2 }}
-            >
-              Add Employee
-            </Button>
+            />
             <Typography sx={{ mb: 1.5 }} color="text.secondary">
               Employees Assigned to this Project:
             </Typography>
             <Stack direction="row" spacing={2}>
-              {/* {projectAssignmentData?.data?.data?.data?.map(
-                (projectAssignment: ProjectAssignments) => (
-                  <div key={projectAssignment.projectAssignmentId}>
-                    <Chip
-                      label={projectAssignment?.employee?.name}
-                      onDelete={handleDelete}
-                    />
-                  </div>
-                )
-              )} */}
-
-              {addEmployee?.map((employeeData) => (
-                <div key={employeeData}>
+              {allProjectAssignmentEmployees?.map((employeeData: any) => (
+                <div key={employeeData.id}>
                   <Chip
-                    label={employeeData}
+                    label={employeeData.name}
                     onDelete={() => {
-                      console.log('employeeData', employeeData);
-                      setAddEmployee((addEmployee) =>
-                        addEmployee.filter(
-                          (employee) => employee !== employeeData
+                      setAllProjectAssignmentEmployees(
+                        allProjectAssignmentEmployees.filter(
+                          (employee: any) => employee !== employeeData
                         )
                       );
-                      setAddEmployeeById((addEmployeeById) =>
-                        addEmployeeById.filter(
-                          (employee) => employee !== employeeData
-                        )
-                      );
+                      // setAddEmployee((addEmployee) =>
+                      //   addEmployee.filter(
+                      //     (employee) => employee !== employeeData.name
+                      //   )
+                      // );
+                      // setAddEmployeeById((addEmployeeById) =>
+                      //   addEmployeeById.filter(
+                      //     (employee) => employee !== employeeData.id
+                      //   )
+                      // );
                     }}
                   />
                 </div>
