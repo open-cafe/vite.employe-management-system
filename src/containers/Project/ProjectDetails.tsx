@@ -29,6 +29,11 @@ interface AddEmployee {
   id: string;
   label: string;
 }
+interface EmployeeData {
+  name: string;
+  id: string;
+}
+
 const projectDetail = () => {
   const queryClient = useQueryClient();
   const { state } = useLocation();
@@ -74,7 +79,7 @@ const projectDetail = () => {
     const projectAssignmentDetails = {
       projectId: state.projectId,
       employeeId: allProjectAssignmentEmployees?.map(
-        (employee: any) => employee.id
+        (employee: EmployeeData) => employee.id
       ),
     };
     saveEmployeeAction(projectAssignmentDetails, {
@@ -136,8 +141,8 @@ const projectDetail = () => {
               disablePortal
               id="employee-combo-box"
               options={employeeName?.filter(
-                (item: any) =>
-                  !allProjectAssignmentEmployees?.some((obj: any) => {
+                (item: AddEmployee) =>
+                  !allProjectAssignmentEmployees?.some((obj: EmployeeData) => {
                     return obj.name === item.label;
                   })
               )}
@@ -154,27 +159,23 @@ const projectDetail = () => {
               Employees Assigned to this Project:
             </Typography>
             <Stack direction="row" spacing={2}>
-              {allProjectAssignmentEmployees?.map((employeeData: any) => (
-                <div key={employeeData.id}>
-                  <Chip
-                    sx={{
-                      height: 'auto',
-                      '& .MuiChip-label': {
-                        display: 'block',
-                        whiteSpace: 'normal',
-                      },
-                    }}
-                    label={employeeData.name}
-                    onDelete={() => {
-                      setAllProjectAssignmentEmployees(
-                        allProjectAssignmentEmployees.filter(
-                          (employee: any) => employee !== employeeData
-                        )
-                      );
-                    }}
-                  />
-                </div>
-              ))}
+              {allProjectAssignmentEmployees?.map(
+                (employeeData: EmployeeData) => (
+                  <div key={employeeData.id}>
+                    <Chip
+                      label={employeeData.name}
+                      onDelete={() => {
+                        setAllProjectAssignmentEmployees(
+                          allProjectAssignmentEmployees.filter(
+                            (employee: EmployeeData) =>
+                              employee !== employeeData
+                          )
+                        );
+                      }}
+                    />
+                  </div>
+                )
+              )}
             </Stack>
             <Button
               variant="contained"
