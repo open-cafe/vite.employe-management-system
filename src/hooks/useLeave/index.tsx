@@ -1,13 +1,13 @@
 import { useQuery } from '@tanstack/react-query';
 import { fetchLeave } from './request';
 
-const useLeave = () => {
+const useLeave = (page: number, pageSize: number) => {
   const {
-    isSuccess,
+    isError: leaveError,
     data,
     isLoading: leaveLoading,
-  } = useQuery(['leaves'], fetchLeave);
-  return { isSuccess, data, leaveLoading };
+  } = useQuery(['leaves', page, pageSize], () => fetchLeave(page, pageSize));
+  return { leaveError, data, leaveLoading };
 };
 
 export default useLeave;
