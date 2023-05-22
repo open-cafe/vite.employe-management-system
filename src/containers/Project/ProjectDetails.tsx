@@ -39,22 +39,9 @@ const projectDetail = () => {
   } = useProjectAssignments(state.projectId, 1, 10);
   const { allEmployeeData, allEmployeeDataLoading } = useAllEmployee();
 
-  // const [addEmployee, setAddEmployee] = useState<string[]>([]);
-  // const [addEmployeeById, setAddEmployeeById] = useState<string[]>([]);
-
   const [allProjectAssignmentEmployees, setAllProjectAssignmentEmployees] =
     useState<any>([]);
   useEffect(() => {
-    // setAddEmployee(
-    //   projectAssignmentData?.data?.data?.data?.map(
-    //     (data: ProjectAssignments) => data?.employee?.name
-    //   )
-    // );
-    // setAddEmployeeById(
-    //   projectAssignmentData?.data?.data?.data?.map(
-    //     (data: ProjectAssignments) => data?.employee?.employeeId
-    //   )
-    // );
     setAllProjectAssignmentEmployees(
       projectAssignmentData?.data?.data?.data?.map(
         (projectAssignment: ProjectAssignments) => {
@@ -73,10 +60,6 @@ const projectDetail = () => {
     event: SyntheticEvent<Element, Event>,
     value: AddEmployee | null
   ) => {
-    // setAddEmployee(value ? [...addEmployee, value.label] : addEmployee);
-    // setAddEmployeeById(
-    //   value ? [...addEmployeeById, value.id] : addEmployeeById
-    // );
     setAllProjectAssignmentEmployees(
       value
         ? [
@@ -99,7 +82,6 @@ const projectDetail = () => {
         if (data) {
           // add toast later
           queryClient.invalidateQueries(['project-assignment']);
-          console.log('success', data);
         }
       },
       onError: (data) => {
@@ -164,7 +146,7 @@ const projectDetail = () => {
                 <TextField {...params} label="Employee" value={params.id} />
               )}
               onChange={handleEmployeeChange}
-              isOptionEqualToValue={(option, value) => {
+              isOptionEqualToValue={() => {
                 return true;
               }}
             />
@@ -175,6 +157,13 @@ const projectDetail = () => {
               {allProjectAssignmentEmployees?.map((employeeData: any) => (
                 <div key={employeeData.id}>
                   <Chip
+                    sx={{
+                      height: 'auto',
+                      '& .MuiChip-label': {
+                        display: 'block',
+                        whiteSpace: 'normal',
+                      },
+                    }}
                     label={employeeData.name}
                     onDelete={() => {
                       setAllProjectAssignmentEmployees(
@@ -182,16 +171,6 @@ const projectDetail = () => {
                           (employee: any) => employee !== employeeData
                         )
                       );
-                      // setAddEmployee((addEmployee) =>
-                      //   addEmployee.filter(
-                      //     (employee) => employee !== employeeData.name
-                      //   )
-                      // );
-                      // setAddEmployeeById((addEmployeeById) =>
-                      //   addEmployeeById.filter(
-                      //     (employee) => employee !== employeeData.id
-                      //   )
-                      // );
                     }}
                   />
                 </div>

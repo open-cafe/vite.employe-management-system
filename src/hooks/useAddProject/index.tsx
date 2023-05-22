@@ -4,8 +4,11 @@ import { addProject } from './result';
 const useAddProject = () => {
   const { mutate: addProjectAction, isLoading: addProjectLoading } =
     useMutation({
-      mutationFn: (body: { projectName: string; description: string }) =>
-        addProject(body),
+      mutationFn: (body: {
+        projectName: string;
+        description: string;
+        status: string;
+      }) => addProject(body),
     });
   return { addProjectAction, addProjectLoading };
 };

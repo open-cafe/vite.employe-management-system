@@ -1,4 +1,4 @@
-import { Button, TextField, Typography } from '@mui/material';
+import { Autocomplete, Button, TextField, Typography } from '@mui/material';
 import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import MainLayout from '@/layout/MainLayout';
@@ -12,6 +12,7 @@ const AddProject = () => {
   const { addProjectAction, addProjectLoading } = useAddProject();
 
   const [description, setDescription] = useState('');
+  const [projectStatus, setProjectStatus] = useState('');
   const [enteredProject, setEnteredProject] = useState('');
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setDescription(event.target.value);
@@ -21,6 +22,7 @@ const AddProject = () => {
     const projectDetails = {
       projectName: enteredProject,
       description: description,
+      status: projectStatus,
     };
 
     addProjectAction(projectDetails, {
@@ -35,6 +37,7 @@ const AddProject = () => {
     });
     setEnteredProject('');
     setDescription('');
+    setProjectStatus('');
   };
 
   return (
@@ -57,6 +60,15 @@ const AddProject = () => {
             onChange={(e) => setEnteredProject(e.target.value)}
             fullWidth
             required
+          />
+          <Autocomplete
+            sx={{ mt: 2, mb: 2 }}
+            disablePortal
+            id="projectstatus-combo-box"
+            options={['Active', 'Completed', 'Cancelled', 'OnHold']}
+            fullWidth
+            renderInput={(params) => <TextField {...params} label="Project" />}
+            onChange={(event, value) => setProjectStatus(value as string)}
           />
 
           <TextField
