@@ -67,7 +67,7 @@ const AddProject = () => {
             id="projectstatus-combo-box"
             options={['Active', 'Completed', 'Cancelled', 'OnHold']}
             fullWidth
-            renderInput={(params) => <TextField {...params} label="Project" />}
+            renderInput={(params) => <TextField {...params} label="Status" />}
             onChange={(event, value) => setProjectStatus(value as string)}
           />
 
