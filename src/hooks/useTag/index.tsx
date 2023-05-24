@@ -3,11 +3,11 @@ import { fetchTag } from './request';
 
 const useTag = () => {
   const {
-    isSuccess,
-    data,
-    isLoading: projectLoading,
+    isSuccess: istagSuccess,
+    data: tagData,
+    isLoading: istagLoading,
   } = useQuery(['tag'], fetchTag);
-  return { isSuccess, data, projectLoading };
+  return { istagSuccess, tagData, istagLoading };
 };
 
 export default useTag;
