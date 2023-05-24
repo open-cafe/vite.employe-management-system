@@ -9,14 +9,20 @@ import {
   Button,
   Chip,
   CircularProgress,
+  Grid,
+  IconButton,
   Stack,
   TextField,
 } from '@mui/material';
-import { Employee } from '../AddProjectAssignment';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { Employee, ProjectAndEmployee } from '../AddProjectAssignment';
 import useAllEmployee from '@/hooks/useAllEmployee';
 import { SyntheticEvent, useEffect, useState } from 'react';
+import useAddProjectAssignment from '@/hooks/useAddProjectAssignment';
 import { useQueryClient } from '@tanstack/react-query';
-import useSaveEmployeeAssign from '@/hooks/useSaveEmployeeAssign';
+import useDeleteProjectAssignment from '@/hooks/useDeleteProjectAssignment';
+import useProject from '@/hooks/useProject';
+import useProjectDesignationByAssignment from '@/hooks/useProjectDesignationByAssignment';
 
 interface ProjectAssignments {
   projectAssignmentId: string;
@@ -25,6 +31,7 @@ interface ProjectAssignments {
     employeeId: string;
   };
 }
+
 interface AddEmployee {
   id: string;
   label: string;
@@ -32,8 +39,8 @@ interface AddEmployee {
 interface EmployeeData {
   name: string;
   id: string;
+  projectAssignmentId: string;
 }
-
 const projectDetail = () => {
   const queryClient = useQueryClient();
   const { state } = useLocation();
@@ -43,9 +50,15 @@ const projectDetail = () => {
     projectAssignmentError,
   } = useProjectAssignments(state.projectId, 1, 10);
   const { allEmployeeData, allEmployeeDataLoading } = useAllEmployee();
+  const { deleteProjectAssignmentAction } = useDeleteProjectAssignment();
+
+  const { addProjectAssignmentAction } = useAddProjectAssignment();
+
+  const [enteredEmployee, setEnteredEmployee] = useState<string | null>('');
 
   const [allProjectAssignmentEmployees, setAllProjectAssignmentEmployees] =
     useState<any>([]);
+
   useEffect(() => {
     setAllProjectAssignmentEmployees(
       projectAssignmentData?.data?.data?.data?.map(
@@ -53,46 +66,40 @@ const projectDetail = () => {
           return {
             name: projectAssignment?.employee?.name,
             id: projectAssignment?.employee?.employeeId,
+            projectAssignmentId: projectAssignment?.projectAssignmentId,
           };
         }
       )
     );
   }, [projectAssignmentData]);
 
-  const { saveEmployeeAction } = useSaveEmployeeAssign();
-
   const handleEmployeeChange = (
     event: SyntheticEvent<Element, Event>,
-    value: AddEmployee | null
+    value: ProjectAndEmployee | null
   ) => {
-    setAllProjectAssignmentEmployees(
-      value
-        ? [
-            ...allProjectAssignmentEmployees,
-            { name: value.label, id: value.id },
-          ]
-        : allProjectAssignmentEmployees
-    );
+    if (value) setEnteredEmployee(value.id);
+    else setEnteredEmployee('');
   };
 
-  const save = () => {
+  const handleSubmit = async () => {
     const projectAssignmentDetails = {
       projectId: state.projectId,
-      employeeId: allProjectAssignmentEmployees?.map(
-        (employee: EmployeeData) => employee.id
-      ),
+      employeeId: enteredEmployee || '',
     };
-    saveEmployeeAction(projectAssignmentDetails, {
+
+    addProjectAssignmentAction(projectAssignmentDetails, {
       onSuccess: (data) => {
         if (data) {
           // add toast later
           queryClient.invalidateQueries(['project-assignment']);
+          console.log('success', data);
         }
       },
       onError: (data) => {
         console.log('err', data);
       },
     });
+    setEnteredEmployee('');
   };
 
   const employeeName = allEmployeeData?.data?.data.map((employee: Employee) => {
@@ -117,7 +124,6 @@ const projectDetail = () => {
         !allEmployeeDataLoading &&
         projectAssignmentData && (
           <CardContent>
-            {}
             <Typography
               sx={{ fontSize: 25, fontFamily: 'monospace', fontWeight: 'bold' }}
               color="text.secondary"
@@ -151,41 +157,85 @@ const projectDetail = () => {
                 <TextField {...params} label="Employee" value={params.id} />
               )}
               onChange={handleEmployeeChange}
-              isOptionEqualToValue={() => {
-                return true;
-              }}
+              isOptionEqualToValue={() => true}
             />
-            <Typography sx={{ mb: 1.5 }} color="text.secondary">
-              Employees Assigned to this Project:
-            </Typography>
-            <Stack direction="row" spacing={2}>
-              {allProjectAssignmentEmployees?.map(
-                (employeeData: EmployeeData) => (
-                  <div key={employeeData.id}>
-                    <Chip
-                      label={employeeData.name}
-                      onDelete={() => {
-                        setAllProjectAssignmentEmployees(
-                          allProjectAssignmentEmployees.filter(
-                            (employee: EmployeeData) =>
-                              employee !== employeeData
-                          )
-                        );
-                      }}
-                    />
-                  </div>
-                )
-              )}
-            </Stack>
             <Button
               variant="contained"
               onClick={() => {
-                save();
+                handleSubmit();
               }}
-              sx={{ mt: 2 }}
+              sx={{ mb: 2 }}
             >
-              Save
+              Add Employee
             </Button>
+            <Typography sx={{ mb: 1.5 }} color="text.secondary">
+              Employees Assigned to this Project:
+            </Typography>
+
+            <Box
+              sx={{
+                direction: 'row',
+                spacing: 2,
+                display: 'flex',
+                flexDirection: 'row',
+                flexWrap: 'wrap',
+                gap: '20px',
+              }}
+            >
+              {allProjectAssignmentEmployees?.map(
+                (employeeData: EmployeeData) => (
+                  <div key={employeeData.id}>
+                    <Card>
+                      <CardContent>
+                        <Grid container spacing={2}>
+                          <Grid item xs={10} sm={10} md={10} lg={10} xl={10}>
+                            <Typography
+                              sx={{ fontSize: 22 }}
+                              color="text.secondary"
+                              gutterBottom
+                            >
+                              {employeeData.name}
+                            </Typography>
+                          </Grid>
+                          <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
+                            <IconButton
+                              style={{ color: 'black' }}
+                              onClick={() => {
+                                const projectAssignmentDetails = {
+                                  projectAssignmentId:
+                                    employeeData.projectAssignmentId,
+                                };
+                                deleteProjectAssignmentAction(
+                                  projectAssignmentDetails,
+                                  {
+                                    onSuccess: (data) => {
+                                      if (data) {
+                                        // add toast later
+                                        queryClient.invalidateQueries([
+                                          'project-assignment',
+                                        ]);
+                                        console.log('success', data);
+                                      }
+                                    },
+                                    onError: (data) => {
+                                      console.log('err', data);
+                                    },
+                                  }
+                                );
+                              }}
+                            >
+                              <DeleteIcon />
+                            </IconButton>
+                          </Grid>
+                        </Grid>
+
+                        {/* add the project designation tags here */}
+                      </CardContent>
+                    </Card>
+                  </div>
+                )
+              )}
+            </Box>
           </CardContent>
         )}
     </Card>
