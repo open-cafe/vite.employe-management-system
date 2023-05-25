@@ -37,6 +37,7 @@ const LeaveAdd = () => {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setLeaveType(event.target.value);
   };
+
   // console.log('111', today);
   // const handleDate = () => {
   //   onbeforeinput={(e) => {
@@ -85,10 +86,10 @@ const LeaveAdd = () => {
               select
               margin="normal"
               name="leavetype"
-              // value={inputValues.leave_type}
+              value={leaveType}
               // onChange={handleInputChange}
               label="Leave Type"
-              //   variant="outlined"
+              variant="outlined"
               fullWidth
               required
             >
@@ -101,7 +102,7 @@ const LeaveAdd = () => {
 
             <TextField
               id="reason"
-              // value={description}
+              value={reason}
               label="Reason"
               multiline
               rows={2}
@@ -117,7 +118,7 @@ const LeaveAdd = () => {
                     label="Start Date"
                     minDate={today}
                     maxDate={yesterday}
-                    // value={startDate}
+                    value={startDate}
                     // editable= {false}
                     // onChange={handleDate}
                     onChange={(newValue) => setStartDate(newValue)}
@@ -128,6 +129,7 @@ const LeaveAdd = () => {
                     label="End Date"
                     minDate={today}
                     maxDate={yesterday}
+                    value={endDate}
                     // onBeforeInput={(e) => e.preventDefault()}
                     onChange={(newVal) => setEndDate(newVal)}
                   />

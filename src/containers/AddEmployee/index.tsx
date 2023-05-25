@@ -54,7 +54,7 @@ const AddEmployee = () => {
           sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
         >
           <Typography component="h1" variant="h4" align="center">
-            Add employee
+            Add/Update employee details
           </Typography>
           <TextField
             margin="normal"
