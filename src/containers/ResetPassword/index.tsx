@@ -7,6 +7,8 @@ import {
   Typography,
   Card,
   CardContent,
+  Snackbar,
+  Alert,
 } from '@mui/material';
 
 import { useEffect, useState } from 'react';
@@ -20,6 +22,14 @@ const ResetPassword = () => {
 
   const { resetPasswordChangeAction, resetPasswordchangeLoading } =
     useResetPassword();
+  const [alertOpen, setAlertOpen] = useState(false);
+  const [alertSeverity, setAlertSeverity] = useState<
+    'success' | 'error' | 'info' | 'warning'
+  >('success');
+  const [alertMessage, setAlertMessage] = useState('');
+  const handleAlertClose = () => {
+    setAlertOpen(false);
+  };
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -39,14 +49,18 @@ const ResetPassword = () => {
           navigate('/login');
         },
         onError: (data) => {
-          console.log('err', data);
+          setAlertSeverity('error');
+          setAlertMessage('Token expired');
+          setAlertOpen(true);
         },
       });
 
       setnewPassword('');
       setconfirmPassword('');
     } else {
-      console.log('confrim password is not equal to new password');
+      setAlertSeverity('warning');
+      setAlertMessage('confrim password is not equal to new password');
+      setAlertOpen(true);
     }
   };
 
@@ -99,6 +113,19 @@ const ResetPassword = () => {
           </Box>
         </CardContent>
       </Card>
+      <Snackbar
+        open={alertOpen}
+        autoHideDuration={1500}
+        onClose={handleAlertClose}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+      >
+        <Alert onClose={handleAlertClose} severity={alertSeverity}>
+          {alertMessage}
+        </Alert>
+      </Snackbar>
     </>
   );
 };

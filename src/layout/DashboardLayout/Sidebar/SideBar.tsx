@@ -31,6 +31,9 @@ const SideBar = () => {
           <ListItemButton onClick={() => navigate('checkinout')}>
             <ListItemText primary="CheckInOut" />
           </ListItemButton>
+          <ListItemButton onClick={() => navigate('adduser')}>
+            <ListItemText primary="AddUser" />
+          </ListItemButton>
         </Grid>
       </Grid>
     </List>

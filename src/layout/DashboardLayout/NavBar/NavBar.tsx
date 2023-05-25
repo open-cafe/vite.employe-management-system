@@ -8,13 +8,21 @@ import { useNavigate } from 'react-router-dom';
 import { cookieName } from '@/constants/environment';
 import { deleteCookie } from '@/utils/authCookies';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
+import axios from 'axios';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
+import PersonIcon from '@mui/icons-material/Person';
 
 export default function NavBar() {
-  const routeChange = () => {
+  const navigate = useNavigate();
+
+  const routeChange = async () => {
+    // const res = await axios.post('http://localhost:3000/user/logout');
     deleteCookie(cookieName);
     navigate(`login`);
   };
-  const navigate = useNavigate();
+
   return (
     <Box sx={{ position: 'relative' }}>
       <AppBar position="static">
@@ -26,9 +34,23 @@ export default function NavBar() {
               </Typography>
             </Grid>
             <Grid item xs={12} sm={1} md={1} lg={1} xl={1}>
-              <IconButton style={{ color: 'black' }} onClick={routeChange}>
-                <LogoutOutlinedIcon />
-              </IconButton>
+              <PopupState variant="popover" popupId="demo-popup-menu">
+                {(popupState) => (
+                  <React.Fragment>
+                    <IconButton {...bindTrigger(popupState)}>
+                      <PersonIcon />
+                    </IconButton>
+
+                    <Menu {...bindMenu(popupState)}>
+                      <MenuItem onClick={popupState.close}>Profile</MenuItem>
+                      <MenuItem onClick={() => navigate('changepassword')}>
+                        Change Password
+                      </MenuItem>
+                      <MenuItem onClick={routeChange}>Logout</MenuItem>
+                    </Menu>
+                  </React.Fragment>
+                )}
+              </PopupState>
             </Grid>
           </Grid>
         </Toolbar>

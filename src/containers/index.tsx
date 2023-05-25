@@ -5,26 +5,29 @@ import PrivateRoutes from '@/components/PrivateRoutes';
 import PublicRoutes from '@/components/PublicRoutes';
 import Dashboard from './Dashboard';
 import DashboardLayout from '@/layout/DashboardLayout';
-import Employees from './Employee/Employees';
-import Leave from './Leave/Leave';
+import Employees from './Employee';
+import Leave from './Leave';
 import Project from './Project';
 
-import LeaveDetails from './Leave/LeaveDetails';
-import CheckInOut from './CheckInOut/CheckInOut';
+import LeaveDetails from './Leave/Details';
+import CheckInOut from './CheckInOut';
 
 import Login from './Login/index';
 import AddUser from './AddUser';
-import ChangePassword from './Employee/ChangePassword';
+import ChangePassword from './ChangePassword';
 import AddProject from './AddProject';
 import ResetPasswordMailForm from './ResetPassowrdMailForm/resetPasswordMailForm';
 import ResetPassword from './ResetPassword';
 import AddProjectAssignment from './AddProjectAssignment';
 import ProjectDetails from './Project/ProjectDetails';
+import EmployeeOnBoarding from './EmployeeOnBorading';
 
 const Router: FC = () => {
   return (
     <Routes>
       <Route path="/" element={<PrivateRoutes />}>
+        <Route path="/employeeonboarding" element={<EmployeeOnBoarding />} />
+
         <Route path="/" element={<DashboardLayout />}>
           <Route index element={<Dashboard />} />
           <Route path="employee" element={<Employees />} />
