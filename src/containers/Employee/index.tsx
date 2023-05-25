@@ -28,7 +28,7 @@ const columns: Column[] = [
   { id: 'designation', label: 'Designation', minWidth: 100 },
   {
     id: 'phone',
-    label: 'Contct Number',
+    label: 'Contact Number',
     minWidth: 170,
     align: 'right',
   },
