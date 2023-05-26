@@ -21,7 +21,12 @@ export default function NavBar() {
         <Toolbar variant="dense">
           <Grid container>
             <Grid item xs={1} sm={11} md={11} lg={11} xl={11}>
-              <Typography variant="h6" color="inherit" component="div">
+              <Typography
+                variant="h6"
+                sx={{ fontFamily: 'Georgia', fontWeight: 'bold' }}
+                color="inherit"
+                component="div"
+              >
                 Employee Management System
               </Typography>
             </Grid>
