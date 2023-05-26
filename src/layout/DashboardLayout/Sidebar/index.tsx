@@ -32,6 +32,9 @@ const SideBar = () => {
           <ListItemButton onClick={() => navigate('adduser')}>
             <ListItemText primary="AddUser" />
           </ListItemButton>
+          <ListItemButton onClick={() => navigate('addproject')}>
+            <ListItemText primary="AddProject" />
+          </ListItemButton>
         </>
       );
     } else if (role === 'Employee') {
