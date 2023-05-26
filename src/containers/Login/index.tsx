@@ -18,10 +18,12 @@ import { cookieName } from '../../constants/environment';
 import { useState, useContext } from 'react';
 import LoginLayout from '@/layout/LoginLayout';
 import useAuth from '@/hooks/useAuth';
+import useCurrentUser from '@/hooks/useCurrentUser';
 
 const Login = () => {
   const navigate = useNavigate();
   const { loginAction, loginLoading } = useAuth();
+
   const [enteredEmail, setEnteredEmail] = useState('');
   const [enteredPassword, setEnteredPassword] = useState('');
   const [alertOpen, setAlertOpen] = useState(false);

@@ -13,6 +13,8 @@ interface DashboardLayoutPops {
 }
 
 const DashboardLayout = () => {
+  const { currentUserError, data, currentUserLoading } = useCurrentUser();
+
   return (
     <MainLayout>
       <Grid container>

@@ -17,6 +17,14 @@ import {
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import MainLayout from '@/layout/MainLayout';
+import { AxiosError } from 'axios';
+
+interface ErrorData {
+  errorObj: {
+    message: string;
+    // other properties, if applicable
+  };
+}
 
 const ChangePassword = () => {
   const [oldPassword, setoldPassword] = useState('');
@@ -48,9 +56,17 @@ const ChangePassword = () => {
           }
           navigate('/login');
         },
-        onError: (data) => {
+        onError: (
+          error: unknown,
+          variables: { oldPassword: string; newPassword: string },
+          context: unknown
+        ) => {
+          const axiosError = error as AxiosError;
+
           setAlertSeverity('error');
-          setAlertMessage('old password does not match');
+          setAlertMessage(
+            (axiosError.response?.data as ErrorData)?.errorObj?.message
+          );
           setAlertOpen(true);
         },
       });
@@ -123,7 +139,7 @@ const ChangePassword = () => {
       </Card>
       <Snackbar
         open={alertOpen}
-        autoHideDuration={1500}
+        autoHideDuration={6000}
         onClose={handleAlertClose}
         anchorOrigin={{
           vertical: 'top',

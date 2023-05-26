@@ -14,6 +14,14 @@ import {
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import CommonStyles from '@/style/Common.styles';
+import { AxiosError } from 'axios';
+
+interface ErrorData {
+  errorObj: {
+    message: string;
+    // other properties, if applicable
+  };
+}
 
 const ResetPassword = () => {
   const [newPassword, setnewPassword] = useState('');
@@ -48,9 +56,17 @@ const ResetPassword = () => {
         onSuccess: (data) => {
           navigate('/login');
         },
-        onError: (data) => {
+        onError: (
+          error: unknown,
+          variables: { password: string; token: string },
+          context: unknown
+        ) => {
+          const axiosError = error as AxiosError;
+
           setAlertSeverity('error');
-          setAlertMessage('Token expired');
+          setAlertMessage(
+            (axiosError.response?.data as ErrorData)?.errorObj?.message
+          );
           setAlertOpen(true);
         },
       });
