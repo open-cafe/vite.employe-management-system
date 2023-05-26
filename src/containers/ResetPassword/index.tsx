@@ -56,11 +56,7 @@ const ResetPassword = () => {
         onSuccess: (data) => {
           navigate('/login');
         },
-        onError: (
-          error: unknown,
-          variables: { password: string; token: string },
-          context: unknown
-        ) => {
+        onError: (error) => {
           const axiosError = error as AxiosError;
 
           setAlertSeverity('error');

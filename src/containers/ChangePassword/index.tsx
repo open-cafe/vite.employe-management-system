@@ -56,11 +56,7 @@ const ChangePassword = () => {
           }
           navigate('/login');
         },
-        onError: (
-          error: unknown,
-          variables: { oldPassword: string; newPassword: string },
-          context: unknown
-        ) => {
+        onError: (error) => {
           const axiosError = error as AxiosError;
 
           setAlertSeverity('error');
@@ -139,7 +135,7 @@ const ChangePassword = () => {
       </Card>
       <Snackbar
         open={alertOpen}
-        autoHideDuration={6000}
+        autoHideDuration={60000}
         onClose={handleAlertClose}
         anchorOrigin={{
           vertical: 'top',

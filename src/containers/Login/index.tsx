@@ -43,9 +43,9 @@ const Login = () => {
       loginAction(loginCredentials, {
         onSuccess: (data) => {
           if (data) {
-            setCookie(cookieName, data.data.data.access_token);
-            if (data.data.data.role === 'Employee') {
-              if (data.data.data.employeeDetail) {
+            setCookie(cookieName, data?.data?.data?.access_token);
+            if (data?.data?.data?.role === 'Employee') {
+              if (data?.data?.data?.employeeDetail) {
                 navigate(`/`);
               } else {
                 navigate('/employeeonboarding');

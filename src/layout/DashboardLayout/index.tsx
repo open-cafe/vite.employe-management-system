@@ -6,15 +6,12 @@ import SideBar from './Sidebar';
 import Grid from '@mui/material/Grid';
 import { Outlet } from 'react-router-dom';
 import { Box } from '@mui/material';
-import useCurrentUser from '@/hooks/useCurrentUser';
 
 interface DashboardLayoutPops {
   children: ReactNode;
 }
 
 const DashboardLayout = () => {
-  const { currentUserError, data, currentUserLoading } = useCurrentUser();
-
   return (
     <MainLayout>
       <Grid container>
