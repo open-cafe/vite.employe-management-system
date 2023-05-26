@@ -7,6 +7,8 @@ import {
   TextField,
   Typography,
   Card,
+  Snackbar,
+  Alert,
   CardContent,
 } from '@mui/material';
 import Grid from '@mui/material/Grid';
@@ -16,13 +18,22 @@ import { cookieName } from '../../constants/environment';
 import { useState, useContext } from 'react';
 import LoginLayout from '@/layout/LoginLayout';
 import useAuth from '@/hooks/useAuth';
+import useCurrentUser from '@/hooks/useCurrentUser';
 
 const Login = () => {
   const navigate = useNavigate();
   const { loginAction, loginLoading } = useAuth();
+
   const [enteredEmail, setEnteredEmail] = useState('');
   const [enteredPassword, setEnteredPassword] = useState('');
-
+  const [alertOpen, setAlertOpen] = useState(false);
+  const [alertSeverity, setAlertSeverity] = useState<
+    'success' | 'error' | 'info' | 'warning'
+  >('success');
+  const [alertMessage, setAlertMessage] = useState('');
+  const handleAlertClose = () => {
+    setAlertOpen(false);
+  };
   const handleSubmit = async () => {
     const loginCredentials = {
       email: enteredEmail,
@@ -32,12 +43,22 @@ const Login = () => {
       loginAction(loginCredentials, {
         onSuccess: (data) => {
           if (data) {
-            setCookie(cookieName, data.data.data.access_token);
-            navigate(`/`);
+            setCookie(cookieName, data?.data?.data?.access_token);
+            if (data?.data?.data?.role === 'Employee') {
+              if (data?.data?.data?.employeeDetail) {
+                navigate(`/`);
+              } else {
+                navigate('/employeeonboarding');
+              }
+            } else {
+              navigate(`/`);
+            }
           }
         },
         onError: (data) => {
-          console.log('err', data);
+          setAlertSeverity('error');
+          setAlertMessage('email or password is incorrect');
+          setAlertOpen(true);
         },
       });
       setEnteredEmail('');
@@ -109,6 +130,19 @@ const Login = () => {
           </CardContent>
         </Box>
       </Card>
+      <Snackbar
+        open={alertOpen}
+        autoHideDuration={6000}
+        onClose={handleAlertClose}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+      >
+        <Alert onClose={handleAlertClose} severity={alertSeverity}>
+          {alertMessage}
+        </Alert>
+      </Snackbar>
     </LoginLayout>
   );
 };
