@@ -5,6 +5,7 @@ import ListItemText from '@mui/material/ListItemText';
 import Grid from '@mui/material/Grid';
 import { useNavigate } from 'react-router-dom';
 import useCurrentUser from '@/hooks/useCurrentUser';
+import SideBarStyles from '@/style/SideBar.styles';
 
 export const mainListItems = <React.Fragment></React.Fragment>;
 
@@ -41,7 +42,7 @@ const SideBar = () => {
       return (
         <>
           <ListItemButton>
-            <ListItemText primary="Apply Leave" />
+            <ListItemText primary="ApplyLeave" />
           </ListItemButton>
           <ListItemButton>
             <ListItemText primary="Project" />
@@ -55,14 +56,8 @@ const SideBar = () => {
   };
 
   return (
-    <List component="nav" sx={{ backgroundColor: '#ED81AD', height: '100vh' }}>
-      <Grid
-        container
-        direction="column"
-        justifyContent="center"
-        alignItems="center"
-        sx={{ paddingTop: 8 }}
-      >
+    <List component="nav" sx={SideBarStyles.sidebarlist}>
+      <Grid sx={SideBarStyles.sidebarGrid}>
         <Grid item xs={6}>
           {renderSidebarItems()}
         </Grid>
