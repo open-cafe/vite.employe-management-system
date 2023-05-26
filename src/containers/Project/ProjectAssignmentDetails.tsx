@@ -21,6 +21,17 @@ import { AddEmployeeOrTag } from './ProjectDetails';
 import ProjectAssignmentStyles from '@/style/ProjectAssignment.styles';
 import { returnTagColor } from '@/utils/commonUtils';
 
+interface Tag {
+  tagId: string;
+  tagName: string;
+}
+
+interface ProjectDesignation {
+  projectDesignationId: string;
+  tag: Tag;
+  projectAssignmentId: string;
+}
+
 const ProjectAssignmentDetails = ({
   projectAssignmentId,
 }: {
@@ -69,7 +80,7 @@ const ProjectAssignmentDetails = ({
   const handleClickOpen = () => {
     setOpen(true);
   };
-  const tagNames = tagData?.data?.data?.data?.map((tag: any) => {
+  const tagNames = tagData?.data?.data?.data?.map((tag: Tag) => {
     return { label: tag.tagName, id: tag.tagId };
   });
 
@@ -109,7 +120,7 @@ const ProjectAssignmentDetails = ({
                     options={tagNames.filter(
                       (tag: AddEmployeeOrTag) =>
                         !projectDesignationData?.data?.data?.data?.some(
-                          (projectDesignation: any) =>
+                          (projectDesignation: ProjectDesignation) =>
                             projectDesignation?.tag?.tagName === tag.label
                         )
                     )}
@@ -142,8 +153,8 @@ const ProjectAssignmentDetails = ({
           }}
         >
           {projectDesignationData?.data?.data?.data?.map(
-            (projectDesignation: any, i: number) => {
-              let tagColor: string = '';
+            (projectDesignation: ProjectDesignation, i: number) => {
+              const tagColor = '';
               const tagName: string = projectDesignation?.tag?.tagName.trim();
 
               return (
