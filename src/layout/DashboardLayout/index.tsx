@@ -1,7 +1,7 @@
-import React, { ReactChildren, ReactNode } from 'react';
-import NavBar from './NavBar/NavBar';
+import React, { ReactChildren, ReactNode, useEffect } from 'react';
+import NavBar from './NavBar';
 import MainLayout from '../MainLayout';
-import SideBar from './Sidebar/SideBar';
+import SideBar from './Sidebar';
 
 import Grid from '@mui/material/Grid';
 import { Outlet } from 'react-router-dom';
@@ -15,10 +15,10 @@ const DashboardLayout = () => {
   return (
     <MainLayout>
       <Grid container>
-        <Grid item xs={6} md={1}>
+        <Grid item xs={3} md={1}>
           <SideBar />
         </Grid>
-        <Grid item xs={6} md={11}>
+        <Grid item xs={9} md={11}>
           <NavBar />
           <Box sx={{ height: `calc(100% - 48px)` }}>
             <Outlet />

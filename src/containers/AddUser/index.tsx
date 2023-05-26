@@ -1,4 +1,11 @@
-import { Button, TextField, Typography, MenuItem } from '@mui/material';
+import {
+  Button,
+  TextField,
+  Typography,
+  MenuItem,
+  Snackbar,
+  Alert,
+} from '@mui/material';
 
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -9,6 +16,14 @@ import useAddUser from '@/hooks/useAddUser';
 
 const AddUser = () => {
   const navigate = useNavigate();
+  const [alertOpen, setAlertOpen] = useState(false);
+  const [alertSeverity, setAlertSeverity] = useState<
+    'success' | 'error' | 'info' | 'warning'
+  >('success');
+  const [alertMessage, setAlertMessage] = useState('');
+  const handleAlertClose = () => {
+    setAlertOpen(false);
+  };
   const { addUserAction, addUserLoading } = useAddUser();
 
   const [role, setRole] = useState('');
@@ -30,7 +45,9 @@ const AddUser = () => {
           }
         },
         onError: (data) => {
-          console.log('err', data);
+          setAlertSeverity('error');
+          setAlertMessage('user already exists');
+          setAlertOpen(true);
         },
       });
       setEnteredEmail('');
@@ -72,13 +89,14 @@ const AddUser = () => {
             <MenuItem value="">
               <em>None</em>
             </MenuItem>
-            <MenuItem value={'6c037523-af42-4b8b-a03d-a2665578ae04'}>
+            <MenuItem value={'a4e4d335-dbd5-4c06-a546-bb747665bfb5'}>
               Admin
             </MenuItem>
-            <MenuItem value={'67ef1f80-3f74-432d-954c-ed1d9b5452c8'}>
+            <MenuItem value={'db263526-0c04-4e77-8e05-3d715e6c900b'}>
               Employee
             </MenuItem>
           </TextField>
+
           <Button
             type="submit"
             fullWidth
@@ -90,6 +108,19 @@ const AddUser = () => {
           </Button>
         </Paper>
       </Container>
+      <Snackbar
+        open={alertOpen}
+        autoHideDuration={6000}
+        onClose={handleAlertClose}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+      >
+        <Alert onClose={handleAlertClose} severity={alertSeverity}>
+          {alertMessage}
+        </Alert>
+      </Snackbar>
     </MainLayout>
   );
 };
