@@ -19,6 +19,12 @@ const SideBar = () => {
         sx={{ paddingTop: 8 }}
       >
         <Grid item xs={6}>
+          <ListItemButton onClick={() => navigate('addemployee')}>
+            <ListItemText primary="Add Employee" />
+          </ListItemButton>
+          <ListItemButton onClick={() => navigate('leaveadd')}>
+            <ListItemText primary="Add Leave" />
+          </ListItemButton>
           <ListItemButton onClick={() => navigate('employee')}>
             <ListItemText primary="Employees" />
           </ListItemButton>

@@ -63,7 +63,7 @@ const AddProject = () => {
           />
           <Autocomplete
             sx={{ mt: 2, mb: 2 }}
-            disablePortal
+            // disablePortal
             id="projectstatus-combo-box"
             options={['Active', 'Completed', 'Cancelled', 'OnHold']}
             fullWidth

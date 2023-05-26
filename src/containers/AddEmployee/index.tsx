@@ -13,13 +13,13 @@ const AddEmployee = () => {
   const [designation, setDesignation] = useState('');
   const [enteredName, setEnteredName] = useState('');
   const [phone, setPhone] = useState('');
-  const [hireDate, setHireDate] = useState('');
+  // const [hireDate, setHireDate] = useState('');
 
   // const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   // setEnteredName(event.target.value);
-  //   // setDesignation(event.target.value);
-  //   // setPhone(event.target.value);
-  //   // setHireDate(event.target.value);
+  // setEnteredName(event.target.value);
+  // setDesignation(event.target.value);
+  // setPhone(event.target.value);
+  // setHireDate(event.target.value);
   // };
   //eta herne
   const handleSubmit = async () => {
@@ -27,13 +27,13 @@ const AddEmployee = () => {
       name: enteredName,
       designation: designation,
       phone: phone,
-      hireDate: hireDate,
+      // hireDate: hireDate,
     };
 
     addEmployeeAction(employeeDetails, {
       onSuccess: (data) => {
         if (data) {
-          navigate(`/employees`);
+          navigate(`/employee`);
         }
       },
       onError: (data) => {
@@ -43,7 +43,7 @@ const AddEmployee = () => {
     setEnteredName('');
     setDesignation('');
     setPhone('');
-    setHireDate('');
+    // setHireDate('');
   };
 
   return (
@@ -54,7 +54,7 @@ const AddEmployee = () => {
           sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
         >
           <Typography component="h1" variant="h4" align="center">
-            Add/Update employee details
+            Employee Details
           </Typography>
           <TextField
             margin="normal"
@@ -76,21 +76,22 @@ const AddEmployee = () => {
             fullWidth
             required
           />
-          <Grid container spacing={4}>
-            <Grid item xs={6}>
-              <TextField
-                margin="normal"
-                id="phone"
-                name="phone"
-                label="Phone Number "
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                variant="outlined"
-                fullWidth
-                required
-              />
-            </Grid>
-            <Grid item xs={6}>
+          {/* <Grid container spacing={4}>
+            <Grid item xs={6}> */}
+          <TextField
+            margin="normal"
+            id="phone"
+            name="phone"
+            label="Phone Number "
+            value={phone}
+            placeholder="+977"
+            onChange={(e) => setPhone(e.target.value)}
+            variant="outlined"
+            fullWidth
+            required
+          />
+          {/* </Grid> */}
+          {/* <Grid item xs={6}>
               <TextField
                 margin="normal"
                 name="hireDate"
@@ -102,8 +103,8 @@ const AddEmployee = () => {
                 fullWidth
                 required
               />
-            </Grid>
-          </Grid>
+            </Grid> */}
+          {/* </Grid> */}
           <Button
             type="submit"
             fullWidth
