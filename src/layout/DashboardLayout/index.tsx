@@ -14,17 +14,15 @@ interface DashboardLayoutPops {
 const DashboardLayout = () => {
   return (
     <MainLayout>
-      <Grid container>
-        <Grid item xs={3} md={1}>
-          <SideBar />
-        </Grid>
-        <Grid item xs={9} md={11}>
-          <NavBar />
-          <Box sx={{ height: `calc(100% - 48px)` }}>
-            <Outlet />
-          </Box>
-        </Grid>
-      </Grid>
+      <NavBar />
+      <SideBar />
+      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+        {/* <Grid item xs={3} md={1}> */}
+        {/* </Grid> */}
+        <Box sx={{ width: '80vw' }}>
+          <Outlet />
+        </Box>
+      </Box>
     </MainLayout>
   );
 };
