@@ -15,8 +15,6 @@ const CommonStyles = {
     backgroundColor: '#f7f6f2',
     height: '100%',
   },
-  text: {
-    fontFamily: 'Georgia',
-  },
+  text: {},
 };
 export default CommonStyles;

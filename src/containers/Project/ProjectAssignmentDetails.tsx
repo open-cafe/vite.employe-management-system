@@ -88,12 +88,7 @@ const ProjectAssignmentDetails = ({
     <div>
       {!istagLoading && (
         <>
-          <Button
-            variant="outlined"
-            sx={{ fontFamily: 'Georgia' }}
-            onClick={handleClickOpen}
-            size="small"
-          >
+          <Button variant="outlined" onClick={handleClickOpen} size="small">
             Add Tags
           </Button>
           <Dialog open={open}>

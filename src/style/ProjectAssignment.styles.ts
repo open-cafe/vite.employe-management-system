@@ -6,7 +6,6 @@ const ProjectAssignmentStyles = {
         mr: 2,
         color: 'white',
         backgroundColor: tagColor,
-        fontFamily: 'Georgia',
       },
     };
   },

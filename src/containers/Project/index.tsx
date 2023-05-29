@@ -89,7 +89,6 @@ const Project: React.FC = () => {
           <div>
             <Typography
               sx={{
-                fontFamily: 'Georgia',
                 fontWeight: 'bold',
               }}
               variant="h4"
@@ -115,7 +114,6 @@ const Project: React.FC = () => {
                   {columns.map((column) => (
                     <TableCell
                       sx={{
-                        fontFamily: 'Georgia',
                         fontSize: 19,
                         fontWeight: 600,
                       }}
@@ -140,17 +138,13 @@ const Project: React.FC = () => {
                         key={project.projectId}
                       >
                         <TableCell sx={{ minWidth: 170 }}>
-                          <Typography
-                            variant="h5"
-                            sx={{ fontFamily: 'Georgia', fontSize: 19 }}
-                          >
+                          <Typography variant="h5" sx={{ fontSize: 19 }}>
                             {project?.projectName}
                           </Typography>
                         </TableCell>
                         <TableCell
                           sx={{
                             minWidth: 100,
-                            fontFamily: 'Georgia',
                             fontSize: 15,
                           }}
                         >
@@ -160,7 +154,6 @@ const Project: React.FC = () => {
                           <Typography
                             sx={{
                               minWidth: 100,
-                              fontFamily: 'Georgia',
                               fontSize: 15,
                             }}
                           >

@@ -31,7 +31,7 @@ export default function NavBar() {
             <Grid item xs={1} sm={11} md={11} lg={11} xl={11}>
               <Typography
                 variant="h6"
-                sx={{ fontFamily: 'Georgia', fontWeight: 'bold' }}
+                sx={{ fontWeight: 'bold' }}
                 color="inherit"
                 component="div"
               >
@@ -40,7 +40,7 @@ export default function NavBar() {
             </Grid>
             <Grid item xs={12} sm={1} md={1} lg={1} xl={1}>
               <PopupState variant="popover" popupId="demo-popup-menu">
-                {(popupState) => (
+                {(popupState: any) => (
                   <React.Fragment>
                     <IconButton {...bindTrigger(popupState)}>
                       <PersonIcon />

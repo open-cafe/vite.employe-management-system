@@ -13,7 +13,10 @@ const ProjectDetailStyles = {
   },
   text: {
     fontSize: 22,
-    fontFamily: 'Georgia',
+    fontWeight: 'bold',
+  },
+  nameText: {
+    fontSize: 28,
     fontWeight: 'bold',
   },
 };

@@ -4,7 +4,7 @@ const MainLayoutStyles = {
     height: '100vh',
     backgroundImage: 'linear-gradient(to right, #ED81AD , #FFD969)',
     overflow: 'auto',
-    fontFamily: 'Georgia',
+    // fontFamily: 'Arial, monospace',
   },
 };
 export default MainLayoutStyles;
