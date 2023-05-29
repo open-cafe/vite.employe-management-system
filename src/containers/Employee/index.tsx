@@ -93,7 +93,9 @@ const Employees: React.FC = () => {
             <Table stickyHeader aria-label="sticky table">
               <TableHead>
                 <TableRow>
-                  <TableCell align="center">Employee Details</TableCell>
+                  <TableCell align="center" colSpan={4}>
+                    Employee Details
+                  </TableCell>
                 </TableRow>
                 <TableRow>
                   {columns.map((column) => (

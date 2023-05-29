@@ -18,6 +18,7 @@ import useLeave from '@/hooks/useLeave';
 import { useEffect, useState } from 'react';
 
 import { Dayjs } from 'dayjs';
+import useCurrentUser from '@/hooks/useCurrentUser';
 
 interface Column {
   id: 'reason' | 'leaveType' | 'startDate' | 'endDate';
@@ -54,9 +55,14 @@ interface Leave {
 
 const Leave: React.FC = () => {
   const navigate = useNavigate();
+  // const { currentUserError, roles, currentUserLoading } = useCurrentUser();
+  // const role = roles?.data?.data?.getCurrentUser.role;
+  // console.log(role);
+
   const navigateToConfirmed = (leave: Leave) => {
     navigate(`/leavedetail`, { state: leave });
   };
+
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const { leaveError, data, leaveLoading } = useLeave(page + 1, rowsPerPage);

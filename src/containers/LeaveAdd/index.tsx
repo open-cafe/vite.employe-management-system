@@ -41,23 +41,16 @@ const LeaveAdd = () => {
   const [startDate, setStartDate] = useState<dayjs.Dayjs | null>(null);
   const [endDate, setEndDate] = useState<dayjs.Dayjs | null>(null);
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setLeaveType(event.target.value);
+    // setLeaveType(event.target.value);
     setReason(event.target.value);
   };
-  const handleChanges = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setLeaveType(event.target.value);
-    setReason(event.target.value);
-  };
+  // const handleChanges = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   setLeaveType(event.target.value);
+  //   setReason(event.target.value);
+  // };
   const handleLeaveChange = (event: SelectChangeEvent) => {
     setLeaveType(event.target.value as string);
   };
-
-  // console.log('111', today);
-  // const handleDate = () => {
-  //   onbeforeinput={(e) => {
-  //     e.preventDefault();
-  //   }}
-  // };
 
   const handleSubmit = async () => {
     console.log('asdf', dayjs());
@@ -118,74 +111,71 @@ const LeaveAdd = () => {
               <MenuItem value="2">PERSONAL</MenuItem>
             </TextField> */}
 
-            <FormControl fullWidth>
-              <InputLabel id="demo">Leave Type *</InputLabel>
-              <Select
-                sx={{ mt: 2, mb: 2 }}
-                labelId="demo"
-                label="Leave Type"
-                value={leaveType}
-                onChange={handleLeaveChange}
-                fullWidth
-                variant="outlined"
-                required
-              >
-                <MenuItem value="SICK">SICK</MenuItem>
-                <MenuItem value="PERSONAL">PERSONAL</MenuItem>
-              </Select>
-
-              {/* <Grid item spacing={6}> */}
-              <TextField
-                id="reason"
-                value={reason}
-                label="Reason"
-                multiline
-                rows={5}
-                onChange={handleChange}
-                fullWidth
-                required
-              />
-              {/* </Grid> */}
-
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DemoContainer
-                  components={['DatePicker']}
-                  sx={{ mt: 1, mb: 1 }}
+            <Box /* sx={{ minWidth: 120 }} */>
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">Type</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={leaveType}
+                  label="Leave Type"
+                  onChange={handleLeaveChange}
                 >
-                  <DemoItem component="DatePicker">
-                    <DatePicker
-                      label="Start Date"
-                      minDate={today}
-                      maxDate={yesterday}
-                      value={startDate}
-                      // editable= {false}
-                      // onChange={handleDate}
-                      onChange={(newValue) => setStartDate(newValue)}
-                    />
-                  </DemoItem>
-                  <DemoItem component="DatePicker">
-                    <DatePicker
-                      label="End Date"
-                      minDate={today}
-                      maxDate={yesterday}
-                      value={endDate}
-                      // onBeforeInput={(e) => e.preventDefault()}
-                      onChange={(newVal) => setEndDate(newVal)}
-                    />
-                  </DemoItem>
-                </DemoContainer>
-              </LocalizationProvider>
+                  <MenuItem value="SICK">SICK</MenuItem>
+                  <MenuItem value="PERSONAL">PERSONAL</MenuItem>
+                </Select>
+              </FormControl>
+            </Box>
 
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2 }}
-                onClick={() => handleSubmit()}
-              >
-                Add Leave
-              </Button>
-            </FormControl>
+            {/* <Grid item spacing={6}> */}
+            <TextField
+              margin="normal"
+              id="reason"
+              value={reason}
+              label="Reason"
+              multiline
+              rows={5}
+              onChange={handleChange}
+              fullWidth
+              required
+            />
+            {/* </Grid> */}
+
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DemoContainer components={['DatePicker']} sx={{ mt: 1, mb: 1 }}>
+                <DemoItem component="DatePicker">
+                  <DatePicker
+                    label="Start Date"
+                    minDate={today}
+                    maxDate={yesterday}
+                    value={startDate}
+                    // editable= {false}
+                    // onChange={handleDate}
+                    onChange={(newValue) => setStartDate(newValue)}
+                  />
+                </DemoItem>
+                <DemoItem component="DatePicker">
+                  <DatePicker
+                    label="End Date"
+                    minDate={today}
+                    maxDate={yesterday}
+                    value={endDate}
+                    // onBeforeInput={(e) => e.preventDefault()}
+                    onChange={(newVal) => setEndDate(newVal)}
+                  />
+                </DemoItem>
+              </DemoContainer>
+            </LocalizationProvider>
+
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+              onClick={() => handleSubmit()}
+            >
+              Add Leave
+            </Button>
           </Paper>
         </Container>
       </MainLayout>
