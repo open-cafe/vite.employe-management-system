@@ -15,7 +15,7 @@ const SideBar = () => {
   const role = data?.data?.data?.getCurrentUser.role;
 
   const renderSidebarItems = () => {
-    if (role === 'SuperAdmin') {
+    if (role === 'SuperAdmin' || role === 'Admin') {
       return (
         <>
           <ListItemButton onClick={() => navigate('employee')}>
@@ -58,9 +58,7 @@ const SideBar = () => {
   return (
     <List component="nav" sx={SideBarStyles.sidebarlist}>
       <Grid sx={SideBarStyles.sidebarGrid}>
-        <Grid item xs={6}>
-          {renderSidebarItems()}
-        </Grid>
+        <Grid>{renderSidebarItems()}</Grid>
       </Grid>
     </List>
   );

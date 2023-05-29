@@ -27,6 +27,7 @@ const ResetPassword = () => {
   const [newPassword, setnewPassword] = useState('');
   const [confrmPassword, setconfirmPassword] = useState('');
   const [token, setToken] = useState<string | null>(null);
+  const [userId, setUserID] = useState<string | null>(null);
 
   const { resetPasswordChangeAction, resetPasswordchangeLoading } =
     useResetPassword();
@@ -42,6 +43,8 @@ const ResetPassword = () => {
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const tokenValue = urlParams.get('token');
+    const userId = urlParams.get('userId');
+    setUserID(userId);
     setToken(tokenValue);
   }, []);
 
@@ -49,6 +52,7 @@ const ResetPassword = () => {
     const resetPassowrdCredentials = {
       password: newPassword,
       token: token as string,
+      userId: userId as string,
     };
 
     if (newPassword === confrmPassword) {

@@ -13,8 +13,11 @@ import MainLayout from '@/layout/MainLayout';
 import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';
 import useAddUser from '@/hooks/useAddUser';
+import useAllRole from '@/hooks/useAllRole';
 
 const AddUser = () => {
+  const { allRoleData, allRoleDataLoading } = useAllRole();
+  const roles = allRoleData?.data.data.data;
   const navigate = useNavigate();
   const [alertOpen, setAlertOpen] = useState(false);
   const [alertSeverity, setAlertSeverity] = useState<
@@ -89,12 +92,14 @@ const AddUser = () => {
             <MenuItem value="">
               <em>None</em>
             </MenuItem>
-            <MenuItem value={'a4e4d335-dbd5-4c06-a546-bb747665bfb5'}>
-              Admin
-            </MenuItem>
-            <MenuItem value={'db263526-0c04-4e77-8e05-3d715e6c900b'}>
-              Employee
-            </MenuItem>
+            {roles &&
+              roles.map((Role: any) => {
+                return (
+                  <MenuItem value={Role.roleId} key={Role.roleId}>
+                    {Role.role}
+                  </MenuItem>
+                );
+              })}
           </TextField>
 
           <Button
