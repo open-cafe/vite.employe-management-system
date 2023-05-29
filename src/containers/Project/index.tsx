@@ -15,6 +15,7 @@ import {
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import CommonStyles from '@/style/Common.styles';
+import ProjectStyles from '@/style/Project.styles';
 
 interface Column {
   id: 'project_name' | 'description' | 'status';
@@ -98,12 +99,7 @@ const Project: React.FC = () => {
               Project List
             </Typography>
           </div>
-          <TableContainer
-            sx={{
-              minHeight: '85vh',
-              backgroundColor: 'white',
-            }}
-          >
+          <TableContainer sx={ProjectStyles.tableContainer}>
             <Table
               stickyHeader
               aria-label="sticky table"
@@ -131,7 +127,7 @@ const Project: React.FC = () => {
                   projectDetail.map((project: Project) => {
                     return (
                       <TableRow
-                        sx={{ cursor: 'pointer' }}
+                        sx={ProjectStyles.cursorPointer}
                         onClick={() => navigateToConfirmed(project)}
                         hover
                         role="checkbox"
@@ -142,21 +138,11 @@ const Project: React.FC = () => {
                             {project?.projectName}
                           </Typography>
                         </TableCell>
-                        <TableCell
-                          sx={{
-                            minWidth: 100,
-                            fontSize: 15,
-                          }}
-                        >
+                        <TableCell sx={ProjectStyles.text}>
                           {project?.description}
                         </TableCell>
                         <TableCell sx={{ minWidth: 100 }}>
-                          <Typography
-                            sx={{
-                              minWidth: 100,
-                              fontSize: 15,
-                            }}
-                          >
+                          <Typography sx={ProjectStyles.text}>
                             {project?.status}
                           </Typography>
                         </TableCell>

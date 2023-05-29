@@ -100,12 +100,7 @@ const ProjectAssignmentDetails = ({
               <Box
                 noValidate
                 component="form"
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  m: 'auto',
-                  width: 'fit-content',
-                }}
+                sx={ProjectAssignmentStyles.form}
               >
                 <FormControl sx={{ mt: 2, minWidth: 120 }}>
                   <Autocomplete
@@ -137,16 +132,7 @@ const ProjectAssignmentDetails = ({
         </>
       )}
       {!projectDesignationLoading && projectDesignationData && (
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'row',
-            mb: 2,
-            flexWrap: 'wrap',
-            width: '275px',
-            height: '75px',
-          }}
-        >
+        <Box sx={ProjectAssignmentStyles.box}>
           {projectDesignationData?.data?.data?.data?.map(
             (projectDesignation: ProjectDesignation, i: number) => {
               const tagColor = '';
