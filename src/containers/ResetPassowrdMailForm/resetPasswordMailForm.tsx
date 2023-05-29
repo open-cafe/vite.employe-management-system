@@ -12,7 +12,7 @@ import {
 import { useState } from 'react';
 import LoginLayout from '@/layout/LoginLayout';
 import useSendResetEmail from '@/hooks/useSendResetEmail';
-import ResetFormStyles from '@/style/ResetForm.style';
+import ResetFormStyles from '@/style/ResetForm.styles';
 
 const ResetPassowrdMailForm = () => {
   const [enteredEmail, setEnteredEmail] = useState('');
@@ -41,7 +41,7 @@ const ResetPassowrdMailForm = () => {
       },
       onError: (data) => {
         setAlertSeverity('error');
-        setAlertMessage('An error occurred while sending the email.');
+        setAlertMessage('User with this Email id does not exist.');
         setAlertOpen(true);
       },
     });
@@ -91,7 +91,7 @@ const ResetPassowrdMailForm = () => {
           horizontal: 'center',
         }}
       >
-        <Alert onClose={handleAlertClose} severity="success">
+        <Alert onClose={handleAlertClose} severity={alertSeverity}>
           {alertMessage}
         </Alert>
       </Snackbar>

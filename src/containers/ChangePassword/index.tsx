@@ -10,16 +10,35 @@ import {
   Typography,
   Card,
   CardContent,
+  Snackbar,
+  Alert,
 } from '@mui/material';
 
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import MainLayout from '@/layout/MainLayout';
+import { AxiosError } from 'axios';
+
+interface ErrorData {
+  errorObj: {
+    message: string;
+    // other properties, if applicable
+  };
+}
 
 const ChangePassword = () => {
   const [oldPassword, setoldPassword] = useState('');
   const [newPassword, setnewPassword] = useState('');
   const [confrmPassword, setconfirmPassword] = useState('');
   const { passwordChangeAction, passwordchangeLoading } = useChangePassword();
+  const [alertOpen, setAlertOpen] = useState(false);
+  const [alertSeverity, setAlertSeverity] = useState<
+    'success' | 'error' | 'info' | 'warning'
+  >('success');
+  const [alertMessage, setAlertMessage] = useState('');
+  const handleAlertClose = () => {
+    setAlertOpen(false);
+  };
 
   const navigate = useNavigate();
 
@@ -37,19 +56,27 @@ const ChangePassword = () => {
           }
           navigate('/login');
         },
-        onError: (data) => {
-          console.log('err', data);
+        onError: (error) => {
+          const axiosError = error as AxiosError;
+
+          setAlertSeverity('error');
+          setAlertMessage(
+            (axiosError.response?.data as ErrorData)?.errorObj?.message
+          );
+          setAlertOpen(true);
         },
       });
       setoldPassword('');
       setnewPassword('');
       setconfirmPassword('');
     } else {
-      console.log('confrim password is not equal to new password');
+      setAlertSeverity('warning');
+      setAlertMessage('confrim password is not equal to new password');
+      setAlertOpen(true);
     }
   };
   return (
-    <>
+    <MainLayout>
       <Card variant="outlined" sx={CommonStyles.cardandbutton}>
         <CardContent>
           <Box sx={CommonStyles.cardandbutton}>
@@ -106,7 +133,20 @@ const ChangePassword = () => {
           </Box>
         </CardContent>
       </Card>
-    </>
+      <Snackbar
+        open={alertOpen}
+        autoHideDuration={60000}
+        onClose={handleAlertClose}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+      >
+        <Alert onClose={handleAlertClose} severity={alertSeverity}>
+          {alertMessage}
+        </Alert>
+      </Snackbar>
+    </MainLayout>
   );
 };
 

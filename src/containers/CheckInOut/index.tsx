@@ -122,7 +122,9 @@ const CheckInOut: React.FC = () => {
                         {check.checkinTime.toLocaleString().slice(11, 16)}
                       </TableCell>
                       <TableCell align="right" sx={{ minWidth: 170 }}>
-                        {check.checkoutTime.toLocaleString().slice(11, 16)}
+                        {check.checkoutTime
+                          ? check.checkoutTime.toLocaleString().slice(11, 16)
+                          : '-'}
                       </TableCell>
                       <TableCell align="right" sx={{ minWidth: 170 }}>
                         {check.currenDate.toLocaleString().slice(0, 10)}
