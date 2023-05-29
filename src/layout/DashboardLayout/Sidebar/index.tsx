@@ -13,6 +13,7 @@ const SideBar = () => {
   const navigate = useNavigate();
   const { currentUserError, data, currentUserLoading } = useCurrentUser();
   const role = data?.data?.data?.getCurrentUser.role;
+  // console.log(role);
 
   const renderSidebarItems = () => {
     if (role === 'SuperAdmin') {
@@ -41,11 +42,14 @@ const SideBar = () => {
     } else if (role === 'Employee') {
       return (
         <>
-          <ListItemButton>
+          <ListItemButton onClick={() => navigate('leaveadd')}>
             <ListItemText primary="ApplyLeave" />
           </ListItemButton>
-          <ListItemButton>
+          <ListItemButton onClick={() => navigate('project')}>
             <ListItemText primary="Project" />
+          </ListItemButton>
+          <ListItemButton onClick={() => navigate('leave')}>
+            <ListItemText primary="Leave" />
           </ListItemButton>
           <ListItemButton>
             <ListItemText primary="CheckInOut" />
