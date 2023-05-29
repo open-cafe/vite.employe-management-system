@@ -23,5 +23,6 @@ const ProjectAssignmentStyles = {
     width: '275px',
     height: '75px',
   },
+  autoComplete: { mt: 2, width: 300, mb: 2 },
 };
 export default ProjectAssignmentStyles;

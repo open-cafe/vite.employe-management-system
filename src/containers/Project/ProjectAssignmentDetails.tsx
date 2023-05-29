@@ -104,7 +104,7 @@ const ProjectAssignmentDetails = ({
               >
                 <FormControl sx={{ mt: 2, minWidth: 120 }}>
                   <Autocomplete
-                    sx={{ mt: 2, width: 300, mb: 2 }}
+                    sx={ProjectAssignmentStyles.autoComplete}
                     disablePortal
                     id="tag-combo-box"
                     options={tagNames.filter(
