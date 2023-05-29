@@ -14,7 +14,7 @@ import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';
 import useAddUser from '@/hooks/useAddUser';
 
-const AddUser = () => {
+const EmployeeOnBoarding = () => {
   const navigate = useNavigate();
   const [alertOpen, setAlertOpen] = useState(false);
   const [alertSeverity, setAlertSeverity] = useState<
@@ -89,10 +89,10 @@ const AddUser = () => {
             <MenuItem value="">
               <em>None</em>
             </MenuItem>
-            <MenuItem value={'a4e4d335-dbd5-4c06-a546-bb747665bfb5'}>
+            <MenuItem value={'f3658bec-dc23-48cc-b4ad-9f1f6ec65bb1'}>
               Admin
             </MenuItem>
-            <MenuItem value={'db263526-0c04-4e77-8e05-3d715e6c900b'}>
+            <MenuItem value={'63dc3f20-3191-4be9-b497-71c9af09063b'}>
               Employee
             </MenuItem>
           </TextField>
@@ -125,4 +125,4 @@ const AddUser = () => {
   );
 };
 
-export default AddUser;
+export default EmployeeOnBoarding;

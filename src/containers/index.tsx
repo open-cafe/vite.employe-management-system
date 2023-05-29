@@ -16,8 +16,7 @@ import Login from './Login/index';
 import AddUser from './AddUser';
 import ChangePassword from './ChangePassword';
 import AddProject from './AddProject';
-import AddEmployee from './AddEmployee';
-// import AddLeave from './AddLeave';
+
 import LeaveAdd from './LeaveAdd';
 import ResetPasswordMailForm from './ResetPassowrdMailForm/resetPasswordMailForm';
 import ResetPassword from './ResetPassword';
@@ -34,7 +33,6 @@ const Router: FC = () => {
         <Route path="/" element={<DashboardLayout />}>
           <Route index element={<Dashboard />} />
           <Route path="employee" element={<Employees />} />
-          <Route path="addemployee" element={<AddEmployee />} />
           <Route path="leave" element={<Leave />} />
           <Route path="project" element={<Project />} />
           <Route path="leavedetail" element={<LeaveDetails />} />
