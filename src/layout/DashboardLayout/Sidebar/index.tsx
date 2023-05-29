@@ -1,7 +1,7 @@
 import List from '@mui/material/List';
 import * as React from 'react';
 import ListItemButton from '@mui/material/ListItemButton';
-import { ListItemText, ListItemIcon } from '@mui/material';
+import { ListItemText, ListItemIcon, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import { useNavigate } from 'react-router-dom';
 import useCurrentUser from '@/hooks/useCurrentUser';
@@ -29,9 +29,11 @@ const SideBar = () => {
             onClick={() => action?.setShowSidebar(false)}
           >
             <ListItemIcon sx={{ color: 'white' }}>
-              <ArrowBackIcon sx={{ fontSize: 20 }} />
+              <ArrowBackIcon sx={{ fontSize: 18 }} />
             </ListItemIcon>
-            <ListItemText sx={{ margin: -3, color: 'white' }} primary="Back" />
+            <Typography fontSize={17} sx={{ marginLeft: -3, color: 'white' }}>
+              Back
+            </Typography>
           </ListItemButton>
           <ListItemButton
             onClick={() => {
@@ -40,7 +42,7 @@ const SideBar = () => {
             }}
           >
             <ListItemText
-              sx={{ width: 200, color: 'white' }}
+              sx={SideBarStyles.listTextStyle}
               primary="Employees"
             />
           </ListItemButton>
@@ -50,7 +52,7 @@ const SideBar = () => {
               action?.setShowSidebar(false);
             }}
           >
-            <ListItemText sx={{ width: 200, color: 'white' }} primary="Leave" />
+            <ListItemText sx={SideBarStyles.listTextStyle} primary="Leave" />
           </ListItemButton>
           <ListItemButton
             onClick={() => {
@@ -70,7 +72,7 @@ const SideBar = () => {
             }}
           >
             <ListItemText
-              sx={{ width: 200, color: 'white' }}
+              sx={SideBarStyles.listTextStyle}
               primary="CheckInOut"
             />
           </ListItemButton>
@@ -80,10 +82,7 @@ const SideBar = () => {
               action?.setShowSidebar(false);
             }}
           >
-            <ListItemText
-              sx={{ width: 200, color: 'white' }}
-              primary="AddUser"
-            />
+            <ListItemText sx={SideBarStyles.listTextStyle} primary="AddUser" />
           </ListItemButton>
           <ListItemButton
             onClick={() => {
@@ -92,7 +91,7 @@ const SideBar = () => {
             }}
           >
             <ListItemText
-              sx={{ width: 200, color: 'white' }}
+              sx={SideBarStyles.listTextStyle}
               primary="AddProject"
             />
           </ListItemButton>
@@ -100,17 +99,34 @@ const SideBar = () => {
       );
     } else if (role === 'Employee') {
       return (
-        <>
-          <ListItemButton>
-            <ListItemText primary="ApplyLeave" />
+        <Box>
+          <ListItemButton
+            sx={SideBarStyles.listButtonStyle}
+            onClick={() => action?.setShowSidebar(false)}
+          >
+            <ListItemIcon sx={{ color: 'white' }}>
+              <ArrowBackIcon sx={{ fontSize: 18 }} />
+            </ListItemIcon>
+            <Typography fontSize={18} sx={{ marginLeft: -3, color: 'white' }}>
+              Back
+            </Typography>
+          </ListItemButton>
+          <ListItemButton sx={SideBarStyles.listButtonStyle}>
+            <ListItemText
+              sx={SideBarStyles.listTextStyle}
+              primary="ApplyLeave"
+            />
           </ListItemButton>
           <ListItemButton>
-            <ListItemText primary="Project" />
+            <ListItemText sx={SideBarStyles.listTextStyle} primary="Project" />
           </ListItemButton>
           <ListItemButton>
-            <ListItemText primary="CheckInOut" />
+            <ListItemText
+              sx={SideBarStyles.listTextStyle}
+              primary="CheckInOut"
+            />
           </ListItemButton>
-        </>
+        </Box>
       );
     }
   };

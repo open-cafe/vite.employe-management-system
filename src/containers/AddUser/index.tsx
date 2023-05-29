@@ -89,10 +89,10 @@ const AddUser = () => {
             <MenuItem value="">
               <em>None</em>
             </MenuItem>
-            <MenuItem value={'a4e4d335-dbd5-4c06-a546-bb747665bfb5'}>
+            <MenuItem value={'11157323-ac32-44a1-972a-6a30776251ae'}>
               Admin
             </MenuItem>
-            <MenuItem value={'db263526-0c04-4e77-8e05-3d715e6c900b'}>
+            <MenuItem value={'3003f8ea-d212-429a-b01a-73da9ff2580f'}>
               Employee
             </MenuItem>
           </TextField>

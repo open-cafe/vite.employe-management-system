@@ -16,10 +16,15 @@ const DashboardLayout = () => {
     <MainLayout>
       <NavBar />
       <SideBar />
-      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-        {/* <Grid item xs={3} md={1}> */}
-        {/* </Grid> */}
-        <Box sx={{ width: '80vw' }}>
+      <Box
+        sx={{
+          display: 'flex',
+          height: 'calc(100vh - 60px)',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <Box sx={{ width: '75vw' }}>
           <Outlet />
         </Box>
       </Box>

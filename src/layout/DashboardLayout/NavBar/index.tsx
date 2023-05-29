@@ -53,7 +53,7 @@ export default function NavBar() {
             component="div"
             sx={{ flexGrow: 1 }}
           >
-            EMS
+            Employee Management System
           </Typography>
 
           {/* <Grid item xs={12} sm={1} md={1} lg={1} xl={1}> */}

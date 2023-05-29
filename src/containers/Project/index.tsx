@@ -14,6 +14,8 @@ import {
   Typography,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import tableStyle from '@/style/Table.styles';
+import CommonStyles from '@/style/Common.styles';
 
 interface Column {
   id: 'project_name' | 'description' | 'status';
@@ -71,7 +73,7 @@ const Project: React.FC = () => {
   const projectDetail = projectData?.data?.data?.data;
 
   return (
-    <Paper /* sx={{ width: '100%' }} */>
+    <Paper elevation={1} sx={CommonStyles.paperLayout}>
       {projectLoading ? (
         <Box
           display="flex"
@@ -87,15 +89,15 @@ const Project: React.FC = () => {
         <>
           <div>
             <Typography
-              sx={{ fontFamily: 'monospace', fontWeight: 'bold' }}
-              variant="h4"
+              sx={{ fontFamily: 'sans-serifs', fontWeight: 'bold' }}
+              variant="h5"
               color="inherit"
               align="center"
             >
               Project List
             </Typography>
           </div>
-          <TableContainer sx={{ height: '85vh' }}>
+          <TableContainer sx={tableStyle.size}>
             <Table
               stickyHeader
               aria-label="sticky table"

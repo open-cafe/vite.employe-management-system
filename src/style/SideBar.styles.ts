@@ -18,5 +18,10 @@ const SideBarStyles = {
 
     '&:hover': { color: 'black' },
   },
+
+  listTextStyle: {
+    width: 200,
+    color: 'white',
+  },
 };
 export default SideBarStyles;
