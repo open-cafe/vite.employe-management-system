@@ -13,7 +13,7 @@ const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: 'Rubik, sans-serif',
+    fontFamily: 'Nunito, sans-serif',
   },
 });
 export default theme;

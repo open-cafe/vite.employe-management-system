@@ -1,17 +1,17 @@
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import useProjectAssignments from '@/hooks/useProjectAssignments';
 import {
   Autocomplete,
   Box,
   Button,
-  Chip,
   CircularProgress,
   Grid,
   IconButton,
-  Stack,
+  Snackbar,
+  Alert,
   TextField,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -21,8 +21,10 @@ import { SyntheticEvent, useEffect, useState } from 'react';
 import useAddProjectAssignment from '@/hooks/useAddProjectAssignment';
 import { useQueryClient } from '@tanstack/react-query';
 import useDeleteProjectAssignment from '@/hooks/useDeleteProjectAssignment';
-import useProject from '@/hooks/useProject';
-import useProjectDesignationByAssignment from '@/hooks/useProjectDesignationByAssignment';
+import ProjectAssignmentDetails from './ProjectAssignmentDetails';
+import useDeleteProject from '@/hooks/useDeleteProject';
+import ProjectDetailStyles from '@/style/ProjectDetails.styles';
+import CommonStyles from '@/style/Common.styles';
 
 interface ProjectAssignments {
   projectAssignmentId: string;
@@ -32,7 +34,7 @@ interface ProjectAssignments {
   };
 }
 
-interface AddEmployee {
+export interface AddEmployeeOrTag {
   id: string;
   label: string;
 }
@@ -49,12 +51,22 @@ const projectDetail = () => {
     projectAssignmentData,
     projectAssignmentError,
   } = useProjectAssignments(state.projectId, 1, 10);
+  const navigate = useNavigate();
   const { allEmployeeData, allEmployeeDataLoading } = useAllEmployee();
   const { deleteProjectAssignmentAction } = useDeleteProjectAssignment();
+  const { deleteProjectAction } = useDeleteProject();
 
   const { addProjectAssignmentAction } = useAddProjectAssignment();
 
   const [enteredEmployee, setEnteredEmployee] = useState<string | null>('');
+  const [alertOpen, setAlertOpen] = useState(false);
+  const [alertSeverity, setAlertSeverity] = useState<
+    'success' | 'error' | 'info' | 'warning'
+  >('success');
+  const [alertMessage, setAlertMessage] = useState('');
+  const handleAlertClose = () => {
+    setAlertOpen(false);
+  };
 
   const [allProjectAssignmentEmployees, setAllProjectAssignmentEmployees] =
     useState<any>([]);
@@ -107,138 +119,212 @@ const projectDetail = () => {
   });
 
   return (
-    <Card sx={{ minWidth: 275, height: '100%' }}>
-      {projectAssignmentError && <div>Error...=</div>}
-      {!projectAssignmentError && projectAssignmentLoading && (
-        <Box
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          margin="auto"
-        >
-          <CircularProgress />
-        </Box>
-      )}
-      {!projectAssignmentError &&
-        !projectAssignmentLoading &&
-        !allEmployeeDataLoading &&
-        projectAssignmentData && (
-          <CardContent>
-            <Typography
-              sx={{ fontSize: 25, fontFamily: 'monospace', fontWeight: 'bold' }}
-              color="text.secondary"
-              gutterBottom
-            >
-              Name : {state.projectName}
-            </Typography>
-            <Typography
-              sx={{ fontSize: 18 }}
-              color="text.secondary"
-              gutterBottom
-            >
-              Status : {state.status}
-            </Typography>
-            <Typography sx={{ mb: 1.5 }} color="text.secondary">
-              Description : {state.description}
-            </Typography>
-
-            <Autocomplete
-              sx={{ mt: 2, width: 300, mb: 2 }}
-              disablePortal
-              id="employee-combo-box"
-              options={employeeName?.filter(
-                (item: AddEmployee) =>
-                  !allProjectAssignmentEmployees?.some((obj: EmployeeData) => {
-                    return obj.name === item.label;
-                  })
-              )}
-              fullWidth
-              renderInput={(params) => (
-                <TextField {...params} label="Employee" value={params.id} />
-              )}
-              onChange={handleEmployeeChange}
-              isOptionEqualToValue={() => true}
-            />
-            <Button
-              variant="contained"
-              onClick={() => {
-                handleSubmit();
-              }}
-              sx={{ mb: 2 }}
-            >
-              Add Employee
-            </Button>
-            <Typography sx={{ mb: 1.5 }} color="text.secondary">
-              Employees Assigned to this Project:
-            </Typography>
-
-            <Box
-              sx={{
-                direction: 'row',
-                spacing: 2,
-                display: 'flex',
-                flexDirection: 'row',
-                flexWrap: 'wrap',
-                gap: '20px',
-              }}
-            >
-              {allProjectAssignmentEmployees?.map(
-                (employeeData: EmployeeData) => (
-                  <div key={employeeData.id}>
-                    <Card>
-                      <CardContent>
-                        <Grid container spacing={2}>
-                          <Grid item xs={10} sm={10} md={10} lg={10} xl={10}>
-                            <Typography
-                              sx={{ fontSize: 22 }}
-                              color="text.secondary"
-                              gutterBottom
-                            >
-                              {employeeData.name}
-                            </Typography>
-                          </Grid>
-                          <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
-                            <IconButton
-                              style={{ color: 'black' }}
-                              onClick={() => {
-                                const projectAssignmentDetails = {
-                                  projectAssignmentId:
-                                    employeeData.projectAssignmentId,
-                                };
-                                deleteProjectAssignmentAction(
-                                  projectAssignmentDetails,
-                                  {
-                                    onSuccess: (data) => {
-                                      if (data) {
-                                        // add toast later
-                                        queryClient.invalidateQueries([
-                                          'project-assignment',
-                                        ]);
-                                        console.log('success', data);
-                                      }
-                                    },
-                                    onError: (data) => {
-                                      console.log('err', data);
-                                    },
-                                  }
-                                );
-                              }}
-                            >
-                              <DeleteIcon />
-                            </IconButton>
-                          </Grid>
-                        </Grid>
-
-                        {/* add the project designation tags here */}
-                      </CardContent>
-                    </Card>
-                  </div>
-                )
-              )}
-            </Box>
-          </CardContent>
+    <>
+      <Card sx={CommonStyles.paperAndCard}>
+        {projectAssignmentError && <div>Error...=</div>}
+        {!projectAssignmentError && projectAssignmentLoading && (
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            margin="auto"
+          >
+            <CircularProgress />
+          </Box>
         )}
-    </Card>
+        {!projectAssignmentError &&
+          !projectAssignmentLoading &&
+          !allEmployeeDataLoading &&
+          projectAssignmentData && (
+            <CardContent>
+              <Card sx={ProjectDetailStyles.detailsCard}>
+                <Typography
+                  variant="h4"
+                  sx={ProjectDetailStyles.nameText}
+                  gutterBottom
+                >
+                  {state.projectName}
+                  <IconButton
+                    style={{ color: 'black' }}
+                    onClick={() => {
+                      const projectDetails = {
+                        projectId: state.projectId,
+                      };
+                      deleteProjectAction(projectDetails, {
+                        onSuccess: (data) => {
+                          if (data) {
+                            // add toast later
+                            queryClient.invalidateQueries(['project']);
+                            navigate(`/project`);
+                            console.log('success', data);
+                          }
+                        },
+                        onError: (data) => {
+                          console.log('err', data);
+                          setAlertSeverity('error');
+                          setAlertMessage(
+                            'Cannot Delete Project!! Employees are assigned to the project '
+                          );
+                          setAlertOpen(true);
+                        },
+                      });
+                    }}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </Typography>
+                <Typography
+                  variant="h5"
+                  sx={ProjectDetailStyles.text}
+                  gutterBottom
+                >
+                  Status:{' '}
+                  <Typography
+                    display="inline"
+                    sx={ProjectDetailStyles.text}
+                    gutterBottom
+                  >
+                    {state.status}
+                  </Typography>
+                </Typography>
+                <Typography variant="h5" sx={ProjectDetailStyles.text}>
+                  Description:
+                </Typography>
+                <Typography
+                  sx={{
+                    mt: 1,
+                    mb: 1.5,
+                  }}
+                  color="text.secondary"
+                >
+                  {state.description}
+                </Typography>
+              </Card>
+              <Card sx={ProjectDetailStyles.employeeAddCard}>
+                <Autocomplete
+                  sx={{ mt: 2, width: 300, mb: 2 }}
+                  disablePortal
+                  id="employee-combo-box"
+                  options={employeeName?.filter(
+                    (item: AddEmployeeOrTag) =>
+                      !allProjectAssignmentEmployees?.some(
+                        (obj: EmployeeData) => {
+                          return obj.name === item.label;
+                        }
+                      )
+                  )}
+                  fullWidth
+                  renderInput={(params) => (
+                    <TextField {...params} label="Employee" value={params.id} />
+                  )}
+                  onChange={handleEmployeeChange}
+                  isOptionEqualToValue={() => true}
+                />
+                <Button
+                  variant="contained"
+                  onClick={() => {
+                    handleSubmit();
+                  }}
+                  sx={{ mb: 2 }}
+                >
+                  Add Employee
+                </Button>
+                <Typography variant="h6" sx={{ mb: 1.5 }}>
+                  Employees Assigned to this Project:
+                </Typography>
+
+                <Box
+                  sx={{
+                    direction: 'row',
+                    spacing: 2,
+                    display: 'flex',
+                    flexDirection: 'row',
+                    flexWrap: 'wrap',
+                    gap: '20px',
+                  }}
+                >
+                  {allProjectAssignmentEmployees?.map(
+                    (employeeData: EmployeeData) => (
+                      <div key={employeeData.id}>
+                        <Card sx={{ backgroundColor: '#edf2ef' }}>
+                          <CardContent>
+                            <Grid container spacing={2}>
+                              <Grid
+                                item
+                                xs={10}
+                                sm={10}
+                                md={10}
+                                lg={10}
+                                xl={10}
+                              >
+                                <Typography
+                                  sx={{ fontSize: 22 }}
+                                  color="text.secondary"
+                                  gutterBottom
+                                >
+                                  {employeeData.name}
+                                </Typography>
+                              </Grid>
+                              <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
+                                <IconButton
+                                  sx={{ color: 'black' }}
+                                  onClick={() => {
+                                    const projectAssignmentDetails = {
+                                      projectAssignmentId:
+                                        employeeData.projectAssignmentId,
+                                    };
+                                    deleteProjectAssignmentAction(
+                                      projectAssignmentDetails,
+                                      {
+                                        onSuccess: (data) => {
+                                          if (data) {
+                                            // add toast later
+                                            queryClient.invalidateQueries([
+                                              'project-assignment',
+                                            ]);
+                                            console.log('success', data);
+                                          }
+                                        },
+                                        onError: (data) => {
+                                          console.log('err', data);
+                                        },
+                                      }
+                                    );
+                                  }}
+                                >
+                                  <DeleteIcon />
+                                </IconButton>
+                              </Grid>
+                            </Grid>
+                            <ProjectAssignmentDetails
+                              projectAssignmentId={
+                                employeeData.projectAssignmentId
+                              }
+                            />
+                          </CardContent>
+                        </Card>
+                      </div>
+                    )
+                  )}
+                </Box>
+              </Card>
+            </CardContent>
+          )}
+      </Card>
+      <Snackbar
+        open={alertOpen}
+        autoHideDuration={6000}
+        onClose={handleAlertClose}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+      >
+        <Alert onClose={handleAlertClose} severity={alertSeverity}>
+          {alertMessage}
+        </Alert>
+      </Snackbar>
+    </>
   );
 };
 export default projectDetail;
