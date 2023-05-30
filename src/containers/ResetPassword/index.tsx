@@ -64,7 +64,7 @@ const ResetPassword = () => {
           );
           setAlertOpen(true);
         },
-      }); // Update this line
+      });
       setUserID(userId);
       setToken(tokenValue);
     }
