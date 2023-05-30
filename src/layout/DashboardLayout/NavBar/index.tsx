@@ -31,7 +31,7 @@ export default function NavBar() {
   console.log(state, action);
 
   return (
-    <Box sx={{ position: 'relative', flexGrow: 1 }}>
+    <Box sx={{ position: 'relative', flexGrow: 1, zIndex: 999 }}>
       <AppBar position="static">
         <Toolbar sx={NavbarStyles.navbarHeight} variant="dense">
           <IconButton

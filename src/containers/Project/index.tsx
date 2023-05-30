@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -14,8 +14,8 @@ import {
   Typography,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import tableStyle from '@/style/Table.styles';
 import CommonStyles from '@/style/Common.styles';
+import ProjectStyles from '@/style/Project.styles';
 
 interface Column {
   id: 'project_name' | 'description' | 'status';
@@ -73,7 +73,7 @@ const Project: React.FC = () => {
   const projectDetail = projectData?.data?.data?.data;
 
   return (
-    <Paper elevation={1} sx={CommonStyles.paperLayout}>
+    <Paper sx={CommonStyles.paperAndCard}>
       {projectLoading ? (
         <Box
           display="flex"
@@ -89,15 +89,17 @@ const Project: React.FC = () => {
         <>
           <div>
             <Typography
-              sx={{ fontFamily: 'sans-serifs', fontWeight: 'bold' }}
-              variant="h5"
+              sx={{
+                fontWeight: 'bold',
+              }}
+              variant="h4"
               color="inherit"
               align="center"
             >
               Project List
             </Typography>
           </div>
-          <TableContainer sx={tableStyle.size}>
+          <TableContainer sx={ProjectStyles.tableContainer}>
             <Table
               stickyHeader
               aria-label="sticky table"
@@ -106,7 +108,14 @@ const Project: React.FC = () => {
               <TableHead>
                 <TableRow>
                   {columns.map((column) => (
-                    <TableCell key={column.id} align={column.align}>
+                    <TableCell
+                      sx={{
+                        fontSize: 19,
+                        fontWeight: 600,
+                      }}
+                      key={column.id}
+                      align={column.align}
+                    >
                       {column.label}
                     </TableCell>
                   ))}
@@ -118,19 +127,24 @@ const Project: React.FC = () => {
                   projectDetail.map((project: Project) => {
                     return (
                       <TableRow
+                        sx={ProjectStyles.cursorPointer}
                         onClick={() => navigateToConfirmed(project)}
                         hover
                         role="checkbox"
                         key={project.projectId}
                       >
                         <TableCell sx={{ minWidth: 170 }}>
-                          {project?.projectName}
+                          <Typography variant="h5" sx={{ fontSize: 19 }}>
+                            {project?.projectName}
+                          </Typography>
                         </TableCell>
-                        <TableCell sx={{ minWidth: 100 }}>
+                        <TableCell sx={ProjectStyles.text}>
                           {project?.description}
                         </TableCell>
                         <TableCell sx={{ minWidth: 100 }}>
-                          {project?.status}
+                          <Typography sx={ProjectStyles.text}>
+                            {project?.status}
+                          </Typography>
                         </TableCell>
                       </TableRow>
                     );
