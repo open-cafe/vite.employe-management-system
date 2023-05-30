@@ -6,8 +6,7 @@ interface ContextProps {
   children: React.ReactNode;
 }
 const AppProvider = ({ children }: ContextProps) => (
-  //@ts-ignore
-  <SidebarContext.Provider value={useStatesAndActions()}>
+  <SidebarContext.Provider value={useStatesAndActions() as any}>
     {children}
   </SidebarContext.Provider>
 );
