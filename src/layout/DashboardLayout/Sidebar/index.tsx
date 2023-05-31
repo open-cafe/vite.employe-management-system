@@ -118,20 +118,32 @@ const SideBar = () => {
               Back
             </Typography>
           </ListItemButton>
-          <ListItemButton sx={SideBarStyles.listButtonStyle}>
+          <ListItemButton
+            onClick={() => {
+              navigate('leaveadd');
+              action?.setShowSidebar && action?.setShowSidebar(false);
+            }}
+          >
             <ListItemText
               sx={SideBarStyles.listTextStyle}
               primary="ApplyLeave"
             />
           </ListItemButton>
-          <ListItemButton>
+          <ListItemButton
+            onClick={() => {
+              navigate('projectassignmentbyempid');
+              action?.setShowSidebar && action?.setShowSidebar(false);
+            }}
+          >
             <ListItemText sx={SideBarStyles.listTextStyle} primary="Project" />
           </ListItemButton>
-          <ListItemButton>
-            <ListItemText
-              sx={SideBarStyles.listTextStyle}
-              primary="CheckInOut"
-            />
+          <ListItemButton
+            onClick={() => {
+              navigate('leave');
+              action?.setShowSidebar && action?.setShowSidebar(false);
+            }}
+          >
+            <ListItemText sx={SideBarStyles.listTextStyle} primary="Leave" />
           </ListItemButton>
         </Box>
       );
