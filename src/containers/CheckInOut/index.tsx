@@ -93,7 +93,9 @@ const CheckInOut: React.FC = () => {
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
               <TableRow>
-                <TableCell align="center">Checkinout Details</TableCell>
+                <TableCell align="center" colSpan={6}>
+                  Checkinout Details
+                </TableCell>
               </TableRow>
               <TableRow>
                 {columns.map((column) => (

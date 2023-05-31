@@ -55,18 +55,23 @@ interface Leave {
 
 const Leave: React.FC = () => {
   const navigate = useNavigate();
-  // const { currentUserError, roles, currentUserLoading } = useCurrentUser();
-  // const role = roles?.data?.data?.getCurrentUser.role;
-  // console.log(role);
+  const { currentUserError, data, currentUserLoading } = useCurrentUser();
+  const role = data?.data?.data?.getCurrentUser.role;
+  console.log(role);
 
   const navigateToConfirmed = (leave: Leave) => {
-    navigate(`/leavedetail`, { state: leave });
+    if (role !== 'Employee') {
+      navigate(`/leavedetail`, { state: leave });
+    }
   };
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const { leaveError, data, leaveLoading } = useLeave(page + 1, rowsPerPage);
-  const [leaveDetail, setLeaveDetail] = useState(data?.data.data.data);
+  const { leaveError, leaveData, leaveLoading } = useLeave(
+    page + 1,
+    rowsPerPage
+  );
+  const [leaveDetail, setLeaveDetail] = useState(leaveData?.data.data.data);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -79,10 +84,10 @@ const Leave: React.FC = () => {
   };
 
   useEffect(() => {
-    setLeaveDetail(data?.data.data.data);
+    setLeaveDetail(leaveData?.data.data.data);
   }, [data]);
 
-  const total = data?.data.data;
+  const total = leaveData?.data.data;
 
   return (
     <Paper sx={{ width: '100%' }}>
@@ -123,6 +128,32 @@ const Leave: React.FC = () => {
               <TableBody>
                 {leaveDetail &&
                   leaveDetail.map((leave: Leave) => {
+                    <TableBody>
+                      {leaveDetail &&
+                        leaveDetail.map((leave: Leave) => {
+                          return (
+                            <TableRow
+                              onClick={() => navigateToConfirmed(leave)}
+                              hover
+                              role="checkbox"
+                              key={leave.leaveId}
+                            >
+                              <TableCell sx={{ minWidth: 170 }}>
+                                {leave.reason}
+                              </TableCell>
+                              <TableCell sx={{ minWidth: 100 }}>
+                                {leave.leaveType}
+                              </TableCell>
+                              <TableCell align="left" sx={{ minWidth: 170 }}>
+                                {leave.startDate.toLocaleString().slice(0, 10)}
+                              </TableCell>
+                              <TableCell align="left" sx={{ minWidth: 170 }}>
+                                {leave.endDate.toLocaleString().slice(0, 10)}
+                              </TableCell>
+                            </TableRow>
+                          );
+                        })}
+                    </TableBody>;
                     return (
                       <TableRow
                         onClick={() => navigateToConfirmed(leave)}

@@ -45,15 +45,15 @@ const SideBar = () => {
           <ListItemButton onClick={() => navigate('leaveadd')}>
             <ListItemText primary="ApplyLeave" />
           </ListItemButton>
-          <ListItemButton onClick={() => navigate('project')}>
+          <ListItemButton onClick={() => navigate('projectassignmentbyempid')}>
             <ListItemText primary="Project" />
           </ListItemButton>
           <ListItemButton onClick={() => navigate('leave')}>
             <ListItemText primary="Leave" />
           </ListItemButton>
-          <ListItemButton>
+          {/* <ListItemButton>
             <ListItemText primary="CheckInOut" />
-          </ListItemButton>
+          </ListItemButton> */}
         </>
       );
     }

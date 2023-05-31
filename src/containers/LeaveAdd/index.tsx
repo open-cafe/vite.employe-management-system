@@ -20,9 +20,7 @@ import MainLayout from '@/layout/MainLayout';
 import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';
 import useAddLeave from '@/hooks/useAddLeave';
-import { spacing } from '@mui/system';
 
-// import DatePicker from 'react-datepicker';
 import dayjs from 'dayjs';
 import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -41,13 +39,8 @@ const LeaveAdd = () => {
   const [startDate, setStartDate] = useState<dayjs.Dayjs | null>(null);
   const [endDate, setEndDate] = useState<dayjs.Dayjs | null>(null);
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    // setLeaveType(event.target.value);
     setReason(event.target.value);
   };
-  // const handleChanges = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   setLeaveType(event.target.value);
-  //   setReason(event.target.value);
-  // };
   const handleLeaveChange = (event: SelectChangeEvent) => {
     setLeaveType(event.target.value as string);
   };
@@ -93,24 +86,6 @@ const LeaveAdd = () => {
               Apply Leave
             </Typography>
 
-            {/* <TextField
-              select
-              margin="normal"
-              name="leavetype"
-              value={leaveType}
-              onChange={handleChanges}
-              label="Leave Type"
-              variant="outlined"
-              fullWidth
-              required
-            >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              <MenuItem value="1">SICK</MenuItem>
-              <MenuItem value="2">PERSONAL</MenuItem>
-            </TextField> */}
-
             <Box /* sx={{ minWidth: 120 }} */>
               <FormControl fullWidth>
                 <InputLabel id="demo-simple-select-label">Type</InputLabel>
@@ -142,7 +117,7 @@ const LeaveAdd = () => {
             {/* </Grid> */}
 
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DemoContainer components={['DatePicker']} sx={{ mt: 1, mb: 1 }}>
+              <DemoContainer components={['DatePicker']} sx={{ my: 1 }}>
                 <DemoItem component="DatePicker">
                   <DatePicker
                     label="Start Date"

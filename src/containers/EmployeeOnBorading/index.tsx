@@ -10,12 +10,13 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import MainLayout from '@/layout/MainLayout';
 import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';
 import useAddEmployee from '@/hooks/useAddEmployee';
+import EmployeeOnboardingStyles from '@/style/EmployeeOnboarding.styles';
 
 const AddEmployee = () => {
   const navigate = useNavigate();
@@ -62,16 +63,8 @@ const AddEmployee = () => {
         alignItems="center"
         style={{ height: '100vh' }}
       >
-        <Container
-          component="main"
-          maxWidth="sm"
-
-          /* sx={{ mb: 4 }} */
-        >
-          <Paper
-            variant="outlined"
-            sx={{ my: { xs: 4, md: 6 }, p: { xs: 2, md: 3 } }}
-          >
+        <Container component="main" maxWidth="sm">
+          <Paper variant="outlined" sx={EmployeeOnboardingStyles.container}>
             <Typography component="h1" variant="h4" align="center">
               Employee Details
             </Typography>
@@ -118,8 +111,6 @@ const AddEmployee = () => {
               </FormControl>
             </Box>
 
-            {/* <Grid container spacing={4}>
-            <Grid item xs={6}> */}
             <TextField
               margin="normal"
               id="phone"
@@ -132,21 +123,7 @@ const AddEmployee = () => {
               fullWidth
               required
             />
-            {/* </Grid> */}
-            {/* <Grid item xs={6}>
-              <TextField
-                margin="normal"
-                name="hireDate"
-                type="date"
-                label="Hire Date"
-                value={hireDate}
-                onChange={(e) => setHireDate(e.target.value)}
-                defaultValue={'new Date()'}
-                fullWidth
-                required
-              />
-            </Grid> */}
-            {/* </Grid> */}
+
             <Button
               type="submit"
               fullWidth

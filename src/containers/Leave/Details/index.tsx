@@ -7,6 +7,7 @@ import { useLocation } from 'react-router-dom';
 
 export default function leaveDetail() {
   const { state } = useLocation();
+  // console.log('states', state);
 
   return (
     <Card sx={{ minWidth: 275 }}>
