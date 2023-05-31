@@ -4,9 +4,8 @@ import MainLayout from '../MainLayout';
 import SideBar from './Sidebar';
 
 import Grid from '@mui/material/Grid';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import { Box } from '@mui/material';
-import { useLocation } from 'react-router-dom';
 
 interface DashboardLayoutPops {
   children: ReactNode;
