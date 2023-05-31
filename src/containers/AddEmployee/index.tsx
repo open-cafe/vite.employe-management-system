@@ -48,7 +48,11 @@ const AddEmployee = () => {
 
   return (
     <MainLayout>
-      <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
+      <Container
+        component="main"
+        maxWidth="sm"
+        sx={{ mb: 4, background: '#f7f7f7' }}
+      >
         <Paper
           variant="outlined"
           sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
