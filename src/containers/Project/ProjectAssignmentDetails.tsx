@@ -20,6 +20,7 @@ import { SyntheticEvent, useState } from 'react';
 import { AddEmployeeOrTag } from './ProjectDetails';
 import ProjectAssignmentStyles from '@/style/ProjectAssignment.styles';
 import { returnTagColor } from '@/utils/commonUtils';
+import CommonStyles from '@/style/Common.styles';
 
 interface Tag {
   tagId: string;
@@ -34,8 +35,10 @@ interface ProjectDesignation {
 
 const ProjectAssignmentDetails = ({
   projectAssignmentId,
+  isAdmin,
 }: {
   projectAssignmentId: string;
+  isAdmin: boolean;
 }) => {
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
@@ -91,7 +94,7 @@ const ProjectAssignmentDetails = ({
           <Button variant="outlined" onClick={handleClickOpen} size="small">
             Add Tags
           </Button>
-          <Dialog open={open}>
+          <Dialog open={open} sx={CommonStyles.dialogBoxHeading}>
             <DialogTitle>Add Tags</DialogTitle>
             <DialogContent>
               <DialogContentText>
@@ -140,37 +143,48 @@ const ProjectAssignmentDetails = ({
 
               return (
                 <div key={i}>
-                  <Chip
-                    sx={
-                      ProjectAssignmentStyles.chip(returnTagColor(tagName)).tag
-                    }
-                    label={projectDesignation?.tag?.tagName}
-                    onDelete={() => {
-                      console.log(tagColor);
-                      const projectDesignationDetails = {
-                        projectDesignationId:
-                          projectDesignation?.projectDesignationId,
-                      };
+                  {isAdmin ? (
+                    <Chip
+                      sx={
+                        ProjectAssignmentStyles.chip(returnTagColor(tagName))
+                          .tag
+                      }
+                      label={projectDesignation?.tag?.tagName}
+                      onDelete={() => {
+                        console.log(tagColor);
+                        const projectDesignationDetails = {
+                          projectDesignationId:
+                            projectDesignation?.projectDesignationId,
+                        };
 
-                      deleteProjectDesignationByAssignmentAction(
-                        projectDesignationDetails,
-                        {
-                          onSuccess: (data) => {
-                            if (data) {
-                              // add toast later
-                              queryClient.invalidateQueries([
-                                'project-designation',
-                              ]);
-                              console.log('success', data);
-                            }
-                          },
-                          onError: (data) => {
-                            console.log('err', data);
-                          },
-                        }
-                      );
-                    }}
-                  />
+                        deleteProjectDesignationByAssignmentAction(
+                          projectDesignationDetails,
+                          {
+                            onSuccess: (data) => {
+                              if (data) {
+                                // add toast later
+                                queryClient.invalidateQueries([
+                                  'project-designation',
+                                ]);
+                                console.log('success', data);
+                              }
+                            },
+                            onError: (data) => {
+                              console.log('err', data);
+                            },
+                          }
+                        );
+                      }}
+                    />
+                  ) : (
+                    <Chip
+                      sx={
+                        ProjectAssignmentStyles.chip(returnTagColor(tagName))
+                          .tag
+                      }
+                      label={projectDesignation?.tag?.tagName}
+                    />
+                  )}
                 </div>
               );
             }

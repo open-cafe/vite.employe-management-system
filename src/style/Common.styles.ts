@@ -16,5 +16,6 @@ const CommonStyles = {
     height: '100%',
   },
   text: {},
+  dialogBoxHeading: { textAlign: 'center' },
 };
 export default CommonStyles;

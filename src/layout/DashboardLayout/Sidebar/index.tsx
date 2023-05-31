@@ -11,8 +11,9 @@ export const mainListItems = <React.Fragment></React.Fragment>;
 
 const SideBar = () => {
   const navigate = useNavigate();
-  const { currentUserError, data, currentUserLoading } = useCurrentUser();
-  const role = data?.data?.data?.getCurrentUser.role;
+  const { currentUserError, currentUserData, currentUserLoading } =
+    useCurrentUser();
+  const role = currentUserData?.data?.data?.getCurrentUser.role;
 
   const renderSidebarItems = () => {
     if (role === 'SuperAdmin') {

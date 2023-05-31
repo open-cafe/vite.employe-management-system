@@ -15,7 +15,7 @@ import Grid from '@mui/material/Grid';
 import { setCookie } from '../../utils/authCookies';
 
 import { cookieName } from '../../constants/environment';
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import LoginLayout from '@/layout/LoginLayout';
 import useAuth from '@/hooks/useAuth';
 import useCurrentUser from '@/hooks/useCurrentUser';
@@ -39,33 +39,30 @@ const Login = () => {
       email: enteredEmail,
       password: enteredPassword,
     };
-    try {
-      loginAction(loginCredentials, {
-        onSuccess: (data) => {
-          if (data) {
-            setCookie(cookieName, data?.data?.data?.access_token);
-            if (data?.data?.data?.role === 'Employee') {
-              if (data?.data?.data?.employeeDetail) {
-                navigate(`/`);
-              } else {
-                navigate('/employeeonboarding');
-              }
-            } else {
+
+    loginAction(loginCredentials, {
+      onSuccess: (data) => {
+        if (data) {
+          setCookie(cookieName, data?.data?.data?.access_token);
+          if (data?.data?.data?.role === 'Employee') {
+            if (data?.data?.data?.employeeDetail) {
               navigate(`/`);
+            } else {
+              navigate('/employeeonboarding');
             }
+          } else {
+            navigate(`/`);
           }
-        },
-        onError: (data) => {
-          setAlertSeverity('error');
-          setAlertMessage('email or password is incorrect');
-          setAlertOpen(true);
-        },
-      });
-      setEnteredEmail('');
-      setEnteredPassword('');
-    } catch (error) {
-      console.log(error);
-    }
+        }
+      },
+      onError: (data) => {
+        setAlertSeverity('error');
+        setAlertMessage('email or password is incorrect');
+        setAlertOpen(true);
+      },
+    });
+    setEnteredEmail('');
+    setEnteredPassword('');
   };
 
   return (
