@@ -6,7 +6,7 @@ const useCurrentUser = () => {
 
   const {
     isError: currentUserError,
-    data,
+    data: currentUserData,
     isLoading: currentUserLoading,
   } = useQuery(['currentUser'], fetchCurrentUser, {
     onSuccess: (data) => {
@@ -14,7 +14,7 @@ const useCurrentUser = () => {
     },
   });
 
-  return { currentUserError, data, currentUserLoading };
+  return { currentUserError, currentUserData, currentUserLoading };
 };
 
 export default useCurrentUser;
