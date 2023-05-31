@@ -23,7 +23,7 @@ import ResetPassword from './ResetPassword';
 import AddProjectAssignment from './AddProjectAssignment';
 import ProjectDetails from './Project/ProjectDetails';
 import EmployeeOnBoarding from './EmployeeOnBorading';
-import ProjectAssignmentByEmpId from './ProjectAssignmentByEmpId';
+import EmployeeProjects from './EmployeeProjects';
 
 const Router: FC = () => {
   return (
@@ -48,10 +48,7 @@ const Router: FC = () => {
             path="addprojectassignment"
             element={<AddProjectAssignment />}
           />
-          <Route
-            path="projectassignmentbyempid"
-            element={<ProjectAssignmentByEmpId />}
-          />
+          <Route path="employeeProjects" element={<EmployeeProjects />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>

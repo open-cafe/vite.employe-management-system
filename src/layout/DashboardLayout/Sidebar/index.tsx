@@ -135,7 +135,7 @@ const SideBar = () => {
           </ListItemButton>
           <ListItemButton
             onClick={() => {
-              navigate('projectassignmentbyempid');
+              navigate('employeeprojects');
               action?.setShowSidebar && action?.setShowSidebar(false);
             }}
           >

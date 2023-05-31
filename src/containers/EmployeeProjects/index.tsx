@@ -47,10 +47,11 @@ interface Project {
   status: string;
 }
 
-const Project: React.FC = () => {
+const EmployeeProjects: React.FC = () => {
   const navigate = useNavigate();
-  const { currentUserError, data, currentUserLoading } = useCurrentUser();
-  const role = data?.data?.data?.getCurrentUser.role;
+  const { currentUserError, currentUserData, currentUserLoading } =
+    useCurrentUser();
+  const role = currentUserData?.data?.data?.getCurrentUser.role;
   console.log(role);
   const navigateToConfirmed = (project: Project) => {
     if (role !== 'Employee') {
@@ -170,4 +171,4 @@ const Project: React.FC = () => {
   );
 };
 
-export default Project;
+export default EmployeeProjects;

@@ -56,8 +56,9 @@ interface Leave {
 
 const Leave: React.FC = () => {
   const navigate = useNavigate();
-  const { currentUserError, data, currentUserLoading } = useCurrentUser();
-  const role = data?.data?.data?.getCurrentUser.role;
+  const { currentUserError, currentUserData, currentUserLoading } =
+    useCurrentUser();
+  const role = currentUserData?.data?.data?.getCurrentUser.role;
   console.log(role);
 
   const navigateToConfirmed = (leave: Leave) => {
@@ -86,7 +87,7 @@ const Leave: React.FC = () => {
 
   useEffect(() => {
     setLeaveDetail(leaveData?.data.data.data);
-  }, [data]);
+  }, [currentUserData]);
 
   const total = leaveData?.data.data;
 
