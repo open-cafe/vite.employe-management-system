@@ -6,25 +6,36 @@ import SideBar from './Sidebar';
 import Grid from '@mui/material/Grid';
 import { Outlet } from 'react-router-dom';
 import { Box } from '@mui/material';
+import { useLocation } from 'react-router-dom';
 
 interface DashboardLayoutPops {
   children: ReactNode;
 }
 
 const DashboardLayout = () => {
+  const location = useLocation();
+
   return (
     <MainLayout>
-      <Grid container>
-        <Grid item xs={3} md={1}>
-          <SideBar />
-        </Grid>
-        <Grid item xs={9} md={11}>
-          <NavBar />
-          <Box sx={{ height: `calc(100% - 48px)` }}>
+      <NavBar />
+      <SideBar />
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        {location.pathname === '/changepassword' ? (
+          <Box sx={{ width: '35vw' }}>
             <Outlet />
           </Box>
-        </Grid>
-      </Grid>
+        ) : (
+          <Box sx={{ width: '70vw' }}>
+            <Outlet />
+          </Box>
+        )}
+      </Box>
     </MainLayout>
   );
 };

@@ -1,11 +1,17 @@
-import List from '@mui/material/List';
 import * as React from 'react';
 import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
-import Grid from '@mui/material/Grid';
+import {
+  ListItemText,
+  ListItemIcon,
+  Typography,
+  Box,
+  Drawer,
+} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import useCurrentUser from '@/hooks/useCurrentUser';
 import SideBarStyles from '@/style/SideBar.styles';
+import useSidebarContext from '@/context/sidebar/useSidebarContext';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 export const mainListItems = <React.Fragment></React.Fragment>;
 
@@ -13,60 +19,143 @@ const SideBar = () => {
   const navigate = useNavigate();
   const { currentUserError, data, currentUserLoading } = useCurrentUser();
   const role = data?.data?.data?.getCurrentUser.role;
-  // console.log(role);
+  const toggleSidebar = useSidebarContext();
+
+  const [state, action] = toggleSidebar;
 
   const renderSidebarItems = () => {
     if (role === 'SuperAdmin') {
       return (
-        <>
-          <ListItemButton onClick={() => navigate('employee')}>
-            <ListItemText primary="Employees" />
+        <Box>
+          <ListItemButton
+            sx={SideBarStyles.listButtonStyle}
+            onClick={() =>
+              action?.setShowSidebar && action?.setShowSidebar(false)
+            }
+          >
+            <ListItemIcon sx={{ color: 'white' }}>
+              <ArrowBackIcon sx={{ fontSize: 18 }} />
+            </ListItemIcon>
+            <Typography fontSize={17} sx={{ marginLeft: -3, color: 'white' }}>
+              Back
+            </Typography>
           </ListItemButton>
-          <ListItemButton onClick={() => navigate('leave')}>
-            <ListItemText primary="Leave" />
+          <ListItemButton
+            onClick={() => {
+              navigate('employee');
+              action?.setShowSidebar && action?.setShowSidebar(false);
+            }}
+          >
+            <ListItemText
+              sx={SideBarStyles.listTextStyle}
+              primary="Employees"
+            />
           </ListItemButton>
-          <ListItemButton onClick={() => navigate('project')}>
-            <ListItemText primary="Project" />
+          <ListItemButton
+            onClick={() => {
+              navigate('leave');
+              action?.setShowSidebar && action?.setShowSidebar(false);
+            }}
+          >
+            <ListItemText sx={SideBarStyles.listTextStyle} primary="Leave" />
           </ListItemButton>
-          <ListItemButton onClick={() => navigate('checkinout')}>
-            <ListItemText primary="CheckInOut" />
+          <ListItemButton
+            onClick={() => {
+              navigate('project');
+              action?.setShowSidebar && action?.setShowSidebar(false);
+            }}
+          >
+            <ListItemText
+              sx={{ width: 200, color: 'white' }}
+              primary="Project"
+            />
           </ListItemButton>
-          <ListItemButton onClick={() => navigate('adduser')}>
-            <ListItemText primary="AddUser" />
+          <ListItemButton
+            onClick={() => {
+              navigate('checkinout');
+              action?.setShowSidebar && action?.setShowSidebar(false);
+            }}
+          >
+            <ListItemText
+              sx={SideBarStyles.listTextStyle}
+              primary="CheckInOut"
+            />
           </ListItemButton>
-          <ListItemButton onClick={() => navigate('addproject')}>
-            <ListItemText primary="AddProject" />
+          <ListItemButton
+            onClick={() => {
+              navigate('adduser');
+              action?.setShowSidebar && action?.setShowSidebar(false);
+            }}
+          >
+            <ListItemText sx={SideBarStyles.listTextStyle} primary="AddUser" />
           </ListItemButton>
-        </>
+          <ListItemButton
+            onClick={() => {
+              navigate('addproject');
+              action?.setShowSidebar && action?.setShowSidebar(false);
+            }}
+          >
+            <ListItemText
+              sx={SideBarStyles.listTextStyle}
+              primary="AddProject"
+            />
+          </ListItemButton>
+        </Box>
       );
     } else if (role === 'Employee') {
       return (
-        <>
-          <ListItemButton onClick={() => navigate('leaveadd')}>
-            <ListItemText primary="ApplyLeave" />
+        <Box>
+          <ListItemButton
+            sx={SideBarStyles.listButtonStyle}
+            onClick={() =>
+              action?.setShowSidebar && action?.setShowSidebar(false)
+            }
+          >
+            <ListItemIcon sx={{ color: 'white' }}>
+              <ArrowBackIcon sx={{ fontSize: 18 }} />
+            </ListItemIcon>
+            <Typography fontSize={18} sx={{ marginLeft: -3, color: 'white' }}>
+              Back
+            </Typography>
           </ListItemButton>
-          <ListItemButton onClick={() => navigate('projectassignmentbyempid')}>
-            <ListItemText primary="Project" />
+          <ListItemButton sx={SideBarStyles.listButtonStyle}>
+            <ListItemText
+              sx={SideBarStyles.listTextStyle}
+              primary="ApplyLeave"
+            />
           </ListItemButton>
-          <ListItemButton onClick={() => navigate('leave')}>
-            <ListItemText primary="Leave" />
+          <ListItemButton>
+            <ListItemText sx={SideBarStyles.listTextStyle} primary="Project" />
           </ListItemButton>
-          {/* <ListItemButton>
-            <ListItemText primary="CheckInOut" />
-          </ListItemButton> */}
-        </>
+          <ListItemButton>
+            <ListItemText
+              sx={SideBarStyles.listTextStyle}
+              primary="CheckInOut"
+            />
+          </ListItemButton>
+        </Box>
       );
     }
   };
 
   return (
-    <List component="nav" sx={SideBarStyles.sidebarlist}>
-      <Grid sx={SideBarStyles.sidebarGrid}>
-        <Grid item xs={6}>
-          {renderSidebarItems()}
-        </Grid>
-      </Grid>
-    </List>
+    <Box>
+      {/* <Button onClick={toggleDrawer(anchor, true)}>{anchor}</Button> */}
+      <Drawer
+        PaperProps={{
+          sx: {
+            backgroundColor: '#36454f',
+          },
+        }}
+        anchor={'left'}
+        open={state?.showSidebar ?? false}
+        onClose={() => {
+          action?.setShowSidebar && action.setShowSidebar(false);
+        }}
+      >
+        {renderSidebarItems()}
+      </Drawer>
+    </Box>
   );
 };
 

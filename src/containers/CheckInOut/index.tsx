@@ -9,6 +9,7 @@ import TableRow from '@mui/material/TableRow';
 import { TableHead, TablePagination } from '@mui/material';
 import useCheckInOut from '@/hooks/useCheckinout';
 import { useEffect, useState } from 'react';
+import CommonStyles from '@/style/Common.styles';
 
 interface Column {
   id: 'name' | 'phone' | 'check_in_time' | 'check_out_time' | 'current_date';
@@ -88,12 +89,12 @@ const CheckInOut: React.FC = () => {
     const total = data?.data.data;
 
     return (
-      <Paper>
-        <TableContainer>
+      <Paper sx={CommonStyles.paperLayout}>
+        <TableContainer sx={{ height: '80vh' }}>
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
               <TableRow>
-                <TableCell align="center" colSpan={6}>
+                <TableCell align="center" colSpan={5}>
                   Checkinout Details
                 </TableCell>
               </TableRow>

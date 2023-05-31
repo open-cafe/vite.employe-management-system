@@ -5,6 +5,8 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
+import tableStyle from '@/style/Table.styles';
+
 //import axios from 'axios';
 import {
   Box,
@@ -75,7 +77,7 @@ const Employees: React.FC = () => {
   const total = data?.data.data;
 
   return (
-    <Paper>
+    <Paper sx={{ height: 'calc(100vh - 80px)', background: '#f7f7f7' }}>
       {employeeLoading ? (
         <Box
           display="flex"
@@ -89,7 +91,7 @@ const Employees: React.FC = () => {
         <div>{employeeError}</div>
       ) : (
         <>
-          <TableContainer>
+          <TableContainer sx={tableStyle.size}>
             <Table stickyHeader aria-label="sticky table">
               <TableHead>
                 <TableRow>
