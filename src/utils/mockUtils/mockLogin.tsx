@@ -2,19 +2,27 @@ import useAuth from '@/hooks/useAuth';
 import Cookie from 'js-cookie';
 
 jest.mock('js-cookie', () => jest.fn());
-const mockResponse = {
+const mockResponse1 = {
   data: {
     data: {
-      data: {
-        access_token: 'test',
-        role: 'Employee',
-        employeeDetail: {
-          id: 1,
-          name: 'test',
-          designation: 'test',
-          phoneNumber: 'test',
-        },
+      access_token: 'test',
+      role: 'Employee',
+      employeeDetail: {
+        id: 1,
+        name: 'test',
+        designation: 'test',
+        phoneNumber: 'test',
       },
+    },
+  },
+};
+
+const mockResponse2 = {
+  data: {
+    data: {
+      access_token: 'test',
+      role: 'Employee',
+      employeeDetail: null,
     },
   },
 };
@@ -25,6 +33,22 @@ export const authMockData = () => {
     loginLoading: false,
     loginAction: jest
       .fn()
-      .mockImplementation((a, b) => b.onSuccess(mockResponse)),
+      .mockImplementation((a, b) => b.onSuccess(mockResponse1)),
+  });
+};
+
+export const authMockData2 = () => {
+  (useAuth as jest.Mock).mockReturnValue({
+    loginLoading: false,
+    loginAction: jest
+      .fn()
+      .mockImplementation((a, b) => b.onSuccess(mockResponse2)),
+  });
+};
+
+export const errorMockData = () => {
+  (useAuth as jest.Mock).mockReturnValue({
+    loginLoading: false,
+    loginAction: jest.fn().mockImplementation((a, b) => b.onError()),
   });
 };
