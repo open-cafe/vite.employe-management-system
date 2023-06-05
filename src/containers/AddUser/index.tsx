@@ -36,30 +36,30 @@ const AddUser = () => {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setRole(event.target.value);
   };
-
+  interface Role {
+    roleId: string;
+    role: string;
+  }
   const handleSubmit = async () => {
     const userDetails = {
       email: enteredEmail,
       roleId: role,
     };
-    try {
-      addUserAction(userDetails, {
-        onSuccess: (data) => {
-          if (data) {
-            navigate(`/`);
-          }
-        },
-        onError: (data) => {
-          setAlertSeverity('error');
-          setAlertMessage('user already exists');
-          setAlertOpen(true);
-        },
-      });
-      setEnteredEmail('');
-      setRole('');
-    } catch (error) {
-      console.log(error);
-    }
+
+    addUserAction(userDetails, {
+      onSuccess: (data) => {
+        if (data) {
+          navigate(`/`);
+        }
+      },
+      onError: (data) => {
+        setAlertSeverity('error');
+        setAlertMessage('user already exists');
+        setAlertOpen(true);
+      },
+    });
+    setEnteredEmail('');
+    setRole('');
   };
 
   return (
@@ -108,10 +108,10 @@ const AddUser = () => {
                   <em>None</em>
                 </MenuItem>
                 {roles &&
-                  roles.map((Role: any) => {
+                  roles.map((role: Role) => {
                     return (
-                      <MenuItem value={Role.roleId} key={Role.roleId}>
-                        {Role.role}
+                      <MenuItem value={role.roleId} key={role.roleId}>
+                        {role.role}
                       </MenuItem>
                     );
                   })}

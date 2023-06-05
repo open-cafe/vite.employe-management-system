@@ -8,7 +8,7 @@ const useAllRole = () => {
     isSuccess: roleSuccess,
     isLoading: roleLoading,
   } = useQuery({
-    queryKey: ['allEmployee'],
+    queryKey: ['allRole'],
     queryFn: () => fetchAllRole(),
     retry: false,
   });
