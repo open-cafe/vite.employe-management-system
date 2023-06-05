@@ -18,6 +18,7 @@ import useLeave from '@/hooks/useLeave';
 import { useEffect, useState } from 'react';
 
 import { Dayjs } from 'dayjs';
+import CommonStyles from '@/style/Common.styles';
 
 interface Column {
   id: 'reason' | 'leaveType' | 'startDate' | 'endDate';
@@ -79,7 +80,7 @@ const Leave: React.FC = () => {
   const total = data?.data.data;
 
   return (
-    <Paper sx={{ width: '100%' }}>
+    <Paper sx={CommonStyles.paperLayout}>
       {leaveLoading ? (
         <Box
           display="flex"
@@ -93,7 +94,7 @@ const Leave: React.FC = () => {
         <div>{leaveError}</div>
       ) : (
         <>
-          <TableContainer>
+          <TableContainer sx={{ height: '80vh' }}>
             <Table stickyHeader aria-label="sticky table">
               <TableHead>
                 <TableRow>

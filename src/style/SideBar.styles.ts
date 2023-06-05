@@ -10,5 +10,18 @@ const SideBarStyles = {
     alignItems: 'center',
     paddingTop: 8,
   },
+
+  listButtonStyle: {
+    display: 'flex',
+    height: 50,
+    backgroundColor: 'transparent',
+
+    '&:hover': { color: 'black' },
+  },
+
+  listTextStyle: {
+    width: 200,
+    color: 'white',
+  },
 };
 export default SideBarStyles;

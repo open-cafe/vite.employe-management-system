@@ -42,6 +42,7 @@ const Login = () => {
     try {
       loginAction(loginCredentials, {
         onSuccess: (data) => {
+          console.log('newdata', data);
           if (data) {
             setCookie(cookieName, data?.data?.data?.access_token);
             if (data?.data?.data?.role === 'Employee') {
