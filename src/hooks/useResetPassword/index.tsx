@@ -6,7 +6,7 @@ const useResetPassword = () => {
     mutate: resetPasswordChangeAction,
     isLoading: resetPasswordchangeLoading,
   } = useMutation({
-    mutationFn: (body: { password: string; token: string }) =>
+    mutationFn: (body: { password: string; token: string; userId: string }) =>
       resetPassword(body),
   });
   return { resetPasswordChangeAction, resetPasswordchangeLoading };
