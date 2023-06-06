@@ -5,6 +5,7 @@ const ResetFormStyles = {
     maxWidth: '400px',
     borderRadius: '20px',
     p: '30px',
+    width: '50%',
   },
   button: {
     mt: 3,

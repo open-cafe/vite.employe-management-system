@@ -19,6 +19,10 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import MainLayout from '@/layout/MainLayout';
 import { AxiosError } from 'axios';
+import { useForm } from 'react-hook-form';
+import { DevTool } from '@hookform/devtools';
+import { yupResolver } from '@hookform/resolvers/yup';
+import changePasswordSchema from './changePasswordSchema';
 
 interface ErrorData {
   errorObj: {
@@ -27,10 +31,25 @@ interface ErrorData {
   };
 }
 
+type formValues = {
+  oldPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+};
+
 const ChangePassword = () => {
-  const [oldPassword, setoldPassword] = useState('');
-  const [newPassword, setnewPassword] = useState('');
-  const [confrmPassword, setconfirmPassword] = useState('');
+  const form = useForm<formValues>({
+    defaultValues: {
+      oldPassword: '',
+      newPassword: '',
+      confirmPassword: '',
+    },
+    resolver: yupResolver(changePasswordSchema),
+    mode: 'onChange',
+  });
+
+  const { register, control, formState, handleSubmit, reset } = form;
+  const { errors } = formState;
   const { passwordChangeAction, passwordchangeLoading } = useChangePassword();
   const [alertOpen, setAlertOpen] = useState(false);
   const [alertSeverity, setAlertSeverity] = useState<
@@ -43,13 +62,14 @@ const ChangePassword = () => {
 
   const navigate = useNavigate();
 
-  const handleSubmit = async () => {
+  const onSubmit = async (data: formValues) => {
+    console.log(data);
     const changePassowrdCredentials = {
-      oldPassword: oldPassword,
-      newPassword: newPassword,
+      oldPassword: data.oldPassword,
+      newPassword: data.newPassword,
     };
 
-    if (newPassword === confrmPassword) {
+    if (data.newPassword === data.confirmPassword) {
       passwordChangeAction(changePassowrdCredentials, {
         onSuccess: (data) => {
           if (data) {
@@ -67,9 +87,7 @@ const ChangePassword = () => {
           setAlertOpen(true);
         },
       });
-      setoldPassword('');
-      setnewPassword('');
-      setconfirmPassword('');
+      reset();
     } else {
       setAlertSeverity('warning');
       setAlertMessage('confrim password is not equal to new password');
@@ -85,53 +103,62 @@ const ChangePassword = () => {
               <Typography component="h1" variant="h5">
                 Change password
               </Typography>
-              <Box sx={TextFieldStyles.container}>
-                <TextField
-                  sx={TextFieldStyles.size}
-                  margin="normal"
-                  id="oldpassword"
-                  name="oldpassword"
-                  label="Old Password"
-                  type="password"
-                  value={oldPassword}
-                  onChange={(e) => setoldPassword(e.target.value)}
-                  required
-                />
-                <TextField
-                  margin="normal"
-                  id="newPassword"
-                  name="newPassword"
-                  label="New Password"
-                  type="password"
-                  autoComplete="current-password"
-                  value={newPassword}
-                  onChange={(e) => setnewPassword(e.target.value)}
-                  sx={TextFieldStyles.size}
-                  required
-                />
-                <TextField
-                  margin="normal"
-                  id="confirmPassword"
-                  name="conmfirPassword"
-                  label="Confirm Password"
-                  type="password"
-                  autoComplete="current-password"
-                  value={confrmPassword}
-                  onChange={(e) => setconfirmPassword(e.target.value)}
-                  sx={TextFieldStyles.size}
-                  required
-                />
-
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  sx={CommonStyles.button}
-                  onClick={() => handleSubmit()}
-                >
-                  Change Passowrd
-                </Button>
-              </Box>
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <Box sx={TextFieldStyles.container}>
+                  <TextField
+                    sx={TextFieldStyles.size}
+                    margin="normal"
+                    id="oldpassword"
+                    label="Old Password"
+                    type="password"
+                    {...register('oldPassword')}
+                  />
+                  <Typography
+                    variant="h6"
+                    sx={{ color: 'red', fontSize: '14px' }}
+                  >
+                    {errors.oldPassword?.message}
+                  </Typography>
+                  <TextField
+                    margin="normal"
+                    id="newPassword"
+                    label="New Password"
+                    type="password"
+                    autoComplete="current-password"
+                    sx={TextFieldStyles.size}
+                    {...register('newPassword')}
+                  />
+                  <Typography
+                    variant="h6"
+                    sx={{ color: 'red', fontSize: '14px' }}
+                  >
+                    {errors.newPassword?.message}
+                  </Typography>
+                  <TextField
+                    margin="normal"
+                    id="confirmPassword"
+                    label="Confirm Password"
+                    type="password"
+                    autoComplete="current-password"
+                    sx={TextFieldStyles.size}
+                    {...register('confirmPassword')}
+                  />
+                  <Typography
+                    variant="h6"
+                    sx={{ color: 'red', fontSize: '14px' }}
+                  >
+                    {errors.confirmPassword?.message}
+                  </Typography>
+                  <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    sx={CommonStyles.button}
+                  >
+                    Change Passowrd
+                  </Button>
+                </Box>
+              </form>
             </Box>
           </CardContent>
         </Card>
@@ -149,6 +176,7 @@ const ChangePassword = () => {
           </Alert>
         </Snackbar>
       </Box>
+      <DevTool control={control} />
     </MainLayout>
   );
 };

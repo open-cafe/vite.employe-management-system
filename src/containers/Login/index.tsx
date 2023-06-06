@@ -13,19 +13,36 @@ import {
 } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import { setCookie } from '../../utils/authCookies';
-
+import { useForm } from 'react-hook-form';
 import { cookieName } from '../../constants/environment';
 import { useState } from 'react';
 import LoginLayout from '@/layout/LoginLayout';
 import useAuth from '@/hooks/useAuth';
 import useCurrentUser from '@/hooks/useCurrentUser';
+import { DevTool } from '@hookform/devtools';
+import schema from './LoginSchema';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 const Login = () => {
+  type formValues = {
+    email: string;
+    password: string;
+  };
+
+  const form = useForm<formValues>({
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+    resolver: yupResolver(schema),
+    mode: 'onChange',
+  });
+
+  const { register, control, handleSubmit, formState } = form;
+  const { errors, isSubmitting, isValid } = formState;
+
   const navigate = useNavigate();
   const { loginAction, loginLoading } = useAuth();
-
-  const [enteredEmail, setEnteredEmail] = useState('');
-  const [enteredPassword, setEnteredPassword] = useState('');
   const [alertOpen, setAlertOpen] = useState(false);
   const [alertSeverity, setAlertSeverity] = useState<
     'success' | 'error' | 'info' | 'warning'
@@ -34,18 +51,18 @@ const Login = () => {
   const handleAlertClose = () => {
     setAlertOpen(false);
   };
-  const handleSubmit = async () => {
-    const loginCredentials = {
-      email: enteredEmail,
-      password: enteredPassword,
-    };
 
+  const onSubmit = (data: formValues) => {
+    const loginCredentials = {
+      email: data.email,
+      password: data.password,
+    };
     loginAction(loginCredentials, {
-      onSuccess: (data) => {
-        if (data) {
-          setCookie(cookieName, data?.data?.data?.access_token);
-          if (data?.data?.data?.role === 'Employee') {
-            if (data?.data?.data?.employeeDetail) {
+      onSuccess: (value) => {
+        if (value) {
+          setCookie(cookieName, value?.data?.data?.access_token);
+          if (value?.data?.data?.role === 'Employee') {
+            if (value?.data?.data?.employeeDetail) {
               navigate(`/`);
             } else {
               navigate('/employeeonboarding');
@@ -61,8 +78,6 @@ const Login = () => {
         setAlertOpen(true);
       },
     });
-    setEnteredEmail('');
-    setEnteredPassword('');
   };
 
   return (
@@ -84,39 +99,53 @@ const Login = () => {
           <CardContent>
             <Box>
               <Box>
-                <TextField
-                  margin="normal"
-                  id="email"
-                  name="email"
-                  label="Email Address"
-                  autoComplete="email"
-                  value={enteredEmail}
-                  onChange={(e) => setEnteredEmail(e.target.value)}
-                  fullWidth
-                  required
-                />
-                <TextField
-                  margin="normal"
-                  id="password"
-                  name="password"
-                  label="Password"
-                  type="password"
-                  autoComplete="current-password"
-                  value={enteredPassword}
-                  onChange={(e) => setEnteredPassword(e.target.value)}
-                  fullWidth
-                  required
-                />
+                <form onSubmit={handleSubmit(onSubmit)} noValidate>
+                  <Box sx={{ minWidth: '300px', maxWidth: '350px' }}>
+                    <TextField
+                      margin="normal"
+                      id="email"
+                      label="Email Address"
+                      autoComplete="email"
+                      {...register('email')}
+                      fullWidth
+                    />
+                    <Typography
+                      variant="h6"
+                      sx={{ fontSize: '14px', color: 'red' }}
+                    >
+                      {errors.email?.message}
+                    </Typography>
+                  </Box>
 
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  sx={{ mt: 3, mb: 2 }}
-                  onClick={() => handleSubmit()}
-                >
-                  Log In
-                </Button>
+                  <Box sx={{ minWidth: '200px', maxWidth: '350px' }}>
+                    <TextField
+                      margin="normal"
+                      id="password"
+                      label="Password"
+                      type="password"
+                      autoComplete="current-password"
+                      {...register('password')}
+                      fullWidth
+                    />
+                    <Typography
+                      variant="h6"
+                      sx={{ fontSize: '14px', color: 'red' }}
+                    >
+                      {errors.password?.message}
+                    </Typography>
+                  </Box>
+
+                  <Button
+                    disabled={isSubmitting || !isValid}
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    sx={{ mt: 3, mb: 2 }}
+                  >
+                    Log In
+                  </Button>
+                </form>
+
                 <Grid container>
                   <Grid item xs>
                     <Link to="/sendresetpasswordmail">Forgot password?</Link>
@@ -140,6 +169,7 @@ const Login = () => {
           {alertMessage}
         </Alert>
       </Snackbar>
+      <DevTool control={control} />
     </LoginLayout>
   );
 };
