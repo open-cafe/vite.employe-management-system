@@ -12,7 +12,6 @@ import Grid from '@mui/material/Grid';
 import { useNavigate } from 'react-router-dom';
 import useCurrentUser from '@/hooks/useCurrentUser';
 import SideBarStyles from '@/style/SideBar.styles';
-
 import useSidebarContext from '@/context/sidebar/useSidebarContext';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
@@ -28,7 +27,7 @@ const SideBar = () => {
   const [state, action] = toggleSidebar;
 
   const renderSidebarItems = () => {
-    if (role === 'SuperAdmin') {
+    if (role === 'SuperAdmin' || role === 'Admin') {
       return (
         <Box>
           <ListItemButton

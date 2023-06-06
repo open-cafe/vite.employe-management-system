@@ -15,6 +15,8 @@ import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import CommonStyles from '@/style/Common.styles';
 import { AxiosError } from 'axios';
+import { verifyToken } from '@/hooks/useVerifyToken/request';
+import useVerifyToken from '@/hooks/useVerifyToken';
 
 interface ErrorData {
   errorObj: {
@@ -27,9 +29,11 @@ const ResetPassword = () => {
   const [newPassword, setnewPassword] = useState('');
   const [confrmPassword, setconfirmPassword] = useState('');
   const [token, setToken] = useState<string | null>(null);
+  const [userId, setUserID] = useState<string | null>(null);
 
   const { resetPasswordChangeAction, resetPasswordchangeLoading } =
     useResetPassword();
+  const { verifyTokenAction, verifyTokenLoading } = useVerifyToken();
   const [alertOpen, setAlertOpen] = useState(false);
   const [alertSeverity, setAlertSeverity] = useState<
     'success' | 'error' | 'info' | 'warning'
@@ -41,14 +45,36 @@ const ResetPassword = () => {
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    const tokenValue = urlParams.get('token');
-    setToken(tokenValue);
+    const tokenEncoded = urlParams.get('token');
+    const userIdEncoded = urlParams.get('userId');
+
+    if (userIdEncoded && tokenEncoded) {
+      const userId = atob(userIdEncoded);
+      const tokenValue = atob(tokenEncoded);
+      const verifyTokenCredentials = {
+        userId: userId,
+      };
+      verifyTokenAction(verifyTokenCredentials, {
+        onError: (error) => {
+          const axiosError = error as AxiosError;
+
+          setAlertSeverity('error');
+          setAlertMessage(
+            (axiosError.response?.data as ErrorData)?.errorObj?.message
+          );
+          setAlertOpen(true);
+        },
+      });
+      setUserID(userId);
+      setToken(tokenValue);
+    }
   }, []);
 
   const handleSubmit = async () => {
     const resetPassowrdCredentials = {
       password: newPassword,
       token: token as string,
+      userId: userId as string,
     };
 
     if (newPassword === confrmPassword) {

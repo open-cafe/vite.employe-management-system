@@ -18,7 +18,7 @@ import ChangePassword from './ChangePassword';
 import AddProject from './AddProject';
 
 import LeaveAdd from './LeaveAdd';
-import ResetPasswordMailForm from './ResetPassowrdMailForm/resetPasswordMailForm';
+import ResetPassowrdMailForm from './ResetPassowrdMailForm';
 import ResetPassword from './ResetPassword';
 import AddProjectAssignment from './AddProjectAssignment';
 import ProjectDetails from './Project/ProjectDetails';
@@ -58,7 +58,7 @@ const Router: FC = () => {
         <Route path="/login" element={<Login />} />
         <Route
           path="/sendresetpasswordmail"
-          element={<ResetPasswordMailForm />}
+          element={<ResetPassowrdMailForm />}
         />
         <Route path="/resetpassword" element={<ResetPassword />} />
       </Route>
