@@ -8,7 +8,6 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import useProjectAssignmentByEmployee from '@/hooks/useProjectAssignmentByEmployee';
 
-// import useProject from '@/hooks/useProject';
 import {
   CircularProgress,
   TablePagination,
@@ -52,7 +51,6 @@ const EmployeeProjects: React.FC = () => {
   const { currentUserError, currentUserData, currentUserLoading } =
     useCurrentUser();
   const role = currentUserData?.data?.data?.getCurrentUser.role;
-  console.log(role);
   const navigateToConfirmed = (project: Project) => {
     if (role !== 'Employee') {
       navigate(`/projectdetail`, { state: project });
@@ -62,11 +60,6 @@ const EmployeeProjects: React.FC = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const { projectLoading, projectData, projectError } =
     useProjectAssignmentByEmployee(page + 1, rowsPerPage);
-  console.log('projectData employee', projectData);
-  // const { projectLoading, projectData, projectError } = useProject(
-  //   page + 1,
-  //   rowsPerPage
-  // );
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -81,7 +74,6 @@ const EmployeeProjects: React.FC = () => {
 
   const total = projectData?.data?.data;
   const projectDetail = projectData?.data?.data?.projects;
-  console.log('projectDetail employee', projectDetail);
 
   return (
     <Paper /* sx={{ width: '100%' }} */>
@@ -125,7 +117,7 @@ const EmployeeProjects: React.FC = () => {
               </TableHead>
 
               <TableBody>
-                {projectDetail.length ? (
+                {projectDetail?.length ? (
                   projectDetail.map((project: Project) => {
                     return (
                       <TableRow

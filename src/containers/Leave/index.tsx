@@ -156,7 +156,7 @@ const Leave: React.FC = () => {
             <Table stickyHeader aria-label="sticky table">
               <TableHead>
                 <TableRow>
-                  <TableCell align="center" colSpan={8}>
+                  <TableCell align="center" colSpan={6}>
                     <h2>Leave Details</h2>
                   </TableCell>
                 </TableRow>

@@ -59,32 +59,33 @@ const LeaveAdd = () => {
   const [endDate, setEndDate] = useState<dayjs.Dayjs | null>(null);
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setReason(event.target.value);
-    console.log('error in reason');
-    if (reason.trim() === '') {
-      setAlertOpen(true);
-      setAlertMessage('Please enter a reason');
-    } else {
-      setAlertOpen(false);
-      setAlertMessage('');
-    }
+
+    // if (reason.trim() === '') {
+    //   console.log('error in reason');
+    //   setAlertOpen(true);
+    //   setAlertMessage('Please enter a reason');
+    // } else {
+    //   setAlertOpen(false);
+    //   setAlertMessage('');
+    // }
   };
   const handleLeaveChange = (event: SelectChangeEvent) => {
     setLeaveType(event.target.value as string);
-    if (leaveType === '') {
-      // setAlertOpen(true);
-      console.log('error in leavetype');
-      setAlertMessage('Please select a leave type.');
-    } else {
-      setAlertOpen(false);
-      setAlertMessage('');
-    }
   };
 
   const handleSubmit = async () => {
-    console.log('asdf', dayjs());
     const start = startDate; /* .toISOString() */
     const end = endDate; /* .toISOString() */
-    console.log('start date', start, end);
+
+    // if (leaveType === '') {
+    //   setAlertOpen(true);
+    //   // console.log('error in leavetype');
+    //   setAlertMessage('Please select a leave type.');
+    // } else {
+    //   setAlertOpen(false);
+    //   setAlertMessage('');
+    // }
+
     const leaveDetails = {
       leaveType: leaveType,
       reason: reason,
@@ -117,13 +118,13 @@ const LeaveAdd = () => {
           } else {
             setAlertMessage('Fill in the date fields');
           }
-        } /* else { */
-        console.log('Data are not present');
+        } else {
+          console.log('Data are not present');
 
-        setAlertSeverity('error');
-        setAlertMessage('Fill in all the fields');
-        setAlertOpen(true);
-        // }
+          setAlertSeverity('error');
+          // setAlertMessage('Fill in all the fields');
+          setAlertOpen(true);
+        }
       },
       // onError: (error) => {
       //   const axiosError = error as AxiosError;

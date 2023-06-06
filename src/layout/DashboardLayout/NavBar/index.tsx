@@ -28,7 +28,6 @@ export default function NavBar() {
 
   const toggleSidebar = useSidebarContext();
   const [state, action] = toggleSidebar;
-  console.log(state, action);
 
   return (
     <Box sx={{ position: 'relative', flexGrow: 1, zIndex: 999 }}>

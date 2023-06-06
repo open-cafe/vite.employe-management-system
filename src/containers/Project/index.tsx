@@ -57,7 +57,6 @@ const Project: React.FC = () => {
     page + 1,
     rowsPerPage
   );
-  console.log('projectData', projectData);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -124,7 +123,7 @@ const Project: React.FC = () => {
               </TableHead>
 
               <TableBody>
-                {projectDetail.length ? (
+                {projectDetail?.length ? (
                   projectDetail.map((project: Project) => {
                     return (
                       <TableRow
@@ -152,7 +151,7 @@ const Project: React.FC = () => {
                   })
                 ) : (
                   <TableRow>
-                    <TableCell align="center" colSpan={8}>
+                    <TableCell align="center" colSpan={2}>
                       No Project Found
                     </TableCell>
                   </TableRow>
@@ -161,7 +160,6 @@ const Project: React.FC = () => {
             </Table>
           </TableContainer>
           <TablePagination
-            rowsPerPageOptions={[10]}
             component="div"
             count={total.total}
             rowsPerPage={rowsPerPage}

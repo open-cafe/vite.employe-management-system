@@ -68,10 +68,7 @@ const SideBar = () => {
               action?.setShowSidebar && action?.setShowSidebar(false);
             }}
           >
-            <ListItemText
-              sx={{ width: 200, color: 'white' }}
-              primary="Project"
-            />
+            <ListItemText sx={SideBarStyles.listTextStyle} primary="Project" />
           </ListItemButton>
           <ListItemButton
             onClick={() => {
@@ -134,11 +131,22 @@ const SideBar = () => {
           </ListItemButton>
           <ListItemButton
             onClick={() => {
-              navigate('employeeprojects');
+              navigate('project');
               action?.setShowSidebar && action?.setShowSidebar(false);
             }}
           >
             <ListItemText sx={SideBarStyles.listTextStyle} primary="Project" />
+          </ListItemButton>
+          <ListItemButton
+            onClick={() => {
+              navigate('employeeprojects');
+              action?.setShowSidebar && action?.setShowSidebar(false);
+            }}
+          >
+            <ListItemText
+              sx={SideBarStyles.listTextStyle}
+              primary="My Projects"
+            />
           </ListItemButton>
           <ListItemButton
             onClick={() => {
