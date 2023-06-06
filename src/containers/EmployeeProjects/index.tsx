@@ -148,7 +148,7 @@ const EmployeeProjects: React.FC = () => {
                   })
                 ) : (
                   <TableRow>
-                    <TableCell align="center" colSpan={2}>
+                    <TableCell align="center" colSpan={4}>
                       No Project Found
                     </TableCell>
                   </TableRow>

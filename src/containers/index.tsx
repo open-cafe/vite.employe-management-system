@@ -24,6 +24,7 @@ import AddProjectAssignment from './AddProjectAssignment';
 import ProjectDetails from './Project/ProjectDetails';
 import EmployeeOnBoarding from './EmployeeOnBorading';
 import EmployeeProjects from './EmployeeProjects';
+import EmployeeEdits from './EmployeeEdits';
 
 const Router: FC = () => {
   return (
@@ -32,6 +33,7 @@ const Router: FC = () => {
         <Route path="/employeeonboarding" element={<EmployeeOnBoarding />} />
 
         <Route path="/" element={<DashboardLayout />}>
+          <Route path="/employeeedit" element={<EmployeeEdits />} />
           <Route index element={<Dashboard />} />
           <Route path="employee" element={<Employees />} />
           <Route path="leave" element={<Leave />} />

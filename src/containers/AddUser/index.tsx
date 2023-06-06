@@ -14,7 +14,7 @@ import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';
 import useAddUser from '@/hooks/useAddUser';
 
-const EmployeeOnBoarding = () => {
+const AddUser = () => {
   const navigate = useNavigate();
   const [alertOpen, setAlertOpen] = useState(false);
   const [alertSeverity, setAlertSeverity] = useState<
@@ -125,4 +125,4 @@ const EmployeeOnBoarding = () => {
   );
 };
 
-export default EmployeeOnBoarding;
+export default AddUser;

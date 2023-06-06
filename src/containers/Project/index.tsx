@@ -152,7 +152,7 @@ const Project: React.FC = () => {
                   })
                 ) : (
                   <TableRow>
-                    <TableCell align="center" colSpan={2}>
+                    <TableCell align="center" colSpan={8}>
                       No Project Found
                     </TableCell>
                   </TableRow>

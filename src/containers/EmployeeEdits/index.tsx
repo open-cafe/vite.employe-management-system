@@ -12,22 +12,37 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import MainLayout from '@/layout/MainLayout';
 import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';
-import useAddEmployee from '@/hooks/useAddEmployee';
+
+import useEmployeeById from '@/hooks/useEmployeeeById';
+
+import useUpdateEmployee from '@/hooks/useUpdateEmployee';
 import EmployeeOnboardingStyles from '@/style/EmployeeOnboarding.styles';
 
-const EmployeeOnboarding = () => {
-  const navigate = useNavigate();
-  const { addEmployeeAction, addEmployeeLoading } = useAddEmployee();
+const EmployeeEdits = () => {
+  const { employeeByIdData, employeeByIdLoading, employeeByIdError } =
+    useEmployeeById();
+  const employeeData = employeeByIdData?.data.data;
+  //   const employeeId = employeeData?.employeeId;
+  const name = employeeData?.name;
+  const designation = employeeData?.designation;
+  const phone = employeeData?.phone;
+  console.log('hehe', designation);
+
+  const { updateEmployeeAction, updateEmployeeLoading } = useUpdateEmployee();
   //herne
-  const [designation, setDesignation] = useState('');
-  const [enteredName, setEnteredName] = useState('');
-  const [phone, setPhone] = useState('+977');
-  // const [hireDate, setHireDate] = useState('');
+  const [nameValue, setNameValue] = useState('');
+  const [designationValue, setDesignationValue] = useState('');
+  const [phoneValue, setPhoneValue] = useState('');
+  useEffect(() => {
+    setNameValue(name);
+    setDesignationValue(designation);
+    setPhoneValue(phone);
+  }, [name, designation, phone]);
 
   const [alertOpen, setAlertOpen] = useState(false);
   const [alertSeverity, setAlertSeverity] = useState<
@@ -40,23 +55,24 @@ const EmployeeOnboarding = () => {
 
   //eta herne
   const handleDesignation = (event: SelectChangeEvent) => {
-    setDesignation(event.target.value as string);
-    if (designation == null) {
+    setDesignationValue(event.target.value as string);
+    if (designationValue == null) {
       setAlertMessage('Add Designation');
     }
   };
   const handleSubmit = async () => {
     const employeeDetails = {
-      name: enteredName,
-      designation: designation,
-      phone: phone,
-      // hireDate: hireDate,
+      name: nameValue,
+      designation: designationValue,
+      phone: phoneValue,
     };
 
-    addEmployeeAction(employeeDetails, {
+    updateEmployeeAction(employeeDetails, {
       onSuccess: (data) => {
         if (data) {
-          navigate(`/employee`);
+          setAlertSeverity('success');
+          setAlertMessage('Updated Successfully!!!');
+          setAlertOpen(true);
         }
       },
       onError: (data) => {
@@ -66,9 +82,9 @@ const EmployeeOnboarding = () => {
         setAlertOpen(true);
       },
     });
-    setEnteredName('');
-    setDesignation('');
-    setPhone('');
+    // setEnteredName('');
+    // setDesignation('');
+    // setPhone('');
     // setHireDate('');
   };
 
@@ -92,8 +108,8 @@ const EmployeeOnboarding = () => {
               label="Employee Name"
               placeholder="George Bush"
               autoComplete="employee"
-              value={enteredName}
-              onChange={(e) => setEnteredName(e.target.value)}
+              value={nameValue}
+              onChange={(e) => setNameValue(e.target.value)}
               fullWidth
               required
             />
@@ -106,7 +122,7 @@ const EmployeeOnboarding = () => {
                 <Select
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
-                  value={designation}
+                  value={designationValue}
                   label="Designation"
                   onChange={handleDesignation}
                 >
@@ -134,9 +150,9 @@ const EmployeeOnboarding = () => {
               id="phone"
               name="phone"
               label="Phone Number "
-              value={phone}
-              placeholder="+977(10 digit numbers)"
-              onChange={(e) => setPhone(e.target.value)}
+              value={phoneValue}
+              //   placeholder="+977(10 digit numbers)"
+              onChange={(e) => setPhoneValue(e.target.value)}
               variant="outlined"
               fullWidth
               required
@@ -149,7 +165,7 @@ const EmployeeOnboarding = () => {
               sx={{ mt: 3, mb: 2 }}
               onClick={() => handleSubmit()}
             >
-              Add employee
+              Update employee
             </Button>
           </Paper>
         </Container>
@@ -171,4 +187,4 @@ const EmployeeOnboarding = () => {
   );
 };
 
-export default EmployeeOnboarding;
+export default EmployeeEdits;

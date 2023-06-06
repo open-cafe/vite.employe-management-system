@@ -1,4 +1,5 @@
 import {
+  Alert,
   Box,
   Button,
   FormControl,
@@ -9,6 +10,7 @@ import {
   MenuItem,
   Select,
   SelectChangeEvent,
+  Snackbar,
   //   Select,
   TextField,
   Typography,
@@ -26,10 +28,27 @@ import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { AxiosError } from 'axios';
+
+// interface ErrorData {
+//   errorObj: {
+//     message: string;
+//     // other properties, if applicable
+//   };
+// }
 
 const LeaveAdd = () => {
   const navigate = useNavigate();
   const { addLeaveAction, addLeaveLoading } = useAddLeave();
+
+  const [alertOpen, setAlertOpen] = useState(false);
+  const [alertSeverity, setAlertSeverity] = useState<
+    'success' | 'error' | 'info' | 'warning'
+  >('success');
+  const [alertMessage, setAlertMessage] = useState('');
+  const handleAlertClose = () => {
+    setAlertOpen(false);
+  };
 
   const today = dayjs();
   const yesterday = dayjs().add(365, 'day');
@@ -40,9 +59,25 @@ const LeaveAdd = () => {
   const [endDate, setEndDate] = useState<dayjs.Dayjs | null>(null);
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setReason(event.target.value);
+    console.log('error in reason');
+    if (reason.trim() === '') {
+      setAlertOpen(true);
+      setAlertMessage('Please enter a reason');
+    } else {
+      setAlertOpen(false);
+      setAlertMessage('');
+    }
   };
   const handleLeaveChange = (event: SelectChangeEvent) => {
     setLeaveType(event.target.value as string);
+    if (leaveType === '') {
+      // setAlertOpen(true);
+      console.log('error in leavetype');
+      setAlertMessage('Please select a leave type.');
+    } else {
+      setAlertOpen(false);
+      setAlertMessage('');
+    }
   };
 
   const handleSubmit = async () => {
@@ -64,8 +99,41 @@ const LeaveAdd = () => {
         }
       },
       onError: (data) => {
-        console.log('err', data);
+        // console.log('err', data);
+        if (data !== null) {
+          console.log('Data are present', data);
+          setAlertSeverity('error');
+          setAlertOpen(true);
+          if (reason.trim() === '') {
+            setAlertMessage('Please enter a reason');
+          }
+          if (leaveType === '') {
+            setAlertMessage('Please select a leave type.');
+          }
+          if (startDate !== null && endDate !== null) {
+            if (startDate > endDate) {
+              setAlertMessage('Start date cannot be greater Than End date');
+            }
+          } else {
+            setAlertMessage('Fill in the date fields');
+          }
+        } /* else { */
+        console.log('Data are not present');
+
+        setAlertSeverity('error');
+        setAlertMessage('Fill in all the fields');
+        setAlertOpen(true);
+        // }
       },
+      // onError: (error) => {
+      //   const axiosError = error as AxiosError;
+
+      //   setAlertSeverity('error');
+      //   setAlertMessage(
+      //     (axiosError.response?.data as ErrorData)?.errorObj?.message
+      //   );
+      //   setAlertOpen(true);
+      // },
     });
     setLeaveType('');
     setReason('');
@@ -95,6 +163,7 @@ const LeaveAdd = () => {
                   value={leaveType}
                   label="Leave Type"
                   onChange={handleLeaveChange}
+                  required
                 >
                   <MenuItem value="SICK">SICK</MenuItem>
                   <MenuItem value="PERSONAL">PERSONAL</MenuItem>
@@ -153,6 +222,19 @@ const LeaveAdd = () => {
             </Button>
           </Paper>
         </Container>
+        <Snackbar
+          open={alertOpen}
+          autoHideDuration={6000}
+          onClose={handleAlertClose}
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'center',
+          }}
+        >
+          <Alert onClose={handleAlertClose} severity={alertSeverity}>
+            {alertMessage}
+          </Alert>
+        </Snackbar>
       </MainLayout>
     </>
   );
