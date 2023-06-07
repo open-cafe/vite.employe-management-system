@@ -8,7 +8,7 @@ const useAddEmployee = () => {
         name: string;
         designation: string;
         phone: string;
-        hireDate: string;
+        // hireDate: string;
       }) => addEmployee(body),
     });
   return { addEmployeeAction, addEmployeeLoading };

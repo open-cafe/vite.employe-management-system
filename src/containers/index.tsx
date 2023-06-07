@@ -16,14 +16,15 @@ import Login from './Login/index';
 import AddUser from './AddUser';
 import ChangePassword from './ChangePassword';
 import AddProject from './AddProject';
-import AddEmployee from './AddEmployee';
-// import AddLeave from './AddLeave';
+
 import LeaveAdd from './LeaveAdd';
 import ResetPassowrdMailForm from './ResetPassowrdMailForm';
 import ResetPassword from './ResetPassword';
 import AddProjectAssignment from './AddProjectAssignment';
 import ProjectDetails from './Project/ProjectDetails';
 import EmployeeOnBoarding from './EmployeeOnBorading';
+import EmployeeProjects from './EmployeeProjects';
+import EmployeeEdits from './EmployeeEdits';
 
 const Router: FC = () => {
   return (
@@ -32,9 +33,9 @@ const Router: FC = () => {
         <Route path="/employeeonboarding" element={<EmployeeOnBoarding />} />
 
         <Route path="/" element={<DashboardLayout />}>
+          <Route path="/employeeedit" element={<EmployeeEdits />} />
           <Route index element={<Dashboard />} />
           <Route path="employee" element={<Employees />} />
-          <Route path="addemployee" element={<AddEmployee />} />
           <Route path="leave" element={<Leave />} />
           <Route path="project" element={<Project />} />
           <Route path="leavedetail" element={<LeaveDetails />} />
@@ -49,6 +50,7 @@ const Router: FC = () => {
             path="addprojectassignment"
             element={<AddProjectAssignment />}
           />
+          <Route path="employeeProjects" element={<EmployeeProjects />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>

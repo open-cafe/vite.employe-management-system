@@ -28,7 +28,6 @@ export default function NavBar() {
 
   const toggleSidebar = useSidebarContext();
   const [state, action] = toggleSidebar;
-  console.log(state, action);
 
   return (
     <Box sx={{ position: 'relative', flexGrow: 1, zIndex: 999 }}>
@@ -41,7 +40,10 @@ export default function NavBar() {
             aria-label="menu"
             sx={{ mr: 2, alignContent: 'items-center' }}
             onClick={() => {
-              action?.setShowSidebar(!state.showSidebar);
+              if (state) {
+                action?.setShowSidebar &&
+                  action?.setShowSidebar(!state.showSidebar);
+              }
             }}
           >
             <MenuIcon />
@@ -68,7 +70,9 @@ export default function NavBar() {
                 </IconButton>
 
                 <Menu {...bindMenu(popupState)}>
-                  <MenuItem onClick={popupState.close}>Profile</MenuItem>
+                  <MenuItem onClick={() => navigate('employeeedit')}>
+                    Profile
+                  </MenuItem>
                   <MenuItem onClick={() => navigate('changepassword')}>
                     Change Password
                   </MenuItem>
