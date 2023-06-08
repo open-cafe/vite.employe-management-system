@@ -30,7 +30,6 @@ const AddUser = () => {
     setAlertOpen(false);
   };
   const { addUserAction, addUserLoading } = useAddUser();
-
   const [role, setRole] = useState('');
   const [enteredEmail, setEnteredEmail] = useState('');
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {

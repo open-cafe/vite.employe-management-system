@@ -12,14 +12,47 @@ import MainLayout from '@/layout/MainLayout';
 import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';
 import useAddProject from '@/hooks/useAddProject';
+import addProjectSchema from './addProjectSchema';
+import { useForm, Controller } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { DevTool } from '@hookform/devtools';
+
+const options = [
+  {
+    id: '1',
+    label: 'Active',
+  },
+  {
+    id: '2',
+    label: 'Completed',
+  },
+  {
+    id: '3',
+    label: 'Cancelled',
+  },
+  {
+    id: '4',
+    label: 'OnHold',
+  },
+];
 
 const AddProject = () => {
+  const form = useForm({
+    defaultValues: {
+      enteredProject: '',
+      status: '',
+      description: '',
+    },
+    resolver: yupResolver(addProjectSchema),
+    mode: 'onChange',
+  });
+
+  const { register, control, formState, handleSubmit, reset, trigger } = form;
+  const { errors } = formState;
   const navigate = useNavigate();
   const { addProjectAction, addProjectLoading } = useAddProject();
 
-  const [description, setDescription] = useState('');
-  const [projectStatus, setProjectStatus] = useState('');
-  const [enteredProject, setEnteredProject] = useState('');
+  const [value, setValue] = useState<string | null>(options[0].id);
   const [descriptionError, setDescriptionError] = useState(false);
   const [nameError, setNameError] = useState(false);
   const [formValues, setFormValues] = useState({
@@ -30,26 +63,22 @@ const AddProject = () => {
       errorMessage: 'You must enter the description',
     },
   });
-  const handleDescriptionChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setDescription(event.target.value);
-    setDescriptionError(false);
-  };
 
-  const handleSubmit = async () => {
+  const onSubmit = async (data: any) => {
+    const projectStatus = options.find((x) => x.id === data.status)?.label;
+
     const projectDetails = {
-      projectName: enteredProject,
-      description: description,
+      projectName: data.enteredProject,
+      description: data.description,
       status: projectStatus,
     };
-    if (enteredProject.length === 0) {
+    if (data.enteredProject.length === 0) {
       setNameError(true);
     }
-    if (description.length === 0) {
+    if (data.description.length === 0) {
       setDescriptionError(true);
     }
-    if (!(enteredProject.length === 0 || description.length === 0)) {
+    if (!(data.enteredProject.length === 0 || data.description.length === 0)) {
       addProjectAction(projectDetails, {
         onSuccess: (data) => {
           if (data) {
@@ -61,9 +90,7 @@ const AddProject = () => {
         },
       });
     }
-    setEnteredProject('');
-    setDescription('');
-    setProjectStatus('');
+    reset();
   };
 
   return (
@@ -76,55 +103,67 @@ const AddProject = () => {
           <Typography component="h1" variant="h4" align="center">
             Add Project
           </Typography>
-          <TextField
-            margin="normal"
-            id="project"
-            name="project"
-            label="Project Name"
-            autoComplete="Project"
-            value={enteredProject}
-            onChange={(e) => {
-              setEnteredProject(e.target.value);
-              setNameError(false);
-            }}
-            error={nameError}
-            helperText={nameError && formValues.name.errorMessage}
-            fullWidth
-            required
-          />
-          <Autocomplete
-            sx={{ mt: 2, mb: 2 }}
-            disablePortal
-            id="projectstatus-combo-box"
-            options={['Active', 'Completed', 'Cancelled', 'OnHold']}
-            fullWidth
-            renderInput={(params) => <TextField {...params} label="Status" />}
-            onChange={(event, value) => setProjectStatus(value as string)}
-          />
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <TextField
+              margin="normal"
+              id="project"
+              label="Project Name"
+              autoComplete="Project"
+              error={nameError}
+              {...register('enteredProject')}
+              fullWidth
+              helperText={errors.enteredProject?.message}
+            />
+            <Controller
+              name="status"
+              control={control}
+              render={({ field }) => {
+                const { onChange, value } = field;
+                return (
+                  <Autocomplete
+                    value={options.find((option) => {
+                      return value == option.id;
+                    })}
+                    sx={{ mt: 2, mb: 2 }}
+                    disablePortal
+                    id="projectstatus-combo-box"
+                    options={options}
+                    fullWidth
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="Status"
+                        helperText={errors.status?.message}
+                      />
+                    )}
+                    onChange={(event: any, newValue) => onChange(newValue?.id)}
+                  />
+                );
+              }}
+            />
 
-          <TextField
-            id="description"
-            value={description}
-            label="Description"
-            multiline
-            rows={5}
-            error={descriptionError}
-            helperText={descriptionError && formValues.description.errorMessage}
-            onChange={handleDescriptionChange}
-            fullWidth
-            required
-          />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-            onClick={() => handleSubmit()}
-          >
-            Add Project
-          </Button>
+            <TextField
+              id="description"
+              label="Description"
+              multiline
+              rows={5}
+              error={descriptionError}
+              fullWidth
+              {...register('description')}
+              helperText={errors.description?.message}
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+            >
+              Add Project
+            </Button>
+          </form>
         </Paper>
       </Container>
+      <DevTool control={control} />
     </MainLayout>
   );
 };

@@ -1,5 +1,6 @@
-import { createTheme, ThemeProvider, CssBaseline } from '@mui/material';
+import { ThemeProvider, CssBaseline } from '@mui/material';
 import theme from './theme';
+import createTheme from './globalTheme';
 export interface LayoutProps {
   children: React.ReactNode;
 }

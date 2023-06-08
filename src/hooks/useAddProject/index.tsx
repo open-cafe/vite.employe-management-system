@@ -7,7 +7,7 @@ const useAddProject = () => {
       mutationFn: (body: {
         projectName: string;
         description: string;
-        status: string;
+        status: string | undefined;
       }) => addProject(body),
     });
   return { addProjectAction, addProjectLoading };

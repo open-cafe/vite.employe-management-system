@@ -48,7 +48,7 @@ const ChangePassword = () => {
     mode: 'onChange',
   });
 
-  const { register, control, formState, handleSubmit, reset } = form;
+  const { register, control, formState, handleSubmit, reset, trigger } = form;
   const { errors } = formState;
   const { passwordChangeAction, passwordchangeLoading } = useChangePassword();
   const [alertOpen, setAlertOpen] = useState(false);
@@ -112,13 +112,9 @@ const ChangePassword = () => {
                     label="Old Password"
                     type="password"
                     {...register('oldPassword')}
+                    helperText={errors.oldPassword?.message}
                   />
-                  <Typography
-                    variant="h6"
-                    sx={{ color: 'red', fontSize: '14px' }}
-                  >
-                    {errors.oldPassword?.message}
-                  </Typography>
+
                   <TextField
                     margin="normal"
                     id="newPassword"
@@ -127,13 +123,10 @@ const ChangePassword = () => {
                     autoComplete="current-password"
                     sx={TextFieldStyles.size}
                     {...register('newPassword')}
+                    onBlur={() => trigger()}
+                    helperText={errors.newPassword?.message}
                   />
-                  <Typography
-                    variant="h6"
-                    sx={{ color: 'red', fontSize: '14px' }}
-                  >
-                    {errors.newPassword?.message}
-                  </Typography>
+
                   <TextField
                     margin="normal"
                     id="confirmPassword"
@@ -142,20 +135,16 @@ const ChangePassword = () => {
                     autoComplete="current-password"
                     sx={TextFieldStyles.size}
                     {...register('confirmPassword')}
+                    helperText={errors.confirmPassword?.message}
                   />
-                  <Typography
-                    variant="h6"
-                    sx={{ color: 'red', fontSize: '14px' }}
-                  >
-                    {errors.confirmPassword?.message}
-                  </Typography>
+
                   <Button
                     type="submit"
                     fullWidth
                     variant="contained"
                     sx={CommonStyles.button}
                   >
-                    Change Passowrd
+                    Change Password
                   </Button>
                 </Box>
               </form>
