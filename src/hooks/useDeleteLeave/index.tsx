@@ -6,7 +6,7 @@ const useDeleteLeave = () => {
     useMutation({
       mutationFn: (body: { leaveId: string }) => deleteLeave(body),
     });
-  console.log('leave');
+
   return { deleteLeaveAction, deleteLeaveLoading };
 };
 

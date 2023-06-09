@@ -11,44 +11,57 @@ export default function leaveDetail() {
   // console.log('states', state);
 
   return (
-    <Card sx={{ maxWidth: 600, mx: { ml: 20 } }}>
-      <CardContent sx={{ textAlign: 'center' }}>
-        <CardContent>
-          <Typography sx={{ mb: 1.5 }} color="text.secondary" gutterBottom>
-            Name : {state.employee.name}
-          </Typography>
-          <Typography sx={{ mb: 1.5 }} color="text.secondary" gutterBottom>
-            Contact Number : {state.employee.phone}
-          </Typography>
-          <Typography sx={{ mb: 1.5 }} color="text.secondary">
-            Designation : {state.employee.designation}
-          </Typography>
-          <Typography sx={{ mb: 1.5 }} color="text.secondary">
-            Startdate : {state.startDate.toLocaleString().slice(0, 10)}
-          </Typography>
-          <Typography sx={{ mb: 1.5 }} color="text.secondary">
-            EndDate : {state.endDate.toLocaleString().slice(0, 10)}
-          </Typography>
-          <Typography sx={{ mb: 1.5 }} color="text.secondary">
-            Leave Type : {state.leaveType}
-          </Typography>
-          <Typography sx={{ mb: 1.5 }} color="text.secondary">
-            Reason : {state.reason}
-          </Typography>
+    <Grid
+      container
+      justifyContent="center"
+      alignItems="center"
+      style={{ height: '90vh' }}
+    >
+      <Card sx={{ maxWidth: 800, mx: { ml: 20 } }}>
+        <CardContent sx={{ textAlign: 'left' }}>
+          <CardContent>
+            <Typography sx={{ mb: 1.5 }} color="text.secondary" gutterBottom>
+              Name : {state.employee.name}
+            </Typography>
+            <Typography sx={{ mb: 1.5 }} color="text.secondary" gutterBottom>
+              Contact Number : {state.employee.phone}
+            </Typography>
+            <Typography sx={{ mb: 1.5 }} color="text.secondary">
+              Designation : {state.employee.designation}
+            </Typography>
+            <Typography sx={{ mb: 1.5 }} color="text.secondary">
+              Startdate : {state.startDate.toLocaleString().slice(0, 10)}
+            </Typography>
+            <Typography sx={{ mb: 1.5 }} color="text.secondary">
+              EndDate : {state.endDate.toLocaleString().slice(0, 10)}
+            </Typography>
+            <Typography sx={{ mb: 1.5 }} color="text.secondary">
+              Leave Type : {state.leaveType}
+            </Typography>
+            <Typography sx={{ mb: 1.5 }} color="text.secondary">
+              Reason : {state.reason}
+            </Typography>
+          </CardContent>
+          <Grid
+            container
+            spacing={2}
+            justifyContent="center"
+            alignItems="center"
+            ml={2}
+          >
+            <Grid item xs={6}>
+              <Button type="submit" variant="contained" sx={{ mt: 3, mb: 2 }}>
+                Accept
+              </Button>
+            </Grid>
+            <Grid item xs={6}>
+              <Button type="submit" variant="contained" sx={{ mt: 3, mb: 2 }}>
+                Reject
+              </Button>
+            </Grid>
+          </Grid>
         </CardContent>
-        <Grid container spacing={2} justifyContent="center" alignItems="center">
-          <Grid item xs={6}>
-            <Button type="submit" variant="contained" sx={{ mt: 3, mb: 2 }}>
-              Accept
-            </Button>
-          </Grid>
-          <Grid item xs={6}>
-            <Button type="submit" variant="contained" sx={{ mt: 3, mb: 2 }}>
-              Reject
-            </Button>
-          </Grid>
-        </Grid>
-      </CardContent>
-    </Card>
+      </Card>
+    </Grid>
   );
 }

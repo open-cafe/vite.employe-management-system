@@ -27,6 +27,7 @@ import CommonStyles from '@/style/Common.styles';
 
 import useDeleteLeave from '@/hooks/useDeleteLeave';
 import { useQueryClient } from '@tanstack/react-query';
+import LeaveEdit from './LeaveEdit';
 
 interface Column {
   id: 'reason' | 'leaveType' | 'startDate' | 'endDate' | 'action';
@@ -48,7 +49,7 @@ const Leave: React.FC = () => {
   const { currentUserError, currentUserData, currentUserLoading } =
     useCurrentUser();
   const role = currentUserData?.data?.data?.getCurrentUser.role;
-  console.log(role);
+
   let isEmployee = false;
   if (role === 'Employee') {
     isEmployee = true;
@@ -91,15 +92,8 @@ const Leave: React.FC = () => {
   const handleAlertClose = () => {
     setAlertOpen(false);
   };
-  // const { currentUserError, currentUserData, currentUserLoading } =
-  //   useCurrentUser();
-  // const role = currentUserData?.data?.data?.getCurrentUser.role;
-  // console.log(role);
-  // let isEmployee = false;
-  // if (role === 'Employee') {
-  //   isEmployee = true;
-  // }
 
+  // console.log('leave all datas leaveById', leaveByIdData);
   const navigateToConfirmed = (leave: Leave) => {
     if (role !== 'Employee') {
       navigate(`/leavedetail`, { state: leave });
@@ -120,6 +114,7 @@ const Leave: React.FC = () => {
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
+
   // const handleDelete = () => {
   //   const leaveDetails = {
   //     // leaveId: leaveDetail.leaveId,
@@ -135,7 +130,11 @@ const Leave: React.FC = () => {
   };
 
   const total = leaveData?.data.data;
-  console.log('total leave', total);
+  // const handleClick = () => {
+  //   console.log('datas of leave');
+  //   const data = printValue();
+  //   console.log('datas of leave', data);
+  // };
 
   return (
     <Paper sx={CommonStyles.paperLayout}>
@@ -237,7 +236,13 @@ const Leave: React.FC = () => {
                                 justifyContent="center"
                               >
                                 <Grid item>
-                                  <Button variant="contained">Edit</Button>
+                                  <LeaveEdit
+                                    leaveId={leave.leaveId}
+                                    leaveType={leave.leaveType}
+                                    reason={leave.reason}
+                                    startDate={leave.startDate}
+                                    endDate={leave.endDate}
+                                  />
                                 </Grid>
                                 <Grid item>
                                   <Button
@@ -250,18 +255,17 @@ const Leave: React.FC = () => {
                                         onSuccess: (data) => {
                                           if (data) {
                                             // add toast later
+
                                             queryClient.invalidateQueries([
-                                              'leave',
+                                              'leaves',
                                             ]);
                                             navigate(`/leave`);
-                                            console.log('success', data);
                                             setAlertSeverity('success');
                                             setAlertMessage('Leave Deleted ');
                                             setAlertOpen(true);
                                           }
                                         },
-                                        onError: (data) => {
-                                          console.log('err', data);
+                                        onError: () => {
                                           setAlertSeverity('error');
                                           setAlertMessage(
                                             'Cannot Delete Leave!! Error '

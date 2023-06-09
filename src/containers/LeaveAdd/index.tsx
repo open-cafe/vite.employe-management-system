@@ -74,23 +74,11 @@ const LeaveAdd = () => {
   };
 
   const handleSubmit = async () => {
-    const start = startDate; /* .toISOString() */
-    const end = endDate; /* .toISOString() */
-
-    // if (leaveType === '') {
-    //   setAlertOpen(true);
-    //   // console.log('error in leavetype');
-    //   setAlertMessage('Please select a leave type.');
-    // } else {
-    //   setAlertOpen(false);
-    //   setAlertMessage('');
-    // }
-
     const leaveDetails = {
       leaveType: leaveType,
       reason: reason,
-      startDate: start || dayjs(),
-      endDate: end || dayjs(),
+      startDate: startDate || dayjs(),
+      endDate: endDate || dayjs(),
     };
 
     addLeaveAction(leaveDetails, {
@@ -141,8 +129,6 @@ const LeaveAdd = () => {
     setStartDate(null);
     setEndDate(null);
   };
-  // const [startDate, setStartDate] = useState(null);
-  // const [endDate, setEndDate] = useState(null);
   return (
     <>
       <MainLayout>
