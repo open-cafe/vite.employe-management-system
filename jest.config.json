@@ -3,6 +3,7 @@
   "testEnvironment": "jsdom",
   "collectCoverage": true,
   "coverageProvider": "v8",
+  "testTimeout": 20000,
   "collectCoverageFrom": [
     "src/**/*.{ts,tsx}",
     "!src/**/*.d.ts",

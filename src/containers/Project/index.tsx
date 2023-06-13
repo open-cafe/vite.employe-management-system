@@ -84,7 +84,7 @@ const Project: React.FC = () => {
           <CircularProgress />
         </Box>
       ) : projectError ? (
-        <div>{projectError}</div>
+        <div>Something went wrong !</div>
       ) : (
         <>
           <div>
@@ -151,7 +151,7 @@ const Project: React.FC = () => {
                   })
                 ) : (
                   <TableRow>
-                    <TableCell align="center" colSpan={2}>
+                    <TableCell align="center" colSpan={5}>
                       No Project Found
                     </TableCell>
                   </TableRow>
