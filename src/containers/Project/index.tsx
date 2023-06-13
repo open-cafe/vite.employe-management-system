@@ -84,7 +84,7 @@ const Project: React.FC = () => {
           <CircularProgress />
         </Box>
       ) : projectError ? (
-        <div>{projectError}</div>
+        <div>Something went wrong !</div>
       ) : (
         <>
           <div>
@@ -123,7 +123,7 @@ const Project: React.FC = () => {
               </TableHead>
 
               <TableBody>
-                {projectDetail.length ? (
+                {projectDetail?.length ? (
                   projectDetail.map((project: Project) => {
                     return (
                       <TableRow
@@ -151,7 +151,7 @@ const Project: React.FC = () => {
                   })
                 ) : (
                   <TableRow>
-                    <TableCell align="center" colSpan={2}>
+                    <TableCell align="center" colSpan={5}>
                       No Project Found
                     </TableCell>
                   </TableRow>
@@ -160,7 +160,6 @@ const Project: React.FC = () => {
             </Table>
           </TableContainer>
           <TablePagination
-            rowsPerPageOptions={[10]}
             component="div"
             count={total.total}
             rowsPerPage={rowsPerPage}
