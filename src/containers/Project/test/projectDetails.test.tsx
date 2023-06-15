@@ -39,8 +39,6 @@ jest.mock('react-router-dom', () => ({
 jest.mock('@/hooks/useCurrentUser');
 jest.mock('@/hooks/useProjectAssignments');
 jest.mock('@/hooks/useAllEmployee');
-jest.mock('@/hooks/useDeleteProjectAssignment');
-jest.mock('@/hooks/useAddProjectAssignment');
 jest.mock('@/hooks/useProject');
 
 const mockUseLocationValue = {
