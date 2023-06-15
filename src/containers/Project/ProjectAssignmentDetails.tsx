@@ -1,7 +1,3 @@
-import useAddProjectDesignationByAssignment from '@/hooks/useAddProjectDesignationByAssignment';
-import useDeleteProjectDesignationByAssignment from '@/hooks/useDeleteProjectDesignationByAssignment';
-import useProjectDesignationByAssignment from '@/hooks/useProjectDesignationByAssignment';
-import useTag from '@/hooks/useTag';
 import {
   Dialog,
   DialogTitle,
@@ -14,10 +10,14 @@ import {
   Autocomplete,
   TextField,
   Chip,
+  Snackbar,
+  Alert,
 } from '@mui/material';
 import { useQueryClient } from '@tanstack/react-query';
 import { SyntheticEvent, useState } from 'react';
 import { AddEmployeeOrTag } from './ProjectDetails';
+import useProjectDesignationByAssignment from '@/hooks/useProjectDesignationByAssignment';
+import useTag from '@/hooks/useTag';
 import ProjectAssignmentStyles from '@/style/ProjectAssignment.styles';
 import { returnTagColor } from '@/utils/commonUtils';
 import CommonStyles from '@/style/Common.styles';
@@ -43,14 +43,28 @@ const ProjectAssignmentDetails = ({
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
   const [enteredTag, setEnteredTag] = useState<string | null>('');
+  const projectDesignationByAssignmentProps = {
+    projectAssignmentId,
+    page: 1,
+    limit: 10,
+  };
+  const {
+    projectDesignationData,
+    projectDesignationLoading,
+    addProjectDesignationByAssignmentAction,
+    deleteProjectDesignationByAssignmentAction,
+  } = useProjectDesignationByAssignment(projectDesignationByAssignmentProps);
 
-  const { projectDesignationData, projectDesignationLoading } =
-    useProjectDesignationByAssignment(projectAssignmentId, 1, 10);
   const { tagData, istagLoading } = useTag();
-  const { addProjectDesignationByAssignmentAction } =
-    useAddProjectDesignationByAssignment();
-  const { deleteProjectDesignationByAssignmentAction } =
-    useDeleteProjectDesignationByAssignment();
+
+  const [alertOpen, setAlertOpen] = useState(false);
+  const [alertSeverity, setAlertSeverity] = useState<
+    'success' | 'error' | 'info' | 'warning'
+  >('success');
+  const [alertMessage, setAlertMessage] = useState('');
+  const handleAlertClose = () => {
+    setAlertOpen(false);
+  };
 
   const handleProjectDesignationChange = (
     event: SyntheticEvent<Element, Event>,
@@ -68,13 +82,16 @@ const ProjectAssignmentDetails = ({
     addProjectDesignationByAssignmentAction(projectDesignationDetails, {
       onSuccess: (data) => {
         if (data) {
-          // add toast later
+          setAlertSeverity('success');
+          setAlertMessage('Added Project Designation Successfully!');
+          setAlertOpen(true);
           queryClient.invalidateQueries(['project-designation']);
-          console.log('success', data);
         }
       },
-      onError: (data) => {
-        console.log('err', data);
+      onError: () => {
+        setAlertSeverity('error');
+        setAlertMessage('Error Adding Project Designation!');
+        setAlertOpen(true);
       },
     });
     setOpen(false);
@@ -89,7 +106,7 @@ const ProjectAssignmentDetails = ({
 
   return (
     <div>
-      {!istagLoading && (
+      {!istagLoading && isAdmin && (
         <>
           <Button variant="outlined" onClick={handleClickOpen} size="small">
             Add Tags
@@ -138,8 +155,7 @@ const ProjectAssignmentDetails = ({
         <Box sx={ProjectAssignmentStyles.box}>
           {projectDesignationData?.data?.data?.data?.map(
             (projectDesignation: ProjectDesignation, i: number) => {
-              const tagColor = '';
-              const tagName: string = projectDesignation?.tag?.tagName.trim();
+              const tagName: string = projectDesignation?.tag?.tagName?.trim();
 
               return (
                 <div key={i}>
@@ -151,7 +167,6 @@ const ProjectAssignmentDetails = ({
                       }
                       label={projectDesignation?.tag?.tagName}
                       onDelete={() => {
-                        console.log(tagColor);
                         const projectDesignationDetails = {
                           projectDesignationId:
                             projectDesignation?.projectDesignationId,
@@ -162,15 +177,22 @@ const ProjectAssignmentDetails = ({
                           {
                             onSuccess: (data) => {
                               if (data) {
-                                // add toast later
+                                setAlertSeverity('success');
+                                setAlertMessage(
+                                  'Deleted Project Designation Successfully!'
+                                );
+                                setAlertOpen(true);
                                 queryClient.invalidateQueries([
                                   'project-designation',
                                 ]);
-                                console.log('success', data);
                               }
                             },
-                            onError: (data) => {
-                              console.log('err', data);
+                            onError: () => {
+                              setAlertSeverity('error');
+                              setAlertMessage(
+                                'Cannot Add Project Assigment. Please try again later'
+                              );
+                              setAlertOpen(true);
                             },
                           }
                         );
@@ -191,6 +213,19 @@ const ProjectAssignmentDetails = ({
           )}
         </Box>
       )}
+      <Snackbar
+        open={alertOpen}
+        autoHideDuration={6000}
+        onClose={handleAlertClose}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+      >
+        <Alert onClose={handleAlertClose} severity={alertSeverity}>
+          {alertMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };
