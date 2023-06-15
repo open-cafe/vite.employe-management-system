@@ -17,16 +17,12 @@ import {
 import DeleteIcon from '@mui/icons-material/Delete';
 import useAllEmployee from '@/hooks/useAllEmployee';
 import { SyntheticEvent, useEffect, useState } from 'react';
-import useAddProjectAssignment from '@/hooks/useAddProjectAssignment';
 import { useQueryClient } from '@tanstack/react-query';
-import useDeleteProjectAssignment from '@/hooks/useDeleteProjectAssignment';
 import ProjectAssignmentDetails from './ProjectAssignmentDetails';
-import useDeleteProject from '@/hooks/useDeleteProject';
+import useProject from '@/hooks/useProject';
 import ProjectDetailStyles from '@/style/ProjectDetails.styles';
 import ProjectEdit from './ProjectEdit';
 import CommonStyles from '@/style/Common.styles';
-import useProjectById from '@/hooks/useProjectById';
-import { ForkRight } from '@mui/icons-material';
 import useCurrentUser from '@/hooks/useCurrentUser';
 
 interface ProjectAssignments {
@@ -63,15 +59,14 @@ const ProjectDetail = () => {
     projectAssignmentLoading,
     projectAssignmentData,
     projectAssignmentError,
+    addProjectAssignmentAction,
+    deleteProjectAssignmentAction,
   } = useProjectAssignments(state.projectId, 1, 10);
-  const { projectByIdData, projectByIdLoading, projectByIdError } =
-    useProjectById(state.projectId);
+
   const navigate = useNavigate();
   const { allEmployeeData, allEmployeeDataLoading } = useAllEmployee();
-  const { deleteProjectAssignmentAction } = useDeleteProjectAssignment();
-  const { deleteProjectAction } = useDeleteProject();
 
-  const { addProjectAssignmentAction } = useAddProjectAssignment();
+  const { deleteProjectAction, projectByIdData } = useProject(state.projectId);
 
   const [enteredEmployee, setEnteredEmployee] = useState<string | null>('');
   const [alertOpen, setAlertOpen] = useState(false);
@@ -122,17 +117,65 @@ const ProjectDetail = () => {
     addProjectAssignmentAction(projectAssignmentDetails, {
       onSuccess: (data) => {
         if (data) {
-          // add toast later
+          setAlertSeverity('success');
+          setAlertMessage('Employee Added Successfully!!');
+          setAlertOpen(true);
           queryClient.invalidateQueries(['project-assignment']);
         }
       },
       onError: () => {
         setAlertSeverity('error');
-        setAlertMessage('Cannot Add Project Assigment. Please try again later');
+        setAlertMessage(
+          'Cannot Add Project Assigment!! Please try again later'
+        );
         setAlertOpen(true);
       },
     });
     setEnteredEmployee('');
+  };
+
+  const handleDeleteProject = async () => {
+    const projectDetails = {
+      projectId: state.projectId,
+    };
+    deleteProjectAction(projectDetails, {
+      onSuccess: (data) => {
+        if (data) {
+          queryClient.invalidateQueries(['project']);
+          navigate(`/project`);
+        }
+      },
+      onError: (data) => {
+        setAlertSeverity('error');
+        setAlertMessage(
+          'Cannot Delete Project!! Employees are assigned to the project '
+        );
+        setAlertOpen(true);
+      },
+    });
+  };
+
+  const handleDeleteProjectAssignment = async (projectAssignmentId: string) => {
+    const projectAssignmentDetails = {
+      projectAssignmentId,
+    };
+    deleteProjectAssignmentAction(projectAssignmentDetails, {
+      onSuccess: (data) => {
+        if (data) {
+          setAlertSeverity('success');
+          setAlertMessage('Project Assignment Deleted Successfully');
+          setAlertOpen(true);
+          queryClient.invalidateQueries(['project-assignment']);
+        }
+      },
+      onError: () => {
+        setAlertSeverity('error');
+        setAlertMessage(
+          'Cannot Delete Project Assignment!! Please try again later'
+        );
+        setAlertOpen(true);
+      },
+    });
   };
 
   const employeeName = allEmployeeData?.data?.data.map((employee: Employee) => {
@@ -187,25 +230,7 @@ const ProjectDetail = () => {
                         data-testid="delete-project"
                         style={{ color: 'black' }}
                         onClick={() => {
-                          const projectDetails = {
-                            projectId: state.projectId,
-                          };
-                          deleteProjectAction(projectDetails, {
-                            onSuccess: (data) => {
-                              if (data) {
-                                // add toast later
-                                queryClient.invalidateQueries(['project']);
-                                navigate(`/project`);
-                              }
-                            },
-                            onError: (data) => {
-                              setAlertSeverity('error');
-                              setAlertMessage(
-                                'Cannot Delete Project!! Employees are assigned to the project '
-                              );
-                              setAlertOpen(true);
-                            },
-                          });
+                          handleDeleteProject();
                         }}
                       >
                         <DeleteIcon />
@@ -319,29 +344,8 @@ const ProjectDetail = () => {
                                     data-testid="delete-project-assignment"
                                     sx={{ color: 'black' }}
                                     onClick={() => {
-                                      const projectAssignmentDetails = {
-                                        projectAssignmentId:
-                                          employeeData.projectAssignmentId,
-                                      };
-                                      deleteProjectAssignmentAction(
-                                        projectAssignmentDetails,
-                                        {
-                                          onSuccess: (data) => {
-                                            if (data) {
-                                              // add toast later
-                                              queryClient.invalidateQueries([
-                                                'project-assignment',
-                                              ]);
-                                            }
-                                          },
-                                          onError: (data) => {
-                                            setAlertSeverity('error');
-                                            setAlertMessage(
-                                              'Cannot Delete Project Assignment!! Please try again later'
-                                            );
-                                            setAlertOpen(true);
-                                          },
-                                        }
+                                      handleDeleteProjectAssignment(
+                                        employeeData.projectAssignmentId
                                       );
                                     }}
                                   >

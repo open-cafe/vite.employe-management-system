@@ -1,12 +1,5 @@
 // Imports
-import {
-  render,
-  screen,
-  cleanup,
-  waitFor,
-  fireEvent,
-  act,
-} from '@testing-library/react';
+import { render, screen, cleanup, waitFor, act } from '@testing-library/react';
 import { QueryClientMockProvider } from '@/utils/mockUtils/mockProvider';
 import userEvent from '@testing-library/user-event';
 
@@ -14,17 +7,14 @@ import userEvent from '@testing-library/user-event';
 import ProjectDetail from '@/containers/Project/ProjectDetails';
 import {
   addProjectAssignmentErrorMockData,
-  addProjectAssignmentMockData,
   allEmployeeMockData,
   currentUserMockData,
-  deleteProjectAssignmentMockData,
   deleteProjectAssignmentErrorMockData,
   deleteProjectErrorMockData,
-  deleteProjectMockData,
   projectAssignmentErrorMockData,
   projectAssignmentsLoadingMock,
   projectAssignmentsMockData,
-  projectByIdMockData,
+  projectMockData,
 } from '@/utils/mockUtils/mockProjectDetails';
 import { MemoryRouter } from 'react-router-dom';
 
@@ -48,11 +38,10 @@ jest.mock('react-router-dom', () => ({
 
 jest.mock('@/hooks/useCurrentUser');
 jest.mock('@/hooks/useProjectAssignments');
-jest.mock('@/hooks/useProjectById');
 jest.mock('@/hooks/useAllEmployee');
 jest.mock('@/hooks/useDeleteProjectAssignment');
-jest.mock('@/hooks/useDeleteProject');
 jest.mock('@/hooks/useAddProjectAssignment');
+jest.mock('@/hooks/useProject');
 
 const mockUseLocationValue = {
   state: {
@@ -83,11 +72,8 @@ describe('Project Detail', () => {
   test('should render circularprogress when loading', async () => {
     projectAssignmentsLoadingMock();
     currentUserMockData();
-    projectByIdMockData();
+    projectMockData();
     allEmployeeMockData();
-    deleteProjectAssignmentMockData();
-    deleteProjectMockData();
-    addProjectAssignmentMockData();
     renderProjectDetail();
 
     // Check if the circular progress is displayed
@@ -97,11 +83,8 @@ describe('Project Detail', () => {
   test('should render project detail', async () => {
     projectAssignmentsMockData();
     currentUserMockData();
-    projectByIdMockData();
+    projectMockData();
     allEmployeeMockData();
-    deleteProjectAssignmentMockData();
-    deleteProjectMockData();
-    addProjectAssignmentMockData();
     renderProjectDetail();
 
     // Check if the project name is displayed
@@ -111,11 +94,8 @@ describe('Project Detail', () => {
   test('should render project detail page with error', async () => {
     projectAssignmentErrorMockData();
     currentUserMockData();
-    projectByIdMockData();
+    projectMockData();
     allEmployeeMockData();
-    deleteProjectAssignmentMockData();
-    deleteProjectMockData();
-    addProjectAssignmentMockData();
     renderProjectDetail();
 
     // Check if the error message is displayed
@@ -125,11 +105,9 @@ describe('Project Detail', () => {
   test('should not delete project as there are project assignments', async () => {
     projectAssignmentsMockData();
     currentUserMockData();
-    projectByIdMockData();
+    projectMockData();
     allEmployeeMockData();
-    deleteProjectAssignmentMockData();
     deleteProjectErrorMockData();
-    addProjectAssignmentMockData();
     renderProjectDetail();
 
     // Click on project delete button
@@ -148,11 +126,8 @@ describe('Project Detail', () => {
   test('should add project assignment', async () => {
     projectAssignmentsMockData();
     currentUserMockData();
-    projectByIdMockData();
+    projectMockData();
     allEmployeeMockData();
-    deleteProjectAssignmentMockData();
-    deleteProjectMockData();
-    addProjectAssignmentMockData();
     renderProjectDetail();
 
     const employeeAutoComplete = screen.getByRole('combobox', {
@@ -163,19 +138,17 @@ describe('Project Detail', () => {
       name: /add employee/i,
     });
 
-    act(() => {
+    await act(async () => {
       employeeAutoComplete.focus();
       // type employee Name
-      fireEvent.change(employeeAutoComplete, {
-        target: { value: 'Shreyam Pokharel' },
-      });
+      await userEvent.type(employeeAutoComplete, 'Shreyam Pokharel');
     });
 
     // navigate to the first item in the autocomplete box
-    fireEvent.keyDown(employeeAutoComplete, { key: 'ArrowDown' });
+    await userEvent.type(employeeAutoComplete, '{arrowdown}');
 
     // select element
-    fireEvent.keyDown(employeeAutoComplete, { key: 'Enter' });
+    await userEvent.type(employeeAutoComplete, '{enter}');
 
     // Check if the employee name is displayed in the autocomplete box
     expect(employeeAutoComplete).toHaveValue('Shreyam Pokharel');
@@ -187,12 +160,9 @@ describe('Project Detail', () => {
   });
 
   test('should not add project assignment as there are no employees', async () => {
-    projectAssignmentsMockData();
     currentUserMockData();
-    projectByIdMockData();
+    projectMockData();
     allEmployeeMockData();
-    deleteProjectAssignmentMockData();
-    deleteProjectMockData();
     addProjectAssignmentErrorMockData();
     renderProjectDetail();
 
@@ -209,11 +179,9 @@ describe('Project Detail', () => {
   test('should delete project', async () => {
     projectAssignmentsMockData();
     currentUserMockData();
-    projectByIdMockData();
+    projectMockData();
     allEmployeeMockData();
-    deleteProjectAssignmentMockData();
-    deleteProjectMockData();
-    addProjectAssignmentMockData();
+
     renderProjectDetail();
 
     const deleteButton = screen.getByTestId('delete-project');
@@ -229,11 +197,8 @@ describe('Project Detail', () => {
   test('should delete project Assignment', async () => {
     projectAssignmentsMockData();
     currentUserMockData();
-    projectByIdMockData();
+    projectMockData();
     allEmployeeMockData();
-    deleteProjectAssignmentMockData();
-    deleteProjectMockData();
-    addProjectAssignmentMockData();
     renderProjectDetail();
 
     const deleteProjectAssignmentButton = screen.getByTestId(
@@ -246,13 +211,11 @@ describe('Project Detail', () => {
   });
 
   test('should not delete project assignment as there are no project assignments', async () => {
-    projectAssignmentsMockData();
+    // projectAssignmentsMockData();
     currentUserMockData();
-    projectByIdMockData();
+    projectMockData();
     allEmployeeMockData();
     deleteProjectAssignmentErrorMockData();
-    deleteProjectMockData();
-    addProjectAssignmentMockData();
     renderProjectDetail();
 
     // Click on project delete button

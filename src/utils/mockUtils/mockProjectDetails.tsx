@@ -1,10 +1,7 @@
-import useAddProjectAssignment from '@/hooks/useAddProjectAssignment';
 import useAllEmployee from '@/hooks/useAllEmployee';
 import useCurrentUser from '@/hooks/useCurrentUser';
-import useDeleteProject from '@/hooks/useDeleteProject';
-import useDeleteProjectAssignment from '@/hooks/useDeleteProjectAssignment';
+import useProject from '@/hooks/useProject';
 import useProjectAssignments from '@/hooks/useProjectAssignments';
-import useProjectById from '@/hooks/useProjectById';
 
 const mockResponse = {
   data: {
@@ -45,14 +42,29 @@ const addProjectAssignmentMockResponse = {
   },
 };
 
+const deleteMockResponse = {
+  data: {
+    data: 'Deleted successfully',
+  },
+};
+
 jest.mock('@/hooks/useProjectAssignments');
 export const projectAssignmentsMockData = () => {
   (useProjectAssignments as jest.Mock).mockReturnValue({
     projectAssignmentLoading: false,
     projectAssignmentData: mockResponse,
     projectAssignmentError: false,
+    deleteProjectAssignmentLoading: false,
+    deleteProjectAssignmentAction: jest.fn().mockImplementation((a, b) => {
+      b.onSuccess(deleteMockResponse);
+    }),
+    addProjectAssignmentLoading: false,
+    addProjectAssignmentAction: jest.fn().mockImplementation((a, b) => {
+      b.onSuccess(addProjectAssignmentMockResponse);
+    }),
   });
 };
+
 export const projectAssignmentsLoadingMock = () => {
   (useProjectAssignments as jest.Mock).mockReturnValue({
     projectAssignmentLoading: true,
@@ -80,20 +92,32 @@ export const currentUserMockData = () => {
   });
 };
 
-jest.mock('@/hooks/useProjectById');
-export const projectByIdMockData = () => {
-  (useProjectById as jest.Mock).mockReturnValue({
-    projectByIdLoading: false,
+jest.mock('@/hooks/useProject');
+export const projectMockData = () => {
+  (useProject as jest.Mock).mockReturnValue({
+    deleteProjectLoading: false,
+    deleteProjectAction: jest.fn().mockImplementation((a, b) => {
+      b.onSuccess(deleteMockResponse);
+    }),
     projectByIdData: {
       data: {
         data: {
           projectId: '567318f5-de9f-4498-8d39-b1546d3acefb',
-          name: 'Miferia',
-          description: 'Miferia description',
+          projectName: 'Miferia',
+          description: 'This is description',
           status: 'Active',
         },
       },
     },
+  });
+};
+
+export const deleteProjectErrorMockData = () => {
+  (useProject as jest.Mock).mockReturnValue({
+    deleteProjectLoading: false,
+    deleteProjectAction: jest.fn().mockImplementation((a, b) => {
+      b.onError();
+    }),
   });
 };
 
@@ -123,62 +147,23 @@ export const allEmployeeMockData = () => {
   });
 };
 
-const deleteMockResponse = {
-  data: {
-    data: 'Deleted successfully',
-  },
-};
-
-jest.mock('@/hooks/useDeleteProjectAssignment');
-export const deleteProjectAssignmentMockData = () => {
-  (useDeleteProjectAssignment as jest.Mock).mockReturnValue({
-    deleteProjectAssignmentLoading: false,
-    deleteProjectAssignmentAction: jest.fn().mockImplementation((a, b) => {
-      b.onSuccess(deleteMockResponse);
-    }),
-  });
-};
-
 export const deleteProjectAssignmentErrorMockData = () => {
-  (useDeleteProjectAssignment as jest.Mock).mockReturnValue({
+  (useProjectAssignments as jest.Mock).mockReturnValue({
+    projectAssignmentLoading: false,
+    projectAssignmentData: mockResponse,
+    projectAssignmentError: false,
     deleteProjectAssignmentLoading: false,
     deleteProjectAssignmentAction: jest.fn().mockImplementation((a, b) => {
       b.onError();
-    }),
-  });
-};
-
-jest.mock('@/hooks/useDeleteProject');
-export const deleteProjectMockData = () => {
-  (useDeleteProject as jest.Mock).mockReturnValue({
-    deleteProjectLoading: false,
-    deleteProjectAction: jest.fn().mockImplementation((a, b) => {
-      b.onSuccess(deleteMockResponse);
-    }),
-  });
-};
-
-export const deleteProjectErrorMockData = () => {
-  (useDeleteProject as jest.Mock).mockReturnValue({
-    deleteProjectLoading: false,
-    deleteProjectAction: jest.fn().mockImplementation((a, b) => {
-      b.onError();
-    }),
-  });
-};
-
-jest.mock('@/hooks/useAddProjectAssignment');
-export const addProjectAssignmentMockData = () => {
-  (useAddProjectAssignment as jest.Mock).mockReturnValue({
-    addProjectAssignmentLoading: false,
-    addProjectAssignmentAction: jest.fn().mockImplementation((a, b) => {
-      b.onSuccess(addProjectAssignmentMockResponse);
     }),
   });
 };
 
 export const addProjectAssignmentErrorMockData = () => {
-  (useAddProjectAssignment as jest.Mock).mockReturnValue({
+  (useProjectAssignments as jest.Mock).mockReturnValue({
+    projectAssignmentLoading: false,
+    projectAssignmentData: mockResponse,
+    projectAssignmentError: false,
     addProjectAssignmentLoading: false,
     addProjectAssignmentAction: jest.fn().mockImplementation((a, b) => {
       b.onError();
