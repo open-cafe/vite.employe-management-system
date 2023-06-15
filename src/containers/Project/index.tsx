@@ -53,10 +53,12 @@ const Project: React.FC = () => {
   };
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const { projectLoading, projectData, projectError } = useProject(
-    page + 1,
-    rowsPerPage
-  );
+  const projectProps = {
+    page: page + 1,
+    limit: rowsPerPage,
+  };
+  const { projectLoading, projectData, projectError } =
+    useProject(projectProps);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);

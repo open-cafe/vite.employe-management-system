@@ -65,8 +65,10 @@ const ProjectDetail = () => {
 
   const navigate = useNavigate();
   const { allEmployeeData, allEmployeeDataLoading } = useAllEmployee();
-
-  const { deleteProjectAction, projectByIdData } = useProject(state.projectId);
+  const projectProps = {
+    projectId: state.projectId,
+  };
+  const { deleteProjectAction, projectByIdData } = useProject(projectProps);
 
   const [enteredEmployee, setEnteredEmployee] = useState<string | null>('');
   const [alertOpen, setAlertOpen] = useState(false);

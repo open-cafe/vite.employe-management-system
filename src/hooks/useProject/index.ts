@@ -6,7 +6,13 @@ import {
   fetchProjectById,
 } from './request';
 
-const useProject = (projectId?: string, page?: number, limit?: number) => {
+interface IProjectProps {
+  projectId?: string;
+  page?: number;
+  limit?: number;
+}
+
+const useProject = ({ projectId, page, limit }: IProjectProps = {}) => {
   const {
     isSuccess: projectSuccess,
     data: projectData,
