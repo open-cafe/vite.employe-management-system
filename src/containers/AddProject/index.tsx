@@ -64,6 +64,8 @@ const AddProject = () => {
     },
   });
 
+  console.log(errors);
+
   const onSubmit = async (data: any) => {
     const projectStatus = options.find((x) => x.id === data.status)?.label;
 
@@ -121,9 +123,13 @@ const AddProject = () => {
                 const { onChange, value } = field;
                 return (
                   <Autocomplete
-                    value={options.find((option) => {
-                      return value == option.id;
-                    })}
+                    value={
+                      value
+                        ? options.find((option) => {
+                            return value == option.id;
+                          }) ?? null
+                        : null
+                    }
                     sx={{ mt: 2, mb: 2 }}
                     disablePortal
                     id="projectstatus-combo-box"
@@ -136,7 +142,9 @@ const AddProject = () => {
                         helperText={errors.status?.message}
                       />
                     )}
-                    onChange={(event: any, newValue) => onChange(newValue?.id)}
+                    onChange={(event: any, newValue) =>
+                      onChange(newValue ? newValue?.id : null)
+                    }
                   />
                 );
               }}

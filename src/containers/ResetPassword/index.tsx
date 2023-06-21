@@ -17,6 +17,10 @@ import CommonStyles from '@/style/Common.styles';
 import { AxiosError } from 'axios';
 import { verifyToken } from '@/hooks/useVerifyToken/request';
 import useVerifyToken from '@/hooks/useVerifyToken';
+import schema from './ResetPasswordSchema';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useForm } from 'react-hook-form';
+import { DevTool } from '@hookform/devtools';
 
 interface ErrorData {
   errorObj: {
@@ -25,9 +29,23 @@ interface ErrorData {
   };
 }
 
+type formValues = {
+  newPassword: string;
+  confirmPassword: string;
+};
+
 const ResetPassword = () => {
-  const [newPassword, setnewPassword] = useState('');
-  const [confrmPassword, setconfirmPassword] = useState('');
+  const form = useForm({
+    defaultValues: {
+      newPassword: '',
+      confirmPassword: '',
+    },
+    resolver: yupResolver(schema),
+    mode: 'onChange',
+  });
+  const { register, control, reset, formState, handleSubmit } = form;
+  const { errors, isValid } = formState;
+
   const [token, setToken] = useState<string | null>(null);
   const [userId, setUserID] = useState<string | null>(null);
 
@@ -70,14 +88,17 @@ const ResetPassword = () => {
     }
   }, []);
 
-  const handleSubmit = async () => {
+  console.log(errors);
+
+  const onSubmit = async (data: formValues) => {
+    console.log(data);
     const resetPassowrdCredentials = {
-      password: newPassword,
+      password: data.newPassword,
       token: token as string,
       userId: userId as string,
     };
 
-    if (newPassword === confrmPassword) {
+    if (data.newPassword === data.confirmPassword) {
       resetPasswordChangeAction(resetPassowrdCredentials, {
         onSuccess: (data) => {
           navigate('/login');
@@ -93,8 +114,7 @@ const ResetPassword = () => {
         },
       });
 
-      setnewPassword('');
-      setconfirmPassword('');
+      reset();
     } else {
       setAlertSeverity('warning');
       setAlertMessage('confrim password is not equal to new password');
@@ -113,40 +133,38 @@ const ResetPassword = () => {
               Reset password
             </Typography>
             <Box>
-              <TextField
-                margin="normal"
-                id="newPassword"
-                name="newPassword"
-                label="New Password"
-                type="password"
-                autoComplete="current-password"
-                value={newPassword}
-                onChange={(e) => setnewPassword(e.target.value)}
-                fullWidth
-                required
-              />
-              <TextField
-                margin="normal"
-                id="confirmPassword"
-                name="conmfirPassword"
-                label="Confirm Password"
-                type="password"
-                autoComplete="current-password"
-                value={confrmPassword}
-                onChange={(e) => setconfirmPassword(e.target.value)}
-                fullWidth
-                required
-              />
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <TextField
+                  margin="normal"
+                  id="newPassword"
+                  label="New Password"
+                  type="password"
+                  autoComplete="current-password"
+                  fullWidth
+                  helperText={errors.newPassword?.message}
+                  {...register('newPassword')}
+                />
+                <TextField
+                  margin="normal"
+                  id="confirmPassword"
+                  label="Confirm Password"
+                  type="password"
+                  autoComplete="current-password"
+                  fullWidth
+                  {...register('confirmPassword')}
+                  helperText={errors.confirmPassword?.message}
+                />
 
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={CommonStyles.button}
-                onClick={() => handleSubmit()}
-              >
-                Reset Password
-              </Button>
+                <Button
+                  disabled={!isValid}
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  sx={CommonStyles.button}
+                >
+                  Reset Password
+                </Button>
+              </form>
             </Box>
           </Box>
         </CardContent>
@@ -164,6 +182,7 @@ const ResetPassword = () => {
           {alertMessage}
         </Alert>
       </Snackbar>
+      <DevTool control={control} />
     </>
   );
 };
