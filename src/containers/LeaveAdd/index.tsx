@@ -21,7 +21,7 @@ import MainLayout from '@/layout/MainLayout';
 
 import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';
-import useAddLeave from '@/hooks/useAddLeave';
+import useLeave from '@/hooks/useLeave';
 
 import dayjs from 'dayjs';
 import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
@@ -39,7 +39,7 @@ import { AxiosError } from 'axios';
 
 const LeaveAdd = () => {
   const navigate = useNavigate();
-  const { addLeaveAction, addLeaveLoading } = useAddLeave();
+  const { addLeaveAction, addLeaveLoading } = useLeave();
 
   const [alertOpen, setAlertOpen] = useState(false);
   const [alertSeverity, setAlertSeverity] = useState<
@@ -59,15 +59,6 @@ const LeaveAdd = () => {
   const [endDate, setEndDate] = useState<dayjs.Dayjs | null>(null);
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setReason(event.target.value);
-
-    // if (reason.trim() === '') {
-    //   console.log('error in reason');
-    //   setAlertOpen(true);
-    //   setAlertMessage('Please enter a reason');
-    // } else {
-    //   setAlertOpen(false);
-    //   setAlertMessage('');
-    // }
   };
   const handleLeaveChange = (event: SelectChangeEvent) => {
     setLeaveType(event.target.value as string);
@@ -114,15 +105,6 @@ const LeaveAdd = () => {
           setAlertOpen(true);
         }
       },
-      // onError: (error) => {
-      //   const axiosError = error as AxiosError;
-
-      //   setAlertSeverity('error');
-      //   setAlertMessage(
-      //     (axiosError.response?.data as ErrorData)?.errorObj?.message
-      //   );
-      //   setAlertOpen(true);
-      // },
     });
     setLeaveType('');
     setReason('');

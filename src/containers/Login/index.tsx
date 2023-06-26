@@ -1,5 +1,5 @@
 import { LockOutlined, Password } from '@mui/icons-material';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import {
   Avatar,
   Box,
@@ -15,7 +15,7 @@ import Grid from '@mui/material/Grid';
 import { setCookie } from '../../utils/authCookies';
 
 import { cookieName } from '../../constants/environment';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import LoginLayout from '@/layout/LoginLayout';
 import useAuth from '@/hooks/useAuth';
 import useCurrentUser from '@/hooks/useCurrentUser';
@@ -23,7 +23,7 @@ import useCurrentUser from '@/hooks/useCurrentUser';
 const Login = () => {
   const navigate = useNavigate();
   const { loginAction, loginLoading } = useAuth();
-
+  const leaveId = localStorage.getItem('leaveId');
   const [enteredEmail, setEnteredEmail] = useState('');
   const [enteredPassword, setEnteredPassword] = useState('');
   const [alertOpen, setAlertOpen] = useState(false);
@@ -44,6 +44,7 @@ const Login = () => {
       onSuccess: (data) => {
         if (data) {
           setCookie(cookieName, data?.data?.data?.access_token);
+
           if (data?.data?.data?.role === 'Employee') {
             if (data?.data?.data?.employeeDetail) {
               navigate(`/`);

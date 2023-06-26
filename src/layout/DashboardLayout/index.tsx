@@ -4,7 +4,7 @@ import MainLayout from '../MainLayout';
 import SideBar from './Sidebar';
 
 import Grid from '@mui/material/Grid';
-import { Outlet, useLocation } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { Box } from '@mui/material';
 
 interface DashboardLayoutPops {
@@ -13,6 +13,15 @@ interface DashboardLayoutPops {
 
 const DashboardLayout = () => {
   const location = useLocation();
+
+  let leaveId = localStorage.getItem('leaveId');
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    leaveId && navigate(`leavedetail/${leaveId}`);
+    leaveId = null;
+  }, [leaveId]);
 
   return (
     <MainLayout>

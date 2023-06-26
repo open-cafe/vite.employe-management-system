@@ -25,6 +25,7 @@ import ProjectDetails from './Project/ProjectDetails';
 import EmployeeOnBoarding from './EmployeeOnBorading';
 import EmployeeProjects from './EmployeeProjects';
 import EmployeeEdits from './EmployeeEdits';
+import AddCheckInOut from './AddCheckInOut';
 
 const Router: FC = () => {
   return (
@@ -38,13 +39,14 @@ const Router: FC = () => {
           <Route path="employee" element={<Employees />} />
           <Route path="leave" element={<Leave />} />
           <Route path="project" element={<Project />} />
-          <Route path="leavedetail" element={<LeaveDetails />} />
+          <Route path="leavedetail/:leaveId" element={<LeaveDetails />} />
           <Route path="checkinout" element={<CheckInOut />} />
           <Route path="adduser" element={<AddUser />} />
           <Route path="changepassword" element={<ChangePassword />} />
           <Route path="projectdetail" element={<ProjectDetails />} />
           <Route path="addproject" element={<AddProject />} />
-          {/* <Route path="addleave" element={<AddLeave />} /> */}
+          <Route path="addcheckinout" element={<AddCheckInOut />} />
+
           <Route path="leaveadd" element={<LeaveAdd />} />
           <Route
             path="addprojectassignment"

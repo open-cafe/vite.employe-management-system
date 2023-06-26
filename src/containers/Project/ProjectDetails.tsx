@@ -99,7 +99,7 @@ const projectDetail = () => {
     if (value) setEnteredEmployee(value.id);
     else setEnteredEmployee('');
   };
-  const Role = currentUserData?.data?.data?.getCurrentUser.role;
+  const Role = currentUserData?.data?.data?.role;
   let isAdmin = false;
   if (Role === 'SuperAdmin' || Role === 'Admin') {
     isAdmin = true;

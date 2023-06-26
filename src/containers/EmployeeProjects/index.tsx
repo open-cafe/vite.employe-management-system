@@ -47,15 +47,15 @@ interface Project {
 }
 
 const EmployeeProjects: React.FC = () => {
-  const navigate = useNavigate();
-  const { currentUserError, currentUserData, currentUserLoading } =
-    useCurrentUser();
-  const role = currentUserData?.data?.data?.getCurrentUser.role;
-  const navigateToConfirmed = (project: Project) => {
-    if (role !== 'Employee') {
-      navigate(`/projectdetail`, { state: project });
-    }
-  };
+  // const navigate = useNavigate();
+  // const { currentUserError, currentUserData, currentUserLoading } =
+  // useCurrentUser();
+  // const role = currentUserData?.data?.data?.getCurrentUser.role;
+  // const navigateToConfirmed = (project: Project) => {
+  //   if (role !== 'Employee') {
+  //     navigate(`/projectdetail`, { state: project });
+  //   }
+  // };
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const { projectLoading, projectData, projectError } =
@@ -121,7 +121,7 @@ const EmployeeProjects: React.FC = () => {
                   projectDetail.map((project: Project) => {
                     return (
                       <TableRow
-                        onClick={() => navigateToConfirmed(project)}
+                        // onClick={() => navigateToConfirmed(project)}
                         hover
                         role="checkbox"
                         key={project.projectId}

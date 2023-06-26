@@ -56,7 +56,7 @@ const EmployeeOnboarding = () => {
     addEmployeeAction(employeeDetails, {
       onSuccess: (data) => {
         if (data) {
-          navigate(`/employee`);
+          navigate(`/`);
         }
       },
       onError: (data) => {
