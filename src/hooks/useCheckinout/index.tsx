@@ -1,15 +1,58 @@
-import { useQuery } from '@tanstack/react-query';
-import { fetchCheckInOut } from './request';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import {
+  addCheckIn,
+  fetchCheckInOut,
+  fetchLatestCheckIn,
+  updateCheckIn,
+} from './request';
 
-const useCheckInOut = (page: number, pageSize: number) => {
+interface CheckProps {
+  page?: number;
+  rowsPerPage?: number;
+}
+
+const useCheckInOut = ({ page, rowsPerPage }: CheckProps = {}) => {
   const {
-    isSuccess,
-    data,
-    isLoading: checkinoutLoading,
-  } = useQuery(['checkinout', page, pageSize], () =>
-    fetchCheckInOut(page, pageSize)
-  );
+    isSuccess: checkInOutSuccess,
+    data: checkInOutData,
+    isLoading: checkInOutLoading,
+  } = useQuery({
+    queryKey: ['checkinout', page, rowsPerPage],
+    queryFn: () => fetchCheckInOut(page as number, rowsPerPage as number),
+    enabled: !!page && !!rowsPerPage,
+  });
 
-  return { isSuccess, data, checkinoutLoading };
+  const { mutate: addCheckInAction, isLoading: addCheckInLoading } =
+    useMutation({
+      mutationFn: () => addCheckIn(),
+    });
+
+  const {
+    isSuccess: latestCheckinSuccess,
+    data: latestCheckinData,
+    isLoading: latestCheckInLoading,
+  } = useQuery({
+    queryKey: ['checkinout'],
+    queryFn: () => fetchLatestCheckIn(),
+  });
+
+  const { mutate: updateCheckInAction, isLoading: updateCheckInLoading } =
+    useMutation({
+      mutationFn: () => updateCheckIn(),
+    });
+
+  return {
+    checkInOutSuccess,
+    checkInOutData,
+    checkInOutLoading,
+    latestCheckinSuccess,
+    latestCheckinData,
+    latestCheckInLoading,
+    addCheckInAction,
+    addCheckInLoading,
+    updateCheckInAction,
+    updateCheckInLoading,
+  };
 };
+
 export default useCheckInOut;
