@@ -24,6 +24,7 @@ import useUpdateEmployee from '@/hooks/useUpdateEmployee';
 import EmployeeOnboardingStyles from '@/style/EmployeeOnboarding.styles';
 
 const EmployeeEdits = () => {
+  const navigate = useNavigate();
   const { employeeByIdData, employeeByIdLoading, employeeByIdError } =
     useEmployeeById();
   const employeeData = employeeByIdData?.data.data;
@@ -31,7 +32,6 @@ const EmployeeEdits = () => {
   const name = employeeData?.name;
   const designation = employeeData?.designation;
   const phone = employeeData?.phone;
-  console.log('hehe', designation);
 
   const { updateEmployeeAction, updateEmployeeLoading } = useUpdateEmployee();
   //herne
@@ -70,10 +70,11 @@ const EmployeeEdits = () => {
     updateEmployeeAction(employeeDetails, {
       onSuccess: (data) => {
         if (data) {
-          setAlertSeverity('success');
-          setAlertMessage('Updated Successfully!!!');
-          setAlertOpen(true);
+          navigate(`/`);
         }
+        setAlertSeverity('success');
+        setAlertMessage('Updated Successfully!!!');
+        setAlertOpen(true);
       },
       onError: (data) => {
         console.log('err', data);
@@ -82,10 +83,6 @@ const EmployeeEdits = () => {
         setAlertOpen(true);
       },
     });
-    // setEnteredName('');
-    // setDesignation('');
-    // setPhone('');
-    // setHireDate('');
   };
 
   return (
@@ -114,36 +111,32 @@ const EmployeeEdits = () => {
               required
             />
 
-            <Box /* sx={{ minWidth: 120 }} */>
-              <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">
-                  Designation
-                </InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={designationValue}
-                  label="Designation"
-                  onChange={handleDesignation}
-                >
-                  <MenuItem value="Frontend Developer">
-                    Frontend Developer
-                  </MenuItem>
-                  <MenuItem value="Backend Developer">
-                    Backend Developer
-                  </MenuItem>
-                  <MenuItem value="Fullstack Developer">
-                    Fullstack Developer
-                  </MenuItem>
-                  <MenuItem value="Designer">Designer</MenuItem>
-                  <MenuItem value="Product Manager">Product Manager</MenuItem>
-                  <MenuItem value="SEO">SEO</MenuItem>
-                  <MenuItem value="DevOps Engineer">DevOps Engineer</MenuItem>
-                  <MenuItem value="UI Designer">UI Designer</MenuItem>
-                  <MenuItem value="UX Designer">UX Designer</MenuItem>
-                </Select>
-              </FormControl>
-            </Box>
+            {/* <Box /* sx={{ minWidth: 120 }} */}
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">Designation</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={designationValue ?? ''}
+                label="Designation"
+                onChange={handleDesignation}
+              >
+                <MenuItem value="Frontend Developer">
+                  Frontend Developer
+                </MenuItem>
+                <MenuItem value="Backend Developer">Backend Developer</MenuItem>
+                <MenuItem value="Fullstack Developer">
+                  Fullstack Developer
+                </MenuItem>
+                <MenuItem value="Designer">Designer</MenuItem>
+                <MenuItem value="Product Manager">Product Manager</MenuItem>
+                <MenuItem value="SEO">SEO</MenuItem>
+                <MenuItem value="DevOps Engineer">DevOps Engineer</MenuItem>
+                <MenuItem value="UI Designer">UI Designer</MenuItem>
+                <MenuItem value="UX Designer">UX Designer</MenuItem>
+              </Select>
+            </FormControl>
+            {/* </Box> */}
 
             <TextField
               margin="normal"

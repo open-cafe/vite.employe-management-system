@@ -5,8 +5,7 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
-// import axios from '../../config/axios';
-// import { useQuery } from '@tanstack/react-query';
+
 import {
   Alert,
   Box,
@@ -17,7 +16,7 @@ import {
   TableHead,
   TablePagination,
 } from '@mui/material';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import useLeave from '@/hooks/useLeave';
 import { useEffect, useState } from 'react';
 
@@ -25,12 +24,11 @@ import { Dayjs } from 'dayjs';
 import useCurrentUser from '@/hooks/useCurrentUser';
 import CommonStyles from '@/style/Common.styles';
 
-import useDeleteLeave from '@/hooks/useDeleteLeave';
 import { useQueryClient } from '@tanstack/react-query';
 import LeaveEdit from './LeaveEdit';
 
 interface Column {
-  id: 'reason' | 'leaveType' | 'startDate' | 'endDate' | 'action';
+  id: 'reason' | 'leaveType' | 'startDate' | 'endDate' | 'status' | 'action';
   label: string;
   minWidth?: number;
   align?: 'right' | 'center' | 'left';
@@ -43,12 +41,13 @@ interface Leave {
   startDate: Dayjs;
   reason: string;
   endDate: Dayjs;
+  status: string;
 }
 
 const Leave: React.FC = () => {
-  const { currentUserError, currentUserData, currentUserLoading } =
-    useCurrentUser();
-  const role = currentUserData?.data?.data?.getCurrentUser.role;
+  const { currentUserData } = useCurrentUser();
+  console.log('currentuser leave', currentUserData);
+  const role = currentUserData?.data?.data?.role;
 
   let isEmployee = false;
   if (role === 'Employee') {
@@ -69,6 +68,12 @@ const Leave: React.FC = () => {
       minWidth: 170,
       align: 'left',
     },
+    {
+      id: 'status',
+      label: 'Status',
+      minWidth: 170,
+      align: 'left',
+    },
   ];
 
   if (role === 'Employee') {
@@ -82,8 +87,8 @@ const Leave: React.FC = () => {
 
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-  const { deleteLeaveAction } = useDeleteLeave();
-  const { state } = useLocation();
+  const { deleteLeaveAction } = useLeave();
+  // const { state } = useLocation();
   const [alertOpen, setAlertOpen] = useState(false);
   const [alertSeverity, setAlertSeverity] = useState<
     'success' | 'error' | 'info' | 'warning'
@@ -93,19 +98,18 @@ const Leave: React.FC = () => {
     setAlertOpen(false);
   };
 
-  // console.log('leave all datas leaveById', leaveByIdData);
-  const navigateToConfirmed = (leave: Leave) => {
+  const navigateToConfirmed = (leaveId: string) => {
     if (role !== 'Employee') {
-      navigate(`/leavedetail`, { state: leave });
+      navigate(`/leavedetail/${leaveId}`);
     }
   };
-
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const { leaveError, leaveData, leaveLoading } = useLeave(
-    page + 1,
-    rowsPerPage
-  );
+  const refreshLeaves = () => {
+    queryClient.invalidateQueries(['leaves']);
+  };
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const pagination = { page: page + 1, rowsPerPage };
+  const { leaveError, leaveData, leaveLoading } = useLeave(pagination);
   const [leaveDetail, setLeaveDetail] = useState(leaveData?.data.data.data);
   useEffect(() => {
     setLeaveDetail(leaveData?.data.data.data);
@@ -115,13 +119,6 @@ const Leave: React.FC = () => {
     setPage(newPage);
   };
 
-  // const handleDelete = () => {
-  //   const leaveDetails = {
-  //     // leaveId: leaveDetail.leaveId,
-  //   };
-  //   console.log('Delete leave', total.data.leaveId);
-  // };
-
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -130,11 +127,6 @@ const Leave: React.FC = () => {
   };
 
   const total = leaveData?.data.data;
-  // const handleClick = () => {
-  //   console.log('datas of leave');
-  //   const data = printValue();
-  //   console.log('datas of leave', data);
-  // };
 
   return (
     <Paper sx={CommonStyles.paperLayout}>
@@ -185,7 +177,9 @@ const Leave: React.FC = () => {
                           leaveDetail.map((leave: Leave) => {
                             return (
                               <TableRow
-                                onClick={() => navigateToConfirmed(leave)}
+                                onClick={() =>
+                                  navigateToConfirmed(leave.leaveId)
+                                }
                                 hover
                                 role="checkbox"
                                 key={leave.leaveId}
@@ -204,6 +198,9 @@ const Leave: React.FC = () => {
                                 <TableCell align="left" sx={{ minWidth: 170 }}>
                                   {leave.endDate.toLocaleString().slice(0, 10)}
                                 </TableCell>
+                                <TableCell sx={{ minWidth: 170 }}>
+                                  {leave.status}
+                                </TableCell>
                               </TableRow>
                             );
                           })}
@@ -211,7 +208,7 @@ const Leave: React.FC = () => {
 
                       return (
                         <TableRow
-                          onClick={() => navigateToConfirmed(leave)}
+                          onClick={() => navigateToConfirmed(leave.leaveId)}
                           hover
                           role="checkbox"
                           key={leave.leaveId}
@@ -227,6 +224,9 @@ const Leave: React.FC = () => {
                           </TableCell>
                           <TableCell align="left" sx={{ minWidth: 170 }}>
                             {leave.endDate.toLocaleString().slice(0, 10)}
+                          </TableCell>
+                          <TableCell sx={{ minWidth: 170 }}>
+                            {leave.status}
                           </TableCell>
                           {isEmployee && (
                             <TableCell>
@@ -255,10 +255,7 @@ const Leave: React.FC = () => {
                                         onSuccess: (data) => {
                                           if (data) {
                                             // add toast later
-
-                                            queryClient.invalidateQueries([
-                                              'leaves',
-                                            ]);
+                                            refreshLeaves();
                                             navigate(`/leave`);
                                             setAlertSeverity('success');
                                             setAlertMessage('Leave Deleted ');

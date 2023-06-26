@@ -21,7 +21,7 @@ const SideBar = () => {
   const navigate = useNavigate();
   const { currentUserError, currentUserData, currentUserLoading } =
     useCurrentUser();
-  const role = currentUserData?.data?.data?.getCurrentUser.role;
+  const role = currentUserData?.data?.data?.role;
   const toggleSidebar = useSidebarContext();
 
   const [state, action] = toggleSidebar;

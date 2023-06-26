@@ -11,31 +11,32 @@ import {
   Select,
   MenuItem,
 } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import dayjs, { Dayjs } from 'dayjs';
-import useUpdateLeave from '@/hooks/useUpdateLeave';
+import useLeave from '@/hooks/useLeave';
 import CommonStyles from '@/style/Common.styles';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
+interface LeaveEditProps {
+  leaveId: string;
+  leaveType: string;
+  reason: string;
+  startDate: Dayjs | null;
+  endDate: Dayjs | null;
+}
 const LeaveEdit = ({
   leaveId,
   leaveType,
   reason,
   startDate,
   endDate,
-}: {
-  leaveId: string;
-  leaveType: string;
-  reason: string;
-  startDate: Dayjs | null;
-  endDate: Dayjs | null;
-}) => {
+}: LeaveEditProps) => {
   const queryClient = useQueryClient();
 
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const [leaveTypeValue, setLeaveTypeValue] = useState(leaveType);
 
   const [reasonValue, setReasonValue] = useState(reason);
@@ -56,7 +57,7 @@ const LeaveEdit = ({
 
   const today = dayjs();
   const yesterday = dayjs().add(365, 'day');
-  const { updateLeaveAction, updateLeaveLoading } = useUpdateLeave();
+  const { updateLeaveAction, updateLeaveLoading } = useLeave();
 
   const handleSubmit = async () => {
     const leaveDetails = {
