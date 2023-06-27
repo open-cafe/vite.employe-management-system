@@ -79,9 +79,7 @@ const LeaveAdd = () => {
         }
       },
       onError: (data) => {
-        // console.log('err', data);
         if (data !== null) {
-          console.log('Data are present', data);
           setAlertSeverity('error');
           setAlertOpen(true);
           if (reason.trim() === '') {
@@ -98,8 +96,6 @@ const LeaveAdd = () => {
             setAlertMessage('Fill in the date fields');
           }
         } else {
-          console.log('Data are not present');
-
           setAlertSeverity('error');
           // setAlertMessage('Fill in all the fields');
           setAlertOpen(true);

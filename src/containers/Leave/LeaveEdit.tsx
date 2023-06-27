@@ -90,7 +90,7 @@ const LeaveEdit = ({
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Update Leave</DialogTitle>
         <DialogContent>
-          <Box>
+          <Box paddingTop={2}>
             <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label">Type</InputLabel>
               <Select

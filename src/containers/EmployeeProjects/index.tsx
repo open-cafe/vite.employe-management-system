@@ -16,6 +16,8 @@ import {
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import useCurrentUser from '@/hooks/useCurrentUser';
+import ProjectStyles from '@/style/Project.styles';
+import CommonStyles from '@/style/Common.styles';
 
 interface Column {
   id: 'project_name' | 'description' | 'status';
@@ -47,15 +49,13 @@ interface Project {
 }
 
 const EmployeeProjects: React.FC = () => {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   // const { currentUserError, currentUserData, currentUserLoading } =
   // useCurrentUser();
   // const role = currentUserData?.data?.data?.getCurrentUser.role;
-  // const navigateToConfirmed = (project: Project) => {
-  //   if (role !== 'Employee') {
-  //     navigate(`/projectdetail`, { state: project });
-  //   }
-  // };
+  const navigateToConfirmed = (project: Project) => {
+    navigate(`/projectdetail`, { state: project });
+  };
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const { projectLoading, projectData, projectError } =
@@ -76,7 +76,7 @@ const EmployeeProjects: React.FC = () => {
   const projectDetail = projectData?.data?.data?.projects;
 
   return (
-    <Paper /* sx={{ width: '100%' }} */>
+    <Paper sx={CommonStyles.paperAndCard}>
       {projectLoading ? (
         <Box
           display="flex"
@@ -97,10 +97,10 @@ const EmployeeProjects: React.FC = () => {
               color="inherit"
               align="center"
             >
-              Project List
+              My Project List
             </Typography>
           </div>
-          <TableContainer sx={{ height: '85vh' }}>
+          <TableContainer sx={ProjectStyles.tableContainer}>
             <Table
               stickyHeader
               aria-label="sticky table"
@@ -121,7 +121,7 @@ const EmployeeProjects: React.FC = () => {
                   projectDetail.map((project: Project) => {
                     return (
                       <TableRow
-                        // onClick={() => navigateToConfirmed(project)}
+                        onClick={() => navigateToConfirmed(project)}
                         hover
                         role="checkbox"
                         key={project.projectId}
@@ -149,7 +149,6 @@ const EmployeeProjects: React.FC = () => {
             </Table>
           </TableContainer>
           <TablePagination
-            rowsPerPageOptions={[10]}
             component="div"
             count={total.total}
             rowsPerPage={rowsPerPage}

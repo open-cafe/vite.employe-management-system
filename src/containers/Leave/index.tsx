@@ -46,7 +46,6 @@ interface Leave {
 
 const Leave: React.FC = () => {
   const { currentUserData } = useCurrentUser();
-  console.log('currentuser leave', currentUserData);
   const role = currentUserData?.data?.data?.role;
 
   let isEmployee = false;
@@ -143,7 +142,7 @@ const Leave: React.FC = () => {
         <div>{leaveError}</div>
       ) : (
         <>
-          <TableContainer sx={{ height: '80vh' }}>
+          <TableContainer sx={{ height: '84vh' }}>
             <Table stickyHeader aria-label="sticky table">
               <TableHead>
                 <TableRow>
@@ -168,68 +167,42 @@ const Leave: React.FC = () => {
               </TableHead>
 
               <TableBody>
-                {
-                  /* leaveDetail.length ? ( */
+                {leaveDetail?.length ? (
                   leaveDetail &&
-                    leaveDetail.map((leave: Leave) => {
-                      <TableBody>
-                        {leaveDetail &&
-                          leaveDetail.map((leave: Leave) => {
-                            return (
-                              <TableRow
-                                onClick={() =>
-                                  navigateToConfirmed(leave.leaveId)
-                                }
-                                hover
-                                role="checkbox"
-                                key={leave.leaveId}
-                              >
-                                <TableCell sx={{ minWidth: 170 }}>
-                                  {leave.reason}
-                                </TableCell>
-                                <TableCell sx={{ minWidth: 170 }}>
-                                  {leave.leaveType}
-                                </TableCell>
-                                <TableCell align="left" sx={{ minWidth: 170 }}>
-                                  {leave.startDate
-                                    .toLocaleString()
-                                    .slice(0, 10)}
-                                </TableCell>
-                                <TableCell align="left" sx={{ minWidth: 170 }}>
-                                  {leave.endDate.toLocaleString().slice(0, 10)}
-                                </TableCell>
-                                <TableCell sx={{ minWidth: 170 }}>
-                                  {leave.status}
-                                </TableCell>
-                              </TableRow>
-                            );
-                          })}
-                      </TableBody>;
-
-                      return (
-                        <TableRow
-                          onClick={() => navigateToConfirmed(leave.leaveId)}
-                          hover
-                          role="checkbox"
-                          key={leave.leaveId}
-                        >
-                          <TableCell sx={{ minWidth: 170 }}>
-                            {leave.reason}
-                          </TableCell>
-                          <TableCell sx={{ minWidth: 170 }}>
-                            {leave.leaveType}
-                          </TableCell>
-                          <TableCell align="left" sx={{ minWidth: 170 }}>
-                            {leave.startDate.toLocaleString().slice(0, 10)}
-                          </TableCell>
-                          <TableCell align="left" sx={{ minWidth: 170 }}>
-                            {leave.endDate.toLocaleString().slice(0, 10)}
-                          </TableCell>
-                          <TableCell sx={{ minWidth: 170 }}>
-                            {leave.status}
-                          </TableCell>
-                          {isEmployee && (
-                            <TableCell>
+                  leaveDetail.map((leave: Leave) => {
+                    let isAcceptReject = false;
+                    const leaveStatus = leave.status;
+                    if (
+                      leaveStatus == 'Accepted' ||
+                      leaveStatus == 'Rejected'
+                    ) {
+                      isAcceptReject = true;
+                    }
+                    return (
+                      <TableRow
+                        onClick={() => navigateToConfirmed(leave.leaveId)}
+                        hover
+                        role="checkbox"
+                        key={leave.leaveId}
+                      >
+                        <TableCell sx={{ minWidth: 170 }}>
+                          {leave.reason}
+                        </TableCell>
+                        <TableCell sx={{ minWidth: 170 }}>
+                          {leave.leaveType}
+                        </TableCell>
+                        <TableCell align="left" sx={{ minWidth: 170 }}>
+                          {leave.startDate.toLocaleString().slice(0, 10)}
+                        </TableCell>
+                        <TableCell align="left" sx={{ minWidth: 170 }}>
+                          {leave.endDate.toLocaleString().slice(0, 10)}
+                        </TableCell>
+                        <TableCell sx={{ minWidth: 170 }}>
+                          {leave.status}
+                        </TableCell>
+                        {isEmployee && (
+                          <TableCell>
+                            {!isAcceptReject && (
                               <Grid
                                 container
                                 spacing={2}
@@ -276,26 +249,29 @@ const Leave: React.FC = () => {
                                   </Button>
                                 </Grid>
                               </Grid>
-                            </TableCell>
-                          )}
-
-                          {/* } */}
-                        </TableRow>
-                      );
-                    })
-                  // ) : (
-                  //   <TableRow>
-                  //     <TableCell align="center" colSpan={6}>
-                  //       No Leave Found
-                  //     </TableCell>
-                  //   </TableRow>
-                  // )
-                }
+                            )}
+                            {isAcceptReject && (
+                              <div style={{ textAlign: 'center' }}>
+                                <span>No actions. </span>
+                              </div>
+                            )}
+                          </TableCell>
+                        )}
+                      </TableRow>
+                    );
+                  })
+                ) : (
+                  <TableRow>
+                    <TableCell align="center" colSpan={6}>
+                      No Leaves Found
+                    </TableCell>
+                  </TableRow>
+                )}
               </TableBody>
             </Table>
           </TableContainer>
           <TablePagination
-            rowsPerPageOptions={[10]}
+            // rowsPerPageOptions={[10]}
             component="div"
             count={total.total}
             rowsPerPage={rowsPerPage}

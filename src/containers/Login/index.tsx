@@ -23,7 +23,6 @@ import useCurrentUser from '@/hooks/useCurrentUser';
 const Login = () => {
   const navigate = useNavigate();
   const { loginAction, loginLoading } = useAuth();
-  const leaveId = localStorage.getItem('leaveId');
   const [enteredEmail, setEnteredEmail] = useState('');
   const [enteredPassword, setEnteredPassword] = useState('');
   const [alertOpen, setAlertOpen] = useState(false);

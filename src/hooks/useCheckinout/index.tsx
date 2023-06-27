@@ -32,8 +32,9 @@ const useCheckInOut = ({ page, rowsPerPage }: CheckProps = {}) => {
     data: latestCheckinData,
     isLoading: latestCheckInLoading,
   } = useQuery({
-    queryKey: ['checkinout'],
+    queryKey: ['checkinoutlatest'],
     queryFn: () => fetchLatestCheckIn(),
+    // enabled: false,
   });
 
   const { mutate: updateCheckInAction, isLoading: updateCheckInLoading } =

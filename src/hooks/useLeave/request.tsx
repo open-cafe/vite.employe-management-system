@@ -24,9 +24,7 @@ export const updateLeave = async (body: UpdateLeave) => {
 };
 
 export const fetchLeaveById = async (leaveId: string | undefined) => {
-  console.log('req leaveId', leaveId);
   const data = await axios.get(`/leaves/${leaveId}`);
-  console.log('req Data', data);
   return data;
 };
 
@@ -35,7 +33,6 @@ interface DeleteLeave {
 }
 export const deleteLeave = async (body: DeleteLeave) => {
   const data = await axios.delete(`/leaves/${body.leaveId}`);
-  console.log('leaveid', body.leaveId);
   return data;
 };
 
