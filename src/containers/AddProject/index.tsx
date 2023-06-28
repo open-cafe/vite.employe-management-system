@@ -8,17 +8,15 @@ import {
 import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import MainLayout from '@/layout/MainLayout';
-import useProject from '@/hooks/useProject';
 
 import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';
 
 import ProjectStyles from '@/style/Project.styles';
-import useAddProject from '@/hooks/useAddProject';
 
 const AddProject = () => {
   const navigate = useNavigate();
-  const { addProjectAction, addProjectLoading } = useProject();
+  const { addProjectAction, addProjectLoading } = useAddProject();
 
   const [description, setDescription] = useState('');
   const [projectStatus, setProjectStatus] = useState('');
