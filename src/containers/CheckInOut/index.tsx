@@ -60,16 +60,13 @@ interface CheckInOut {
 }
 
 const CheckInOut: React.FC = () => {
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const { isSuccess, data, checkinoutLoading } = useCheckInOut(
-    page + 1,
-    rowsPerPage
-  );
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const pagination = { page: page + 1, rowsPerPage };
+  const { checkInOutSuccess, checkInOutData } = useCheckInOut(pagination);
   const [checkinoutDetail, setCheckInOutDetail] = useState(
-    data?.data.data.data
+    checkInOutData?.data?.data?.data
   );
-
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
@@ -82,11 +79,11 @@ const CheckInOut: React.FC = () => {
   };
 
   useEffect(() => {
-    setCheckInOutDetail(data?.data.data.data);
-  }, [data]);
+    setCheckInOutDetail(checkInOutData?.data.data.data);
+  }, [checkInOutData]);
 
-  if (isSuccess) {
-    const total = data?.data.data;
+  if (checkInOutSuccess) {
+    const total = checkInOutData?.data.data;
 
     return (
       <Paper sx={CommonStyles.paperLayout}>

@@ -56,7 +56,7 @@ const EmployeeOnboarding = () => {
     addEmployeeAction(employeeDetails, {
       onSuccess: (data) => {
         if (data) {
-          navigate(`/employee`);
+          navigate(`/`);
         }
       },
       onError: (data) => {
@@ -110,21 +110,13 @@ const EmployeeOnboarding = () => {
                   label="Designation"
                   onChange={handleDesignation}
                 >
-                  <MenuItem value="Frontend Developer">
-                    Frontend Developer
-                  </MenuItem>
-                  <MenuItem value="Backend Developer">
-                    Backend Developer
-                  </MenuItem>
-                  <MenuItem value="Fullstack Developer">
-                    Fullstack Developer
-                  </MenuItem>
+                  <MenuItem value="Frontend">Frontend</MenuItem>
+                  <MenuItem value="Backend ">Backend</MenuItem>
+                  <MenuItem value="Fullstack">Fullstack</MenuItem>
                   <MenuItem value="Designer">Designer</MenuItem>
-                  <MenuItem value="Product Manager">Product Manager</MenuItem>
+                  <MenuItem value="ProductManager">ProductManager</MenuItem>
+                  <MenuItem value="ProjectManager">ProjectManager</MenuItem>
                   <MenuItem value="SEO">SEO</MenuItem>
-                  <MenuItem value="DevOps Engineer">DevOps Engineer</MenuItem>
-                  <MenuItem value="UI Designer">UI Designer</MenuItem>
-                  <MenuItem value="UX Designer">UX Designer</MenuItem>
                 </Select>
               </FormControl>
             </Box>

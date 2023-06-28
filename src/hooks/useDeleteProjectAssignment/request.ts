@@ -6,7 +6,6 @@ interface IDeleteProjectAssignment {
 export const deleteProjectAssignment = async (
   body: IDeleteProjectAssignment
 ) => {
-  console.log(body);
   const data = await axios.delete(
     `/project-assignments/${body.projectAssignmentId}`
   );

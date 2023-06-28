@@ -21,7 +21,7 @@ import MainLayout from '@/layout/MainLayout';
 
 import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';
-import useAddLeave from '@/hooks/useAddLeave';
+import useLeave from '@/hooks/useLeave';
 
 import dayjs from 'dayjs';
 import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
@@ -39,7 +39,7 @@ import { AxiosError } from 'axios';
 
 const LeaveAdd = () => {
   const navigate = useNavigate();
-  const { addLeaveAction, addLeaveLoading } = useAddLeave();
+  const { addLeaveAction, addLeaveLoading } = useLeave();
 
   const [alertOpen, setAlertOpen] = useState(false);
   const [alertSeverity, setAlertSeverity] = useState<
@@ -59,38 +59,17 @@ const LeaveAdd = () => {
   const [endDate, setEndDate] = useState<dayjs.Dayjs | null>(null);
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setReason(event.target.value);
-
-    // if (reason.trim() === '') {
-    //   console.log('error in reason');
-    //   setAlertOpen(true);
-    //   setAlertMessage('Please enter a reason');
-    // } else {
-    //   setAlertOpen(false);
-    //   setAlertMessage('');
-    // }
   };
   const handleLeaveChange = (event: SelectChangeEvent) => {
     setLeaveType(event.target.value as string);
   };
 
   const handleSubmit = async () => {
-    const start = startDate; /* .toISOString() */
-    const end = endDate; /* .toISOString() */
-
-    // if (leaveType === '') {
-    //   setAlertOpen(true);
-    //   // console.log('error in leavetype');
-    //   setAlertMessage('Please select a leave type.');
-    // } else {
-    //   setAlertOpen(false);
-    //   setAlertMessage('');
-    // }
-
     const leaveDetails = {
       leaveType: leaveType,
       reason: reason,
-      startDate: start || dayjs(),
-      endDate: end || dayjs(),
+      startDate: startDate || dayjs(),
+      endDate: endDate || dayjs(),
     };
 
     addLeaveAction(leaveDetails, {
@@ -100,9 +79,7 @@ const LeaveAdd = () => {
         }
       },
       onError: (data) => {
-        // console.log('err', data);
         if (data !== null) {
-          console.log('Data are present', data);
           setAlertSeverity('error');
           setAlertOpen(true);
           if (reason.trim() === '') {
@@ -119,30 +96,17 @@ const LeaveAdd = () => {
             setAlertMessage('Fill in the date fields');
           }
         } else {
-          console.log('Data are not present');
-
           setAlertSeverity('error');
           // setAlertMessage('Fill in all the fields');
           setAlertOpen(true);
         }
       },
-      // onError: (error) => {
-      //   const axiosError = error as AxiosError;
-
-      //   setAlertSeverity('error');
-      //   setAlertMessage(
-      //     (axiosError.response?.data as ErrorData)?.errorObj?.message
-      //   );
-      //   setAlertOpen(true);
-      // },
     });
     setLeaveType('');
     setReason('');
     setStartDate(null);
     setEndDate(null);
   };
-  // const [startDate, setStartDate] = useState(null);
-  // const [endDate, setEndDate] = useState(null);
   return (
     <>
       <MainLayout>

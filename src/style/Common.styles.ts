@@ -11,14 +11,14 @@ const CommonStyles = {
   },
 
   paperLayout: {
-    height: 'calc(100vh - 100px)',
+    height: 'calc(90vh)',
   },
   paperAndCard: {
     width: '100%',
     paddingY: '10px',
     paddingX: '20px',
     backgroundColor: '#f7f6f2',
-    height: '100%',
+    height: '85%',
   },
   text: {},
   dialogBoxHeading: { textAlign: 'center' },

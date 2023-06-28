@@ -1,54 +1,123 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
-import { useLocation } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Button, Grid } from '@mui/material';
+// import useUpdateLeaveStatus from '@/hooks/useUpdateLeaveStatus';
+import useLeave from '@/hooks/useLeave';
 
-export default function leaveDetail() {
-  const { state } = useLocation();
-  // console.log('states', state);
+export default function LeaveDetails() {
+  const { leaveId } = useParams();
+
+  const navigate = useNavigate();
+  const leaveIds = { leaveId };
+  const { leaveByIdData } = useLeave(leaveIds);
+  const leaveData = leaveByIdData?.data?.data;
+
+  const statusValue = leaveData?.status;
+  const { updateLeaveStatusAction } = useLeave();
+
+  const handleAccept = () => {
+    handleOnClick('Accepted');
+  };
+
+  const handleReject = () => {
+    handleOnClick('Rejected');
+  };
+  const handleOnClick = (status: string) => {
+    const leaveDetails = {
+      status: status,
+      leaveId: leaveId as string,
+    };
+
+    updateLeaveStatusAction(leaveDetails, {
+      onSuccess: (response) => {
+        if (response) {
+          navigate(`/leave`);
+          console.log('successful update leave status', response.data?.status);
+        }
+      },
+      onError: (response) => {
+        console.log('err', response);
+      },
+    });
+  };
 
   return (
-    <Card sx={{ maxWidth: 600, mx: { ml: 20 } }}>
-      <CardContent sx={{ textAlign: 'center' }}>
-        <CardContent>
-          <Typography sx={{ mb: 1.5 }} color="text.secondary" gutterBottom>
-            Name : {state.employee.name}
-          </Typography>
-          <Typography sx={{ mb: 1.5 }} color="text.secondary" gutterBottom>
-            Contact Number : {state.employee.phone}
-          </Typography>
-          <Typography sx={{ mb: 1.5 }} color="text.secondary">
-            Designation : {state.employee.designation}
-          </Typography>
-          <Typography sx={{ mb: 1.5 }} color="text.secondary">
-            Startdate : {state.startDate.toLocaleString().slice(0, 10)}
-          </Typography>
-          <Typography sx={{ mb: 1.5 }} color="text.secondary">
-            EndDate : {state.endDate.toLocaleString().slice(0, 10)}
-          </Typography>
-          <Typography sx={{ mb: 1.5 }} color="text.secondary">
-            Leave Type : {state.leaveType}
-          </Typography>
-          <Typography sx={{ mb: 1.5 }} color="text.secondary">
-            Reason : {state.reason}
-          </Typography>
+    <Grid
+      container
+      justifyContent="center"
+      alignItems="center"
+      style={{ height: '90vh' }}
+    >
+      <Card sx={{ maxWidth: 800, mx: { ml: 20 } }}>
+        <CardContent sx={{ textAlign: 'left' }}>
+          <CardContent>
+            <Typography sx={{ mb: 1.5 }} color="text.secondary" gutterBottom>
+              Name : {leaveData?.employee?.name}
+            </Typography>
+            <Typography sx={{ mb: 1.5 }} color="text.secondary" gutterBottom>
+              Contact Number : {leaveData?.employee?.phone}
+            </Typography>
+            <Typography sx={{ mb: 1.5 }} color="text.secondary">
+              Designation : {leaveData?.employee?.designation}
+            </Typography>
+            <Typography sx={{ mb: 1.5 }} color="text.secondary">
+              Startdate : {leaveData?.startDate.toLocaleString().slice(0, 10)}
+            </Typography>
+            <Typography sx={{ mb: 1.5 }} color="text.secondary">
+              EndDate : {leaveData?.endDate.toLocaleString().slice(0, 10)}
+            </Typography>
+            <Typography sx={{ mb: 1.5 }} color="text.secondary">
+              Leave Type : {leaveData?.leaveType}
+            </Typography>
+            <Typography sx={{ mb: 1.5 }} color="text.secondary">
+              Reason : {leaveData?.reason}
+            </Typography>
+          </CardContent>
+          {!['Accepted', 'Rejected'].includes(statusValue) && (
+            <Grid
+              container
+              spacing={2}
+              justifyContent="center"
+              alignItems="center"
+              ml={2}
+            >
+              <Grid item xs={6}>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  sx={{ mt: 3, mb: 2 }}
+                  onClick={handleAccept}
+                >
+                  Accept
+                </Button>
+              </Grid>
+              <Grid item xs={6}>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  sx={{ mt: 3, mb: 2 }}
+                  onClick={handleReject}
+                >
+                  Reject
+                </Button>
+              </Grid>
+            </Grid>
+          )}
+          {statusValue == 'Accepted' && (
+            <div style={{ textAlign: 'center' }}>
+              <span>You have accepted the leave. </span>
+            </div>
+          )}
+          {statusValue == 'Rejected' && (
+            <div style={{ textAlign: 'center' }}>
+              <span>You have rejected the leave. </span>
+            </div>
+          )}
         </CardContent>
-        <Grid container spacing={2} justifyContent="center" alignItems="center">
-          <Grid item xs={6}>
-            <Button type="submit" variant="contained" sx={{ mt: 3, mb: 2 }}>
-              Accept
-            </Button>
-          </Grid>
-          <Grid item xs={6}>
-            <Button type="submit" variant="contained" sx={{ mt: 3, mb: 2 }}>
-              Reject
-            </Button>
-          </Grid>
-        </Grid>
-      </CardContent>
-    </Card>
+      </Card>
+    </Grid>
   );
 }
