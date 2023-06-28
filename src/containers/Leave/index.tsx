@@ -5,8 +5,7 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
-// import axios from '../../config/axios';
-// import { useQuery } from '@tanstack/react-query';
+
 import {
   Alert,
   Box,
@@ -17,7 +16,7 @@ import {
   TableHead,
   TablePagination,
 } from '@mui/material';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import useLeave from '@/hooks/useLeave';
 import { useEffect, useState } from 'react';
 
@@ -25,11 +24,11 @@ import { Dayjs } from 'dayjs';
 import useCurrentUser from '@/hooks/useCurrentUser';
 import CommonStyles from '@/style/Common.styles';
 
-import useDeleteLeave from '@/hooks/useDeleteLeave';
 import { useQueryClient } from '@tanstack/react-query';
+import LeaveEdit from './LeaveEdit';
 
 interface Column {
-  id: 'reason' | 'leaveType' | 'startDate' | 'endDate' | 'action';
+  id: 'reason' | 'leaveType' | 'startDate' | 'endDate' | 'status' | 'action';
   label: string;
   minWidth?: number;
   align?: 'right' | 'center' | 'left';
@@ -42,13 +41,13 @@ interface Leave {
   startDate: Dayjs;
   reason: string;
   endDate: Dayjs;
+  status: string;
 }
 
 const Leave: React.FC = () => {
-  const { currentUserError, currentUserData, currentUserLoading } =
-    useCurrentUser();
-  const role = currentUserData?.data?.data?.getCurrentUser.role;
-  console.log(role);
+  const { currentUserData } = useCurrentUser();
+  const role = currentUserData?.data?.data?.role;
+
   let isEmployee = false;
   if (role === 'Employee') {
     isEmployee = true;
@@ -68,6 +67,12 @@ const Leave: React.FC = () => {
       minWidth: 170,
       align: 'left',
     },
+    {
+      id: 'status',
+      label: 'Status',
+      minWidth: 170,
+      align: 'left',
+    },
   ];
 
   if (role === 'Employee') {
@@ -81,8 +86,8 @@ const Leave: React.FC = () => {
 
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-  const { deleteLeaveAction } = useDeleteLeave();
-  const { state } = useLocation();
+  const { deleteLeaveAction } = useLeave();
+  // const { state } = useLocation();
   const [alertOpen, setAlertOpen] = useState(false);
   const [alertSeverity, setAlertSeverity] = useState<
     'success' | 'error' | 'info' | 'warning'
@@ -91,27 +96,19 @@ const Leave: React.FC = () => {
   const handleAlertClose = () => {
     setAlertOpen(false);
   };
-  // const { currentUserError, currentUserData, currentUserLoading } =
-  //   useCurrentUser();
-  // const role = currentUserData?.data?.data?.getCurrentUser.role;
-  // console.log(role);
-  // let isEmployee = false;
-  // if (role === 'Employee') {
-  //   isEmployee = true;
-  // }
 
-  const navigateToConfirmed = (leave: Leave) => {
+  const navigateToConfirmed = (leaveId: string) => {
     if (role !== 'Employee') {
-      navigate(`/leavedetail`, { state: leave });
+      navigate(`/leavedetail/${leaveId}`);
     }
   };
-
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const { leaveError, leaveData, leaveLoading } = useLeave(
-    page + 1,
-    rowsPerPage
-  );
+  const refreshLeaves = () => {
+    queryClient.invalidateQueries(['leaves']);
+  };
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const pagination = { page: page + 1, rowsPerPage };
+  const { leaveError, leaveData, leaveLoading } = useLeave(pagination);
   const [leaveDetail, setLeaveDetail] = useState(leaveData?.data.data.data);
   useEffect(() => {
     setLeaveDetail(leaveData?.data.data.data);
@@ -120,12 +117,6 @@ const Leave: React.FC = () => {
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
-  // const handleDelete = () => {
-  //   const leaveDetails = {
-  //     // leaveId: leaveDetail.leaveId,
-  //   };
-  //   console.log('Delete leave', total.data.leaveId);
-  // };
 
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -135,7 +126,6 @@ const Leave: React.FC = () => {
   };
 
   const total = leaveData?.data.data;
-  console.log('total leave', total);
 
   return (
     <Paper sx={CommonStyles.paperLayout}>
@@ -152,7 +142,7 @@ const Leave: React.FC = () => {
         <div>{leaveError}</div>
       ) : (
         <>
-          <TableContainer sx={{ height: '80vh' }}>
+          <TableContainer sx={{ height: '84vh' }}>
             <Table stickyHeader aria-label="sticky table">
               <TableHead>
                 <TableRow>
@@ -177,67 +167,55 @@ const Leave: React.FC = () => {
               </TableHead>
 
               <TableBody>
-                {
-                  /* leaveDetail.length ? ( */
+                {leaveDetail?.length ? (
                   leaveDetail &&
-                    leaveDetail.map((leave: Leave) => {
-                      <TableBody>
-                        {leaveDetail &&
-                          leaveDetail.map((leave: Leave) => {
-                            return (
-                              <TableRow
-                                onClick={() => navigateToConfirmed(leave)}
-                                hover
-                                role="checkbox"
-                                key={leave.leaveId}
-                              >
-                                <TableCell sx={{ minWidth: 170 }}>
-                                  {leave.reason}
-                                </TableCell>
-                                <TableCell sx={{ minWidth: 170 }}>
-                                  {leave.leaveType}
-                                </TableCell>
-                                <TableCell align="left" sx={{ minWidth: 170 }}>
-                                  {leave.startDate
-                                    .toLocaleString()
-                                    .slice(0, 10)}
-                                </TableCell>
-                                <TableCell align="left" sx={{ minWidth: 170 }}>
-                                  {leave.endDate.toLocaleString().slice(0, 10)}
-                                </TableCell>
-                              </TableRow>
-                            );
-                          })}
-                      </TableBody>;
-
-                      return (
-                        <TableRow
-                          onClick={() => navigateToConfirmed(leave)}
-                          hover
-                          role="checkbox"
-                          key={leave.leaveId}
-                        >
-                          <TableCell sx={{ minWidth: 170 }}>
-                            {leave.reason}
-                          </TableCell>
-                          <TableCell sx={{ minWidth: 170 }}>
-                            {leave.leaveType}
-                          </TableCell>
-                          <TableCell align="left" sx={{ minWidth: 170 }}>
-                            {leave.startDate.toLocaleString().slice(0, 10)}
-                          </TableCell>
-                          <TableCell align="left" sx={{ minWidth: 170 }}>
-                            {leave.endDate.toLocaleString().slice(0, 10)}
-                          </TableCell>
-                          {isEmployee && (
-                            <TableCell>
+                  leaveDetail.map((leave: Leave) => {
+                    let isAcceptReject = false;
+                    const leaveStatus = leave.status;
+                    if (
+                      leaveStatus == 'Accepted' ||
+                      leaveStatus == 'Rejected'
+                    ) {
+                      isAcceptReject = true;
+                    }
+                    return (
+                      <TableRow
+                        onClick={() => navigateToConfirmed(leave.leaveId)}
+                        hover
+                        role="checkbox"
+                        key={leave.leaveId}
+                      >
+                        <TableCell sx={{ minWidth: 170 }}>
+                          {leave.reason}
+                        </TableCell>
+                        <TableCell sx={{ minWidth: 170 }}>
+                          {leave.leaveType}
+                        </TableCell>
+                        <TableCell align="left" sx={{ minWidth: 170 }}>
+                          {leave.startDate.toLocaleString().slice(0, 10)}
+                        </TableCell>
+                        <TableCell align="left" sx={{ minWidth: 170 }}>
+                          {leave.endDate.toLocaleString().slice(0, 10)}
+                        </TableCell>
+                        <TableCell sx={{ minWidth: 170 }}>
+                          {leave.status}
+                        </TableCell>
+                        {isEmployee && (
+                          <TableCell>
+                            {!isAcceptReject && (
                               <Grid
                                 container
                                 spacing={2}
                                 justifyContent="center"
                               >
                                 <Grid item>
-                                  <Button variant="contained">Edit</Button>
+                                  <LeaveEdit
+                                    leaveId={leave.leaveId}
+                                    leaveType={leave.leaveType}
+                                    reason={leave.reason}
+                                    startDate={leave.startDate}
+                                    endDate={leave.endDate}
+                                  />
                                 </Grid>
                                 <Grid item>
                                   <Button
@@ -250,18 +228,14 @@ const Leave: React.FC = () => {
                                         onSuccess: (data) => {
                                           if (data) {
                                             // add toast later
-                                            queryClient.invalidateQueries([
-                                              'leave',
-                                            ]);
+                                            refreshLeaves();
                                             navigate(`/leave`);
-                                            console.log('success', data);
                                             setAlertSeverity('success');
                                             setAlertMessage('Leave Deleted ');
                                             setAlertOpen(true);
                                           }
                                         },
-                                        onError: (data) => {
-                                          console.log('err', data);
+                                        onError: () => {
                                           setAlertSeverity('error');
                                           setAlertMessage(
                                             'Cannot Delete Leave!! Error '
@@ -275,26 +249,29 @@ const Leave: React.FC = () => {
                                   </Button>
                                 </Grid>
                               </Grid>
-                            </TableCell>
-                          )}
-
-                          {/* } */}
-                        </TableRow>
-                      );
-                    })
-                  // ) : (
-                  //   <TableRow>
-                  //     <TableCell align="center" colSpan={6}>
-                  //       No Leave Found
-                  //     </TableCell>
-                  //   </TableRow>
-                  // )
-                }
+                            )}
+                            {isAcceptReject && (
+                              <div style={{ textAlign: 'center' }}>
+                                <span>No actions. </span>
+                              </div>
+                            )}
+                          </TableCell>
+                        )}
+                      </TableRow>
+                    );
+                  })
+                ) : (
+                  <TableRow>
+                    <TableCell align="center" colSpan={6}>
+                      No Leaves Found
+                    </TableCell>
+                  </TableRow>
+                )}
               </TableBody>
             </Table>
           </TableContainer>
           <TablePagination
-            rowsPerPageOptions={[10]}
+            // rowsPerPageOptions={[10]}
             component="div"
             count={total.total}
             rowsPerPage={rowsPerPage}

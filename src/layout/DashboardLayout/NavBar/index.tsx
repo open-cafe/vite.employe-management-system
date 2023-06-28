@@ -16,16 +16,24 @@ import PersonIcon from '@mui/icons-material/Person';
 import NavbarStyles from '@/style/Navbar.styles';
 import MenuIcon from '@mui/icons-material/Menu';
 import useSidebarContext from '@/context/sidebar/useSidebarContext';
+import AddCheckInOut from '@/containers/AddCheckInOut';
+import useCurrentUser from '@/hooks/useCurrentUser';
 
 export default function NavBar() {
   const navigate = useNavigate();
 
   const routeChange = async () => {
-    // const res = await axios.post('http://localhost:3000/user/logout');
     deleteCookie(cookieName);
+    localStorage.clear();
     navigate(`login`);
   };
+  const { currentUserData } = useCurrentUser();
+  const role = currentUserData?.data?.data?.role;
 
+  let isEmployee = false;
+  if (role === 'Employee') {
+    isEmployee = true;
+  }
   const toggleSidebar = useSidebarContext();
   const [state, action] = toggleSidebar;
 
@@ -59,6 +67,8 @@ export default function NavBar() {
           </Typography>
 
           {/* <Grid item xs={12} sm={1} md={1} lg={1} xl={1}> */}
+          {isEmployee && <AddCheckInOut />}
+
           <PopupState variant="popover" popupId="demo-popup-menu">
             {(popupState) => (
               <React.Fragment>
@@ -70,9 +80,12 @@ export default function NavBar() {
                 </IconButton>
 
                 <Menu {...bindMenu(popupState)}>
-                  <MenuItem onClick={() => navigate('employeeedit')}>
-                    Profile
-                  </MenuItem>
+                  {isEmployee && (
+                    <MenuItem onClick={() => navigate('employeeedit')}>
+                      Profile
+                    </MenuItem>
+                  )}
+
                   <MenuItem onClick={() => navigate('changepassword')}>
                     Change Password
                   </MenuItem>
