@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { fetchProject } from './request';
 
-const useProject = (page: number, limit: number) => {
+const useProjectAssignmentByEmployee = (page: number, limit: number) => {
   const {
     isSuccess: projectSuccess,
     data: projectData,
@@ -11,4 +11,4 @@ const useProject = (page: number, limit: number) => {
   return { projectSuccess, projectData, projectLoading, projectError };
 };
 
-export default useProject;
+export default useProjectAssignmentByEmployee;

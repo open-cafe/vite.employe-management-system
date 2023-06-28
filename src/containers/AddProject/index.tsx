@@ -11,6 +11,8 @@ import MainLayout from '@/layout/MainLayout';
 
 import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';
+
+import ProjectStyles from '@/style/Project.styles';
 import useAddProject from '@/hooks/useAddProject';
 import addProjectSchema from './addProjectSchema';
 import { useForm, Controller } from 'react-hook-form';
@@ -98,13 +100,35 @@ const AddProject = () => {
   return (
     <MainLayout>
       <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
-        <Paper
-          variant="outlined"
-          sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
-        >
+        <Paper variant="outlined" sx={ProjectStyles.container}>
           <Typography component="h1" variant="h4" align="center">
             Add Project
           </Typography>
+          <TextField
+            margin="normal"
+            id="project"
+            name="project"
+            label="Project Name"
+            autoComplete="Project"
+            value={enteredProject}
+            onChange={(e) => {
+              setEnteredProject(e.target.value);
+              setNameError(false);
+            }}
+            error={nameError}
+            helperText={nameError && formValues.name.errorMessage}
+            fullWidth
+            required
+          />
+          <Autocomplete
+            sx={{ my: 2 }}
+            // disablePortal
+            id="projectstatus-combo-box"
+            options={['Active', 'Completed', 'Cancelled', 'OnHold']}
+            fullWidth
+            renderInput={(params) => <TextField {...params} label="Status" />}
+            onChange={(event, value) => setProjectStatus(value as string)}
+          />
           <form onSubmit={handleSubmit(onSubmit)}>
             <TextField
               margin="normal"

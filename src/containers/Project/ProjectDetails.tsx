@@ -15,19 +15,14 @@ import {
   TextField,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Employee, ProjectAndEmployee } from '../AddProjectAssignment';
 import useAllEmployee from '@/hooks/useAllEmployee';
 import { SyntheticEvent, useEffect, useState } from 'react';
-import useAddProjectAssignment from '@/hooks/useAddProjectAssignment';
 import { useQueryClient } from '@tanstack/react-query';
-import useDeleteProjectAssignment from '@/hooks/useDeleteProjectAssignment';
 import ProjectAssignmentDetails from './ProjectAssignmentDetails';
-import useDeleteProject from '@/hooks/useDeleteProject';
+import useProject from '@/hooks/useProject';
 import ProjectDetailStyles from '@/style/ProjectDetails.styles';
 import ProjectEdit from './ProjectEdit';
 import CommonStyles from '@/style/Common.styles';
-import useProjectById from '@/hooks/useProjectById';
-import { ForkRight } from '@mui/icons-material';
 import useCurrentUser from '@/hooks/useCurrentUser';
 
 interface ProjectAssignments {
@@ -37,7 +32,16 @@ interface ProjectAssignments {
     employeeId: string;
   };
 }
-
+interface Employee {
+  employeeId: string;
+  name: string;
+  designation: string;
+  phone: string;
+}
+interface ProjectAndEmployee {
+  id: string;
+  name: string;
+}
 export interface AddEmployeeOrTag {
   id: string;
   label: string;
@@ -47,7 +51,7 @@ interface EmployeeData {
   id: string;
   projectAssignmentId: string;
 }
-const projectDetail = () => {
+const ProjectDetail = () => {
   const queryClient = useQueryClient();
   const { state } = useLocation();
   const { currentUserData, currentUserLoading } = useCurrentUser();
@@ -55,15 +59,16 @@ const projectDetail = () => {
     projectAssignmentLoading,
     projectAssignmentData,
     projectAssignmentError,
+    addProjectAssignmentAction,
+    deleteProjectAssignmentAction,
   } = useProjectAssignments(state.projectId, 1, 10);
-  const { projectByIdData, projectByIdLoading, projectByIdError } =
-    useProjectById(state.projectId);
+
   const navigate = useNavigate();
   const { allEmployeeData, allEmployeeDataLoading } = useAllEmployee();
-  const { deleteProjectAssignmentAction } = useDeleteProjectAssignment();
-  const { deleteProjectAction } = useDeleteProject();
-
-  const { addProjectAssignmentAction } = useAddProjectAssignment();
+  const projectProps = {
+    projectId: state.projectId,
+  };
+  const { deleteProjectAction, projectByIdData } = useProject(projectProps);
 
   const [enteredEmployee, setEnteredEmployee] = useState<string | null>('');
   const [alertOpen, setAlertOpen] = useState(false);
@@ -114,16 +119,65 @@ const projectDetail = () => {
     addProjectAssignmentAction(projectAssignmentDetails, {
       onSuccess: (data) => {
         if (data) {
-          // add toast later
+          setAlertSeverity('success');
+          setAlertMessage('Employee Added Successfully!!');
+          setAlertOpen(true);
           queryClient.invalidateQueries(['project-assignment']);
-          console.log('success', data);
         }
       },
-      onError: (data) => {
-        console.log('err', data);
+      onError: () => {
+        setAlertSeverity('error');
+        setAlertMessage(
+          'Cannot Add Project Assigment!! Please try again later'
+        );
+        setAlertOpen(true);
       },
     });
     setEnteredEmployee('');
+  };
+
+  const handleDeleteProject = async () => {
+    const projectDetails = {
+      projectId: state.projectId,
+    };
+    deleteProjectAction(projectDetails, {
+      onSuccess: (data) => {
+        if (data) {
+          queryClient.invalidateQueries(['project']);
+          navigate(`/project`);
+        }
+      },
+      onError: (data) => {
+        setAlertSeverity('error');
+        setAlertMessage(
+          'Cannot Delete Project!! Employees are assigned to the project '
+        );
+        setAlertOpen(true);
+      },
+    });
+  };
+
+  const handleDeleteProjectAssignment = async (projectAssignmentId: string) => {
+    const projectAssignmentDetails = {
+      projectAssignmentId,
+    };
+    deleteProjectAssignmentAction(projectAssignmentDetails, {
+      onSuccess: (data) => {
+        if (data) {
+          setAlertSeverity('success');
+          setAlertMessage('Project Assignment Deleted Successfully');
+          setAlertOpen(true);
+          queryClient.invalidateQueries(['project-assignment']);
+        }
+      },
+      onError: () => {
+        setAlertSeverity('error');
+        setAlertMessage(
+          'Cannot Delete Project Assignment!! Please try again later'
+        );
+        setAlertOpen(true);
+      },
+    });
   };
 
   const employeeName = allEmployeeData?.data?.data.map((employee: Employee) => {
@@ -133,7 +187,7 @@ const projectDetail = () => {
   return (
     <>
       <Card sx={CommonStyles.paperAndCard}>
-        {projectAssignmentError && <div>Error...=</div>}
+        {projectAssignmentError && <div>Something went wrong ! </div>}
         {!projectAssignmentError && projectAssignmentLoading && (
           <Box
             display="flex"
@@ -175,29 +229,10 @@ const projectDetail = () => {
                         projectId={state.projectId}
                       />
                       <IconButton
+                        data-testid="delete-project"
                         style={{ color: 'black' }}
                         onClick={() => {
-                          const projectDetails = {
-                            projectId: state.projectId,
-                          };
-                          deleteProjectAction(projectDetails, {
-                            onSuccess: (data) => {
-                              if (data) {
-                                // add toast later
-                                queryClient.invalidateQueries(['project']);
-                                navigate(`/project`);
-                                console.log('success', data);
-                              }
-                            },
-                            onError: (data) => {
-                              console.log('err', data);
-                              setAlertSeverity('error');
-                              setAlertMessage(
-                                'Cannot Delete Project!! Employees are assigned to the project '
-                              );
-                              setAlertOpen(true);
-                            },
-                          });
+                          handleDeleteProject();
                         }}
                       >
                         <DeleteIcon />
@@ -308,28 +343,11 @@ const projectDetail = () => {
                               <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
                                 {isAdmin && (
                                   <IconButton
+                                    data-testid="delete-project-assignment"
                                     sx={{ color: 'black' }}
                                     onClick={() => {
-                                      const projectAssignmentDetails = {
-                                        projectAssignmentId:
-                                          employeeData.projectAssignmentId,
-                                      };
-                                      deleteProjectAssignmentAction(
-                                        projectAssignmentDetails,
-                                        {
-                                          onSuccess: (data) => {
-                                            if (data) {
-                                              // add toast later
-                                              queryClient.invalidateQueries([
-                                                'project-assignment',
-                                              ]);
-                                              console.log('success', data);
-                                            }
-                                          },
-                                          onError: (data) => {
-                                            console.log('err', data);
-                                          },
-                                        }
+                                      handleDeleteProjectAssignment(
+                                        employeeData.projectAssignmentId
                                       );
                                     }}
                                   >
@@ -370,4 +388,4 @@ const projectDetail = () => {
     </>
   );
 };
-export default projectDetail;
+export default ProjectDetail;

@@ -1,9 +1,16 @@
 import {
+  Alert,
+  Box,
   Button,
-  //   Grid,
+  FormControl,
+  Grid,
+  InputLabel,
   //   FormControl,
   //   InputLabel,
   MenuItem,
+  Select,
+  SelectChangeEvent,
+  Snackbar,
   //   Select,
   TextField,
   Typography,
@@ -16,16 +23,32 @@ import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';
 import useAddLeave from '@/hooks/useAddLeave';
 
-// import DatePicker from 'react-datepicker';
 import dayjs from 'dayjs';
 import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { AxiosError } from 'axios';
+
+// interface ErrorData {
+//   errorObj: {
+//     message: string;
+//     // other properties, if applicable
+//   };
+// }
 
 const LeaveAdd = () => {
   const navigate = useNavigate();
   const { addLeaveAction, addLeaveLoading } = useAddLeave();
+
+  const [alertOpen, setAlertOpen] = useState(false);
+  const [alertSeverity, setAlertSeverity] = useState<
+    'success' | 'error' | 'info' | 'warning'
+  >('success');
+  const [alertMessage, setAlertMessage] = useState('');
+  const handleAlertClose = () => {
+    setAlertOpen(false);
+  };
 
   const today = dayjs();
   const yesterday = dayjs().add(365, 'day');
@@ -35,32 +58,83 @@ const LeaveAdd = () => {
   const [startDate, setStartDate] = useState<dayjs.Dayjs | null>(null);
   const [endDate, setEndDate] = useState<dayjs.Dayjs | null>(null);
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setLeaveType(event.target.value);
+    setReason(event.target.value);
+
+    // if (reason.trim() === '') {
+    //   console.log('error in reason');
+    //   setAlertOpen(true);
+    //   setAlertMessage('Please enter a reason');
+    // } else {
+    //   setAlertOpen(false);
+    //   setAlertMessage('');
+    // }
   };
-  // console.log('111', today);
-  // const handleDate = () => {
-  //   onbeforeinput={(e) => {
-  //     e.preventDefault();
-  //   }}
-  // };
+  const handleLeaveChange = (event: SelectChangeEvent) => {
+    setLeaveType(event.target.value as string);
+  };
 
   const handleSubmit = async () => {
+    const start = startDate; /* .toISOString() */
+    const end = endDate; /* .toISOString() */
+
+    // if (leaveType === '') {
+    //   setAlertOpen(true);
+    //   // console.log('error in leavetype');
+    //   setAlertMessage('Please select a leave type.');
+    // } else {
+    //   setAlertOpen(false);
+    //   setAlertMessage('');
+    // }
+
     const leaveDetails = {
       leaveType: leaveType,
       reason: reason,
-      startDate: startDate || dayjs(),
-      endDate: endDate || dayjs(),
+      startDate: start || dayjs(),
+      endDate: end || dayjs(),
     };
 
     addLeaveAction(leaveDetails, {
       onSuccess: (data) => {
         if (data) {
-          navigate(`/employees/:employeeId/leaves`);
+          navigate(`/leave`);
         }
       },
       onError: (data) => {
-        console.log('err', data);
+        // console.log('err', data);
+        if (data !== null) {
+          console.log('Data are present', data);
+          setAlertSeverity('error');
+          setAlertOpen(true);
+          if (reason.trim() === '') {
+            setAlertMessage('Please enter a reason');
+          }
+          if (leaveType === '') {
+            setAlertMessage('Please select a leave type.');
+          }
+          if (startDate !== null && endDate !== null) {
+            if (startDate > endDate) {
+              setAlertMessage('Start date cannot be greater Than End date');
+            }
+          } else {
+            setAlertMessage('Fill in the date fields');
+          }
+        } else {
+          console.log('Data are not present');
+
+          setAlertSeverity('error');
+          // setAlertMessage('Fill in all the fields');
+          setAlertOpen(true);
+        }
       },
+      // onError: (error) => {
+      //   const axiosError = error as AxiosError;
+
+      //   setAlertSeverity('error');
+      //   setAlertMessage(
+      //     (axiosError.response?.data as ErrorData)?.errorObj?.message
+      //   );
+      //   setAlertOpen(true);
+      // },
     });
     setLeaveType('');
     setReason('');
@@ -81,43 +155,45 @@ const LeaveAdd = () => {
               Apply Leave
             </Typography>
 
-            <TextField
-              select
-              margin="normal"
-              name="leavetype"
-              // value={inputValues.leave_type}
-              // onChange={handleInputChange}
-              label="Leave Type"
-              //   variant="outlined"
-              fullWidth
-              required
-            >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              <MenuItem value="1">SICK</MenuItem>
-              <MenuItem value="2">PERSONAL</MenuItem>
-            </TextField>
+            <Box /* sx={{ minWidth: 120 }} */>
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">Type</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={leaveType}
+                  label="Leave Type"
+                  onChange={handleLeaveChange}
+                  required
+                >
+                  <MenuItem value="SICK">SICK</MenuItem>
+                  <MenuItem value="PERSONAL">PERSONAL</MenuItem>
+                </Select>
+              </FormControl>
+            </Box>
 
+            {/* <Grid item spacing={6}> */}
             <TextField
+              margin="normal"
               id="reason"
-              // value={description}
+              value={reason}
               label="Reason"
               multiline
-              rows={2}
-              // onChange={handleChange}
+              rows={5}
+              onChange={handleChange}
               fullWidth
               required
             />
+            {/* </Grid> */}
 
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DemoContainer components={['DatePicker']}>
+              <DemoContainer components={['DatePicker']} sx={{ my: 1 }}>
                 <DemoItem component="DatePicker">
                   <DatePicker
                     label="Start Date"
                     minDate={today}
                     maxDate={yesterday}
-                    // value={startDate}
+                    value={startDate}
                     // editable= {false}
                     // onChange={handleDate}
                     onChange={(newValue) => setStartDate(newValue)}
@@ -128,6 +204,7 @@ const LeaveAdd = () => {
                     label="End Date"
                     minDate={today}
                     maxDate={yesterday}
+                    value={endDate}
                     // onBeforeInput={(e) => e.preventDefault()}
                     onChange={(newVal) => setEndDate(newVal)}
                   />
@@ -146,6 +223,19 @@ const LeaveAdd = () => {
             </Button>
           </Paper>
         </Container>
+        <Snackbar
+          open={alertOpen}
+          autoHideDuration={6000}
+          onClose={handleAlertClose}
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'center',
+          }}
+        >
+          <Alert onClose={handleAlertClose} severity={alertSeverity}>
+            {alertMessage}
+          </Alert>
+        </Snackbar>
       </MainLayout>
     </>
   );
