@@ -60,11 +60,12 @@ const Login = () => {
       password: data.password,
     };
     loginAction(loginCredentials, {
-      onSuccess: (value) => {
-        if (value) {
-          setCookie(cookieName, value?.data?.data?.access_token);
-          if (value?.data?.data?.role === 'Employee') {
-            if (value?.data?.data?.employeeDetail) {
+      onSuccess: (data) => {
+        if (data) {
+          setCookie(cookieName, data?.data?.data?.access_token);
+
+          if (data?.data?.data?.role === 'Employee') {
+            if (data?.data?.data?.employeeDetail) {
               navigate(`/`);
             } else {
               navigate('/employeeonboarding');
