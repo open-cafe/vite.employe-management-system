@@ -95,7 +95,7 @@ const EmployeeEdits = () => {
         <Container component="main" maxWidth="sm">
           <Paper variant="outlined" sx={EmployeeOnboardingStyles.container}>
             <Typography component="h1" variant="h4" align="center">
-              Employee Details
+              Employee Profile
             </Typography>
             <TextField
               margin="normal"
