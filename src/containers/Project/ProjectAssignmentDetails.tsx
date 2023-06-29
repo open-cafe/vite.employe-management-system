@@ -33,6 +33,8 @@ interface ProjectDesignation {
   projectAssignmentId: string;
 }
 
+type AlertType = 'success' | 'error' | 'info' | 'warning';
+
 const ProjectAssignmentDetails = ({
   projectAssignmentId,
   isAdmin,
@@ -45,8 +47,6 @@ const ProjectAssignmentDetails = ({
   const [enteredTag, setEnteredTag] = useState<string | null>('');
   const projectDesignationByAssignmentProps = {
     projectAssignmentId,
-    page: 1,
-    limit: 10,
   };
   const {
     projectDesignationData,
@@ -58,9 +58,7 @@ const ProjectAssignmentDetails = ({
   const { tagData, istagLoading } = useTag();
 
   const [alertOpen, setAlertOpen] = useState(false);
-  const [alertSeverity, setAlertSeverity] = useState<
-    'success' | 'error' | 'info' | 'warning'
-  >('success');
+  const [alertSeverity, setAlertSeverity] = useState<AlertType>('success');
   const [alertMessage, setAlertMessage] = useState('');
   const handleAlertClose = () => {
     setAlertOpen(false);

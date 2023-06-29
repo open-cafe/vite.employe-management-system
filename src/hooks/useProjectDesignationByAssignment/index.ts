@@ -7,14 +7,10 @@ import {
 
 interface IProjectDesignationByAssignmentProps {
   projectAssignmentId?: string;
-  page?: number;
-  limit?: number;
 }
 
 const useProjectDesignationByAssignment = ({
   projectAssignmentId,
-  page,
-  limit,
 }: IProjectDesignationByAssignmentProps = {}) => {
   const {
     isSuccess: projectDesignationSuccess,
@@ -22,15 +18,12 @@ const useProjectDesignationByAssignment = ({
     isLoading: projectDesignationLoading,
     isError: projectDesignationError,
   } = useQuery({
-    queryKey: ['project-designation', projectAssignmentId, page, limit],
+    queryKey: ['project-designation', projectAssignmentId],
     queryFn: () =>
-      fetchProjectDesignationByAssignmemt(
-        projectAssignmentId as string,
-        page as number,
-        limit as number
-      ),
-    enabled: !!projectAssignmentId && !!page && !!limit,
+      fetchProjectDesignationByAssignmemt(projectAssignmentId as string),
+    enabled: !!projectAssignmentId,
   });
+
   const {
     mutate: deleteProjectDesignationByAssignmentAction,
     isLoading: deleteProjectDesignationByAssignmentLoading,

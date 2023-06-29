@@ -10,9 +10,7 @@ interface IAddProjectDesignationByAssignment {
 }
 
 export const fetchProjectDesignationByAssignmemt = async (
-  projectAssignmentId: string,
-  page: number,
-  limit: number
+  projectAssignmentId: string
 ) => {
   const data = await axios.get(
     `/project-designations/project-assignments/${projectAssignmentId}`
