@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { cookieName } from '@/constants/environment';
 import { deleteCookie } from '@/utils/authCookies';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
-import axios from 'axios';
+import axios from '@/config/axios';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
@@ -18,11 +18,16 @@ import MenuIcon from '@mui/icons-material/Menu';
 import useSidebarContext from '@/context/sidebar/useSidebarContext';
 import AddCheckInOut from '@/containers/AddCheckInOut';
 import useCurrentUser from '@/hooks/useCurrentUser';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function NavBar() {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const routeChange = async () => {
+    await axios.post('/user/logout');
+    queryClient.removeQueries(['currentUser']);
+
     deleteCookie(cookieName);
     localStorage.clear();
     navigate(`login`);
@@ -62,6 +67,7 @@ export default function NavBar() {
             color="inherit"
             component="div"
             sx={{ flexGrow: 1 }}
+            onClick={() => navigate('/')}
           >
             Employee Management System
           </Typography>
