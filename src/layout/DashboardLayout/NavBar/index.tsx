@@ -18,22 +18,28 @@ import MenuIcon from '@mui/icons-material/Menu';
 import useSidebarContext from '@/context/sidebar/useSidebarContext';
 import AddCheckInOut from '@/containers/AddCheckInOut';
 import useCurrentUser from '@/hooks/useCurrentUser';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function NavBar() {
   const navigate = useNavigate();
-
-  const routeChange = async () => {
-    deleteCookie(cookieName);
-    localStorage.clear();
-    navigate(`login`);
-  };
+  const queryClient = useQueryClient();
   const { currentUserData } = useCurrentUser();
   const role = currentUserData?.data?.data?.role;
+  console.log('from navbar role', role);
 
   let isEmployee = false;
   if (role === 'Employee') {
     isEmployee = true;
   }
+  console.log('from navbar', isEmployee);
+  const routeChange = async () => {
+    await axios.post('http://localhost:3000/user/logout');
+    queryClient.removeQueries(['currentUser']);
+    deleteCookie(cookieName);
+    localStorage.clear();
+    navigate(`login`);
+  };
+
   const toggleSidebar = useSidebarContext();
   const [state, action] = toggleSidebar;
 

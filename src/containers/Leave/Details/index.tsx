@@ -4,11 +4,18 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Button, Grid } from '@mui/material';
-// import useUpdateLeaveStatus from '@/hooks/useUpdateLeaveStatus';
 import useLeave from '@/hooks/useLeave';
+import useCurrentUser from '@/hooks/useCurrentUser';
 
 export default function LeaveDetails() {
   const { leaveId } = useParams();
+  const { currentUserData } = useCurrentUser();
+  const role = currentUserData?.data?.data?.role;
+
+  let isEmployee = false;
+  if (role === 'Employee') {
+    isEmployee = true;
+  }
 
   const navigate = useNavigate();
   const leaveIds = { leaveId };
@@ -51,73 +58,80 @@ export default function LeaveDetails() {
       alignItems="center"
       style={{ height: '90vh' }}
     >
-      <Card sx={{ maxWidth: 800, mx: { ml: 20 } }}>
-        <CardContent sx={{ textAlign: 'left' }}>
-          <CardContent>
-            <Typography sx={{ mb: 1.5 }} color="text.secondary" gutterBottom>
-              Name : {leaveData?.employee?.name}
-            </Typography>
-            <Typography sx={{ mb: 1.5 }} color="text.secondary" gutterBottom>
-              Contact Number : {leaveData?.employee?.phone}
-            </Typography>
-            <Typography sx={{ mb: 1.5 }} color="text.secondary">
-              Designation : {leaveData?.employee?.designation}
-            </Typography>
-            <Typography sx={{ mb: 1.5 }} color="text.secondary">
-              Startdate : {leaveData?.startDate.toLocaleString().slice(0, 10)}
-            </Typography>
-            <Typography sx={{ mb: 1.5 }} color="text.secondary">
-              EndDate : {leaveData?.endDate.toLocaleString().slice(0, 10)}
-            </Typography>
-            <Typography sx={{ mb: 1.5 }} color="text.secondary">
-              Leave Type : {leaveData?.leaveType}
-            </Typography>
-            <Typography sx={{ mb: 1.5 }} color="text.secondary">
-              Reason : {leaveData?.reason}
-            </Typography>
+      {!isEmployee && (
+        <Card sx={{ maxWidth: 800, mx: { ml: 20 } }}>
+          <CardContent sx={{ textAlign: 'left' }}>
+            <CardContent>
+              <Typography sx={{ mb: 1.5 }} color="text.secondary" gutterBottom>
+                Name : {leaveData?.employee?.name}
+              </Typography>
+              <Typography sx={{ mb: 1.5 }} color="text.secondary" gutterBottom>
+                Contact Number : {leaveData?.employee?.phone}
+              </Typography>
+              <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                Designation : {leaveData?.employee?.designation}
+              </Typography>
+              <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                Startdate : {leaveData?.startDate.toLocaleString().slice(0, 10)}
+              </Typography>
+              <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                EndDate : {leaveData?.endDate.toLocaleString().slice(0, 10)}
+              </Typography>
+              <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                Leave Type : {leaveData?.leaveType}
+              </Typography>
+              <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                Reason : {leaveData?.reason}
+              </Typography>
+            </CardContent>
+            {!['Accepted', 'Rejected'].includes(statusValue) && (
+              <Grid
+                container
+                spacing={2}
+                justifyContent="center"
+                alignItems="center"
+                ml={2}
+              >
+                <Grid item xs={6}>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    sx={{ mt: 3, mb: 2 }}
+                    onClick={handleAccept}
+                  >
+                    Accept
+                  </Button>
+                </Grid>
+                <Grid item xs={6}>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    sx={{ mt: 3, mb: 2 }}
+                    onClick={handleReject}
+                  >
+                    Reject
+                  </Button>
+                </Grid>
+              </Grid>
+            )}
+            {statusValue == 'Accepted' && (
+              <div style={{ textAlign: 'center' }}>
+                <span>You have accepted the leave. </span>
+              </div>
+            )}
+            {statusValue == 'Rejected' && (
+              <div style={{ textAlign: 'center' }}>
+                <span>You have rejected the leave. </span>
+              </div>
+            )}
           </CardContent>
-          {!['Accepted', 'Rejected'].includes(statusValue) && (
-            <Grid
-              container
-              spacing={2}
-              justifyContent="center"
-              alignItems="center"
-              ml={2}
-            >
-              <Grid item xs={6}>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  sx={{ mt: 3, mb: 2 }}
-                  onClick={handleAccept}
-                >
-                  Accept
-                </Button>
-              </Grid>
-              <Grid item xs={6}>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  sx={{ mt: 3, mb: 2 }}
-                  onClick={handleReject}
-                >
-                  Reject
-                </Button>
-              </Grid>
-            </Grid>
-          )}
-          {statusValue == 'Accepted' && (
-            <div style={{ textAlign: 'center' }}>
-              <span>You have accepted the leave. </span>
-            </div>
-          )}
-          {statusValue == 'Rejected' && (
-            <div style={{ textAlign: 'center' }}>
-              <span>You have rejected the leave. </span>
-            </div>
-          )}
-        </CardContent>
-      </Card>
+        </Card>
+      )}
+      {isEmployee && (
+        <div style={{ textAlign: 'center' }}>
+          <span>Sorry not allowed. </span>
+        </div>
+      )}
     </Grid>
   );
 }

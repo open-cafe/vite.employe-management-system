@@ -4,21 +4,25 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import { useEffect, useState } from 'react';
 import useCheckInOut from '@/hooks/useCheckinout';
+import useCurrentUser from '@/hooks/useCurrentUser';
 
 const AddCheckInOut = () => {
-  const { latestCheckinData } = useCheckInOut();
-
+  const { currentUserData } = useCurrentUser();
+  const role = currentUserData?.data?.data?.role;
+  let isEmployee = false;
+  if (role === 'Employee') {
+    isEmployee = true;
+  }
+  const employee = { isEmployee };
+  const { latestCheckinData, addCheckInAction, updateCheckInAction } =
+    useCheckInOut(employee);
   const latestCheckOutTime =
     latestCheckinData?.data?.data?.latestData?.checkoutTime;
 
   const [switchState, setSwitchState] = useState(false);
 
-  const { addCheckInAction } = useCheckInOut();
-  const { updateCheckInAction } = useCheckInOut();
-
   const handleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSwitchState(event.target.checked);
-    console.log('false', event.target.checked);
 
     if (event.target.checked) {
       addCheckInAction(undefined, {
@@ -67,22 +71,24 @@ const AddCheckInOut = () => {
 
   return (
     <Box>
-      <FormControlLabel
-        sx={{
-          display: 'block',
-          alignContent: 'center',
-          // color: status === 'Checked-in' ? 'green' : 'white',
-        }}
-        label={status}
-        control={
-          <Switch
-            checked={switchState}
-            onChange={handleSwitchChange}
-            name="checkin"
-            color="success"
-          />
-        }
-      />
+      {isEmployee && (
+        <FormControlLabel
+          sx={{
+            display: 'block',
+            alignContent: 'center',
+            // color: status === 'Checked-in' ? 'green' : 'white',
+          }}
+          label={status}
+          control={
+            <Switch
+              checked={switchState}
+              onChange={handleSwitchChange}
+              name="checkin"
+              color="success"
+            />
+          }
+        />
+      )}
     </Box>
   );
 };

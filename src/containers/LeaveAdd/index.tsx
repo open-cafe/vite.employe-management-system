@@ -3,7 +3,6 @@ import {
   Box,
   Button,
   FormControl,
-  Grid,
   InputLabel,
   //   FormControl,
   //   InputLabel,
@@ -15,7 +14,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import MainLayout from '@/layout/MainLayout';
 
@@ -28,18 +27,10 @@ import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { AxiosError } from 'axios';
-
-// interface ErrorData {
-//   errorObj: {
-//     message: string;
-//     // other properties, if applicable
-//   };
-// }
 
 const LeaveAdd = () => {
   const navigate = useNavigate();
-  const { addLeaveAction, addLeaveLoading } = useLeave();
+  const { addLeaveAction } = useLeave();
 
   const [alertOpen, setAlertOpen] = useState(false);
   const [alertSeverity, setAlertSeverity] = useState<
@@ -97,7 +88,6 @@ const LeaveAdd = () => {
           }
         } else {
           setAlertSeverity('error');
-          // setAlertMessage('Fill in all the fields');
           setAlertOpen(true);
         }
       },
@@ -119,7 +109,7 @@ const LeaveAdd = () => {
               Apply Leave
             </Typography>
 
-            <Box /* sx={{ minWidth: 120 }} */>
+            <Box>
               <FormControl fullWidth>
                 <InputLabel id="demo-simple-select-label">Type</InputLabel>
                 <Select
@@ -136,7 +126,6 @@ const LeaveAdd = () => {
               </FormControl>
             </Box>
 
-            {/* <Grid item spacing={6}> */}
             <TextField
               margin="normal"
               id="reason"
@@ -148,7 +137,6 @@ const LeaveAdd = () => {
               fullWidth
               required
             />
-            {/* </Grid> */}
 
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DemoContainer components={['DatePicker']} sx={{ my: 1 }}>
@@ -158,8 +146,6 @@ const LeaveAdd = () => {
                     minDate={today}
                     maxDate={yesterday}
                     value={startDate}
-                    // editable= {false}
-                    // onChange={handleDate}
                     onChange={(newValue) => setStartDate(newValue)}
                   />
                 </DemoItem>
@@ -169,7 +155,6 @@ const LeaveAdd = () => {
                     minDate={today}
                     maxDate={yesterday}
                     value={endDate}
-                    // onBeforeInput={(e) => e.preventDefault()}
                     onChange={(newVal) => setEndDate(newVal)}
                   />
                 </DemoItem>

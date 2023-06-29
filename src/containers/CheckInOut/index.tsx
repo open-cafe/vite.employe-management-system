@@ -10,6 +10,7 @@ import { TableHead, TablePagination } from '@mui/material';
 import useCheckInOut from '@/hooks/useCheckinout';
 import { useEffect, useState } from 'react';
 import CommonStyles from '@/style/Common.styles';
+import useCurrentUser from '@/hooks/useCurrentUser';
 
 interface Column {
   id: 'name' | 'phone' | 'check_in_time' | 'check_out_time' | 'current_date';
@@ -60,9 +61,16 @@ interface CheckInOut {
 }
 
 const CheckInOut: React.FC = () => {
+  const { currentUserData } = useCurrentUser();
+  const role = currentUserData?.data?.data?.role;
+
+  let isEmployee = false;
+  if (role === 'Employee') {
+    isEmployee = true;
+  }
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const pagination = { page: page + 1, rowsPerPage };
+  const pagination = { page: page + 1, rowsPerPage, isEmployee };
   const { checkInOutSuccess, checkInOutData } = useCheckInOut(pagination);
   const [checkinoutDetail, setCheckInOutDetail] = useState(
     checkInOutData?.data?.data?.data
