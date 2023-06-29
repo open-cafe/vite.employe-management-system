@@ -3,11 +3,10 @@ import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import { Button, Grid, IconButton } from '@mui/material';
+import { IconButton } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { cookieName } from '@/constants/environment';
 import { deleteCookie } from '@/utils/authCookies';
-import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import axios from 'axios';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -25,13 +24,12 @@ export default function NavBar() {
   const queryClient = useQueryClient();
   const { currentUserData } = useCurrentUser();
   const role = currentUserData?.data?.data?.role;
-  console.log('from navbar role', role);
 
   let isEmployee = false;
   if (role === 'Employee') {
     isEmployee = true;
   }
-  console.log('from navbar', isEmployee);
+
   const routeChange = async () => {
     await axios.post('http://localhost:3000/user/logout');
     queryClient.removeQueries(['currentUser']);
