@@ -60,7 +60,6 @@ const EmployeeOnboarding = () => {
         }
       },
       onError: (data) => {
-        console.log('err', data);
         setAlertSeverity('error');
         setAlertMessage('Fill in all the fields');
         setAlertOpen(true);
@@ -69,7 +68,6 @@ const EmployeeOnboarding = () => {
     setEnteredName('');
     setDesignation('');
     setPhone('');
-    // setHireDate('');
   };
 
   return (

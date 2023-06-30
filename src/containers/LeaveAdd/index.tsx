@@ -71,26 +71,9 @@ const LeaveAdd = () => {
         }
       },
       onError: (data) => {
-        if (data !== null) {
-          setAlertSeverity('error');
-          setAlertOpen(true);
-          if (reason.trim() === '') {
-            setAlertMessage('Please enter a reason');
-          }
-          if (leaveType === '') {
-            setAlertMessage('Please select a leave type.');
-          }
-          if (startDate !== null && endDate !== null) {
-            if (startDate > endDate) {
-              setAlertMessage('Start date cannot be greater Than End date');
-            }
-          } else {
-            setAlertMessage('Fill in the date fields');
-          }
-        } else {
-          setAlertSeverity('error');
-          setAlertOpen(true);
-        }
+        setAlertMessage('Already a leave in pending. ');
+        setAlertSeverity('error');
+        setAlertOpen(true);
       },
     });
     setLeaveType('');

@@ -28,7 +28,6 @@ const AddCheckInOut = () => {
       addCheckInAction(undefined, {
         onSuccess: (data) => {
           if (data) {
-            console.log('Employee checked in');
             setStatus('Checked-in');
           }
         },
