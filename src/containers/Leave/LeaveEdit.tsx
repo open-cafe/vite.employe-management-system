@@ -55,7 +55,7 @@ const LeaveEdit = ({
     setOpen(false);
   };
 
-  const today = dayjs();
+  const today = dayjs().add(1, 'day');
   const yesterday = dayjs().add(365, 'day');
   const { updateLeaveAction, updateLeaveLoading } = useLeave();
 
