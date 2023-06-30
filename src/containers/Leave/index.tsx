@@ -26,6 +26,7 @@ import CommonStyles from '@/style/Common.styles';
 
 import { useQueryClient } from '@tanstack/react-query';
 import LeaveEdit from './LeaveEdit';
+import LeaveStyles from '@/style/LeaveStyles';
 
 interface Column {
   id: 'reason' | 'leaveType' | 'startDate' | 'endDate' | 'status' | 'action';
@@ -142,7 +143,7 @@ const Leave: React.FC = () => {
         <div>{leaveError}</div>
       ) : (
         <>
-          <TableContainer sx={{ height: '84vh' }}>
+          <TableContainer sx={LeaveStyles.tableContainer}>
             <Table stickyHeader aria-label="sticky table">
               <TableHead>
                 <TableRow>
@@ -180,6 +181,7 @@ const Leave: React.FC = () => {
                     }
                     return (
                       <TableRow
+                        sx={LeaveStyles.cursorPointer}
                         onClick={() => navigateToConfirmed(leave.leaveId)}
                         hover
                         role="checkbox"

@@ -27,6 +27,7 @@ import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import LeaveStyles from '@/style/LeaveStyles';
 
 const LeaveAdd = () => {
   const navigate = useNavigate();
@@ -101,10 +102,7 @@ const LeaveAdd = () => {
     <>
       <MainLayout>
         <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
-          <Paper
-            variant="outlined"
-            sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
-          >
+          <Paper variant="outlined" sx={LeaveStyles.container}>
             <Typography component="h1" variant="h4" align="center">
               Apply Leave
             </Typography>
