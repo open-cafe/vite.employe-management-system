@@ -92,8 +92,6 @@ const CheckInOut: React.FC = () => {
 
   if (checkInOutSuccess) {
     const total = checkInOutData?.data.data;
-    console.log('checkin', total);
-    console.log('checkin type', typeof total.data.current_date);
 
     return (
       <Paper sx={CommonStyles.paperLayout}>
