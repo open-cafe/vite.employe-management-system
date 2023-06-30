@@ -4,7 +4,10 @@ import userEvent from '@testing-library/user-event';
 
 // To Test
 import ProjectEdit from '@/containers/Project/ProjectEdit';
-import { updateProjectMockData } from '@/utils/mockUtils/mockProjectEdit';
+import {
+  updateProjectErrorMockData,
+  updateProjectMockData,
+} from '@/utils/mockUtils/mockProjectEdit';
 
 jest.mock('@/hooks/useProject');
 
@@ -53,6 +56,7 @@ describe('Project Edit', () => {
     expect(statusInput).toHaveValue('Active');
     waitFor(() => {
       expect(updateButton).not.toBeInTheDocument();
+      expect(screen.getByRole('alert')).toHaveClass('MuiAlert-standardSuccess');
     });
   });
   test('should close dialogbox when clicked cancel', async () => {
@@ -65,6 +69,20 @@ describe('Project Edit', () => {
     await userEvent.click(cancelButton);
     waitFor(() => {
       expect(cancelButton).not.toBeInTheDocument();
+    });
+  });
+
+  test('should show snackbar with error on failure to update project', async () => {
+    updateProjectErrorMockData();
+    renderProjectEdit();
+    const editButton = screen.getByTestId('EditIcon');
+    await userEvent.click(editButton);
+
+    const updateButton = screen.getByRole('button', { name: /Update/i });
+    await userEvent.click(updateButton);
+    waitFor(() => {
+      expect(screen.getByRole('alert')).toHaveClass('MuiAlert-standardError');
+      expect(updateButton).not.toBeInTheDocument();
     });
   });
 });

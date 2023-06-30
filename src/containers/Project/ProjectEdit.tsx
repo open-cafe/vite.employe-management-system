@@ -9,6 +9,8 @@ import {
   TextField,
   DialogActions,
   IconButton,
+  Snackbar,
+  Alert,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
@@ -33,7 +35,14 @@ const ProjectEdit = ({
   const [nameValue, setNameValue] = useState(projectName);
   const [statusValue, setStatusValue] = useState(status);
   const [descriptionValue, setDescriptionValue] = useState(description);
-
+  const [alertOpen, setAlertOpen] = useState(false);
+  const [alertSeverity, setAlertSeverity] = useState<
+    'success' | 'error' | 'info' | 'warning'
+  >('success');
+  const [alertMessage, setAlertMessage] = useState('');
+  const handleAlertClose = () => {
+    setAlertOpen(false);
+  };
   useEffect(() => {
     setNameValue(projectName);
     setStatusValue(status);
@@ -51,13 +60,19 @@ const ProjectEdit = ({
     updateProjectAction(projectDetails, {
       onSuccess: (data) => {
         if (data) {
+          setAlertSeverity('success');
+          setAlertMessage('Project Updated Successfully!!');
+          setAlertOpen(true);
           queryClient.invalidateQueries(['projectById']);
 
           setOpen(false);
         }
       },
-      onError: (data) => {
-        console.log('err', data);
+      onError: () => {
+        setAlertSeverity('error');
+        setAlertMessage('Cannot Edit Project!! Please try again later');
+        setAlertOpen(true);
+        setOpen(false);
       },
     });
   };
@@ -116,6 +131,19 @@ const ProjectEdit = ({
           <Button onClick={() => handleSubmit()}>Update</Button>
         </DialogActions>
       </Dialog>
+      <Snackbar
+        open={alertOpen}
+        autoHideDuration={6000}
+        onClose={handleAlertClose}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+      >
+        <Alert onClose={handleAlertClose} severity={alertSeverity}>
+          {alertMessage}
+        </Alert>
+      </Snackbar>
     </>
   );
 };
