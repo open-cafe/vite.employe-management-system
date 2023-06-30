@@ -63,7 +63,6 @@ const ChangePassword = () => {
   const navigate = useNavigate();
 
   const onSubmit = async (data: formValues) => {
-    console.log(data);
     const changePassowrdCredentials = {
       oldPassword: data.oldPassword,
       newPassword: data.newPassword,
