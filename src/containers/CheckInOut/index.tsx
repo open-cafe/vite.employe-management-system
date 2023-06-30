@@ -57,7 +57,7 @@ interface CheckInOut {
   checkoutTime: Date;
   timeId: string;
   employee: Employees;
-  currenDate: Date;
+  currentDate: Date;
 }
 
 const CheckInOut: React.FC = () => {
@@ -92,6 +92,8 @@ const CheckInOut: React.FC = () => {
 
   if (checkInOutSuccess) {
     const total = checkInOutData?.data.data;
+    console.log('checkin', total);
+    console.log('checkin type', typeof total.data.current_date);
 
     return (
       <Paper sx={CommonStyles.paperLayout}>
@@ -135,7 +137,7 @@ const CheckInOut: React.FC = () => {
                           : '-'}
                       </TableCell>
                       <TableCell align="right" sx={{ minWidth: 170 }}>
-                        {check.currenDate.toLocaleString().slice(0, 10)}
+                        {check.currentDate.toLocaleString().slice(0, 10)}
                       </TableCell>
                     </TableRow>
                   );
