@@ -3,7 +3,6 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  DialogContentText,
   Box,
   FormControl,
   Autocomplete,
@@ -14,7 +13,7 @@ import {
 import { useEffect, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import EditIcon from '@mui/icons-material/Edit';
-import useUpdateProject from '@/hooks/useUpdateProject';
+import useProject from '@/hooks/useProject';
 import CommonStyles from '@/style/Common.styles';
 
 const ProjectEdit = ({
@@ -29,7 +28,7 @@ const ProjectEdit = ({
   projectId: string;
 }) => {
   const queryClient = useQueryClient();
-  const { updateProjectAction, updateProjectLoading } = useUpdateProject();
+  const { updateProjectAction } = useProject();
   const [open, setOpen] = useState(false);
   const [nameValue, setNameValue] = useState(projectName);
   const [statusValue, setStatusValue] = useState(status);
