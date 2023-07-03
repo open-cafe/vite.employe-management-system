@@ -4,6 +4,7 @@ import {
   addProject,
   deleteProject,
   fetchProjectById,
+  updateProject,
 } from './request';
 
 interface IProjectProps {
@@ -13,6 +14,10 @@ interface IProjectProps {
 }
 
 const useProject = ({ projectId, page, limit }: IProjectProps = {}) => {
+  const fetchProjectFilterProps = {
+    page: page as number,
+    limit: limit as number,
+  };
   const {
     isSuccess: projectSuccess,
     data: projectData,
@@ -20,18 +25,21 @@ const useProject = ({ projectId, page, limit }: IProjectProps = {}) => {
     isError: projectError,
   } = useQuery({
     queryKey: ['project', page, limit],
-    queryFn: () => fetchProject(page as number, limit as number),
+    queryFn: () => fetchProject(fetchProjectFilterProps),
     enabled: !!page && !!limit,
   });
 
-  const { mutate: addProjectAction, isLoading: addProjectLoading } =
-    useMutation({
-      mutationFn: (body: {
-        projectName: string;
-        description: string;
-        status: string;
-      }) => addProject(body),
-    });
+  const {
+    mutate: addProjectAction,
+    isLoading: addProjectLoading,
+    isError: addProjectError,
+  } = useMutation({
+    mutationFn: (body: {
+      projectName: string;
+      description: string;
+      status: string;
+    }) => addProject(body),
+  });
 
   const { mutate: deleteProjectAction, isLoading: deleteProjectLoading } =
     useMutation({
@@ -49,6 +57,19 @@ const useProject = ({ projectId, page, limit }: IProjectProps = {}) => {
     enabled: !!projectId,
   });
 
+  const {
+    mutate: updateProjectAction,
+    isLoading: updateProjectLoading,
+    isSuccess: updateProjectSuccess,
+  } = useMutation({
+    mutationFn: (body: {
+      projectId: string;
+      projectName: string;
+      description: string;
+      status: string;
+    }) => updateProject(body),
+  });
+
   return {
     projectSuccess,
     projectData,
@@ -62,6 +83,10 @@ const useProject = ({ projectId, page, limit }: IProjectProps = {}) => {
     projectByIdData,
     projectByIdLoading,
     projectByIdError,
+    updateProjectAction,
+    updateProjectLoading,
+    addProjectError,
+    updateProjectSuccess,
   };
 };
 
