@@ -1,11 +1,5 @@
 import { FC, ReactElement, useEffect } from 'react';
-import {
-  Navigate,
-  Route,
-  RouteProps,
-  Routes,
-  useLocation,
-} from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 
 import PrivateRoutes from '@/components/PrivateRoutes';
 import PublicRoutes from '@/components/PublicRoutes';
@@ -14,7 +8,6 @@ import DashboardLayout from '@/layout/DashboardLayout';
 import Employees from './Employee';
 import Leave from './Leave';
 import Project from './Project';
-import Page from './Page';
 
 import LeaveDetails from './Leave/Details';
 import CheckInOut from './CheckInOut';
@@ -33,6 +26,19 @@ import EmployeeOnBoarding from './EmployeeOnBorading';
 import EmployeeProjects from './EmployeeProjects';
 import EmployeeEdits from './EmployeeEdits';
 import AddCheckInOut from './AddCheckInOut';
+
+interface PageProps {
+  title?: string;
+  component: React.ComponentType;
+}
+
+const Page = ({ title, component: Component }: PageProps) => {
+  useEffect(() => {
+    document.title = 'EMS: '.concat(title || '');
+  }, [title]);
+
+  return <Component />;
+};
 
 const Router: React.FC = () => {
   return (
