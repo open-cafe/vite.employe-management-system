@@ -9,13 +9,10 @@ import useCurrentUser from '@/hooks/useCurrentUser';
 const AddCheckInOut = () => {
   const { currentUserData } = useCurrentUser();
   const role = currentUserData?.data?.data?.role;
-  let isEmployee = false;
-  if (role === 'Employee') {
-    isEmployee = true;
-  }
-  const employee = { isEmployee };
+  const [isEmployee] = useState(role === 'Employee');
+
   const { latestCheckinData, addCheckInAction, updateCheckInAction } =
-    useCheckInOut(employee);
+    useCheckInOut({ isEmployee });
   const latestCheckOutTime =
     latestCheckinData?.data?.data?.latestData?.checkoutTime;
 
@@ -70,24 +67,22 @@ const AddCheckInOut = () => {
 
   return (
     <Box>
-      {isEmployee && (
-        <FormControlLabel
-          sx={{
-            display: 'block',
-            alignContent: 'center',
-            // color: status === 'Checked-in' ? 'green' : 'white',
-          }}
-          label={status}
-          control={
-            <Switch
-              checked={switchState}
-              onChange={handleSwitchChange}
-              name="checkin"
-              color="success"
-            />
-          }
-        />
-      )}
+      <FormControlLabel
+        sx={{
+          display: 'block',
+          alignContent: 'center',
+          // color: status === 'Checked-in' ? 'green' : 'white',
+        }}
+        label={status}
+        control={
+          <Switch
+            checked={switchState}
+            onChange={handleSwitchChange}
+            name="checkin"
+            color="success"
+          />
+        }
+      />
     </Box>
   );
 };

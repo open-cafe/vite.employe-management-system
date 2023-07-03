@@ -1,5 +1,11 @@
-import { FC, useEffect } from 'react';
-import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import { FC, ReactElement, useEffect } from 'react';
+import {
+  Navigate,
+  Route,
+  RouteProps,
+  Routes,
+  useLocation,
+} from 'react-router-dom';
 
 import PrivateRoutes from '@/components/PrivateRoutes';
 import PublicRoutes from '@/components/PublicRoutes';
@@ -8,6 +14,7 @@ import DashboardLayout from '@/layout/DashboardLayout';
 import Employees from './Employee';
 import Leave from './Leave';
 import Project from './Project';
+import Page from './Page';
 
 import LeaveDetails from './Leave/Details';
 import CheckInOut from './CheckInOut';
@@ -27,86 +34,116 @@ import EmployeeProjects from './EmployeeProjects';
 import EmployeeEdits from './EmployeeEdits';
 import AddCheckInOut from './AddCheckInOut';
 
-const Router: FC = () => {
-  const location = useLocation();
-  useEffect(() => {
-    // Update document title on initial render
-    document.title = 'EMS: '.concat(getPageTitle(location.pathname));
-  }, [location.pathname]);
-
-  const getPageTitle = (pathname: string) => {
-    switch (pathname) {
-      case '/':
-        return 'Welcome to EMS';
-      case '/login':
-        return 'Login';
-      case '/leave':
-        return 'Leave Details';
-      case '/employeeonboarding':
-        return 'Employee Details';
-      case '/employeeedit':
-        return 'Employee Profile';
-      case '/employee':
-        return 'Employee Details';
-      case '/project':
-        return 'Project List';
-      case '/leavedetail/:leaveId':
-        return 'Leave Details';
-      case '/adduser':
-        return 'Add User';
-      case '/changepassword':
-        return 'Change Password';
-      case '/projectdetail':
-        return 'Project Details';
-      case '/addproject':
-        return 'Add Project';
-      case '/leaveadd':
-        return 'Apply Leave';
-      case '/employeeprojects':
-        return 'My Project List';
-      case '/checkinout':
-        return 'Checkinout Details';
-      case '/resetpassword':
-        return 'Reset Password';
-      default:
-        return 'EMS';
-    }
-  };
+const Router: React.FC = () => {
   return (
     <Routes>
       <Route path="/" element={<PrivateRoutes />}>
-        <Route path="/employeeonboarding" element={<EmployeeOnBoarding />} />
+        <Route
+          path="/employeeonboarding"
+          element={
+            <Page component={EmployeeOnBoarding} title="Employee Details" />
+          }
+        />
 
-        <Route path="/" element={<DashboardLayout />}>
-          <Route path="/employeeedit" element={<EmployeeEdits />} />
-          <Route index element={<Dashboard />} />
-          <Route path="/employee" element={<Employees />} />
-          <Route path="/leave" element={<Leave />} />
-          <Route path="/project" element={<Project />} />
-          <Route path="/leavedetail/:leaveId" element={<LeaveDetails />} />
-          <Route path="/checkinout" element={<CheckInOut />} />
-          <Route path="/adduser" element={<AddUser />} />
-          <Route path="/changepassword" element={<ChangePassword />} />
-          <Route path="/projectdetail" element={<ProjectDetails />} />
-          <Route path="/addproject" element={<AddProject />} />
-          <Route path="/addcheckinout" element={<AddCheckInOut />} />
+        <Route
+          path="/"
+          element={<Page component={DashboardLayout} title="Welcome" />}
+        >
+          <Route
+            path="/employeeedit"
+            element={
+              <Page component={EmployeeEdits} title="Employee Profile" />
+            }
+          />
+          <Route
+            index
+            element={<Page component={Dashboard} title="Dashboard" />}
+          />
+          <Route
+            path="/employee"
+            element={<Page component={Employees} title="Employee List" />}
+          />
+          <Route
+            path="/leave"
+            element={<Page component={Leave} title="Leave Details" />}
+          />
+          <Route
+            path="/project"
+            element={<Page component={Project} title="Project List" />}
+          />
+          <Route
+            path="/leavedetail/:leaveId"
+            element={<Page component={LeaveDetails} title="Leave Verify" />}
+          />
+          <Route
+            path="/checkinout"
+            element={<Page component={CheckInOut} title="Checkinout Details" />}
+          />
+          <Route
+            path="/adduser"
+            element={<Page component={AddUser} title="Add User" />}
+          />
+          <Route
+            path="/changepassword"
+            element={
+              <Page component={ChangePassword} title="Change Password" />
+            }
+          />
+          <Route
+            path="/projectdetail"
+            element={
+              <Page component={ProjectDetails} title="Project Details" />
+            }
+          />
+          <Route
+            path="/addproject"
+            element={<Page component={AddProject} title="Add Project" />}
+          />
+          <Route
+            path="/addcheckinout"
+            element={<Page component={AddCheckInOut} title="Checkinout" />}
+          />
 
-          <Route path="/leaveadd" element={<LeaveAdd />} />
+          <Route
+            path="/leaveadd"
+            element={<Page component={LeaveAdd} title="Leave Apply" />}
+          />
           <Route
             path="/addprojectassignment"
-            element={<AddProjectAssignment />}
+            element={
+              <Page
+                component={AddProjectAssignment}
+                title="Add Projectassignment"
+              />
+            }
           />
-          <Route path="/employeeprojects" element={<EmployeeProjects />} />
+          <Route
+            path="/employeeprojects"
+            element={
+              <Page component={EmployeeProjects} title="My Project List" />
+            }
+          />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
       <Route path="/" element={<PublicRoutes />}>
-        <Route path="/login" element={<Login />} />
+        <Route
+          path="/login"
+          element={<Page component={Login} title="Login" />}
+        />
         <Route
           path="/sendresetpasswordmail"
-          element={<ResetPassowrdMailForm />}
+          element={
+            <Page
+              component={ResetPassowrdMailForm}
+              title="Reset password Form"
+            />
+          }
         />
-        <Route path="/resetpassword" element={<ResetPassword />} />
+        <Route
+          path="/resetpassword"
+          element={<Page component={ResetPassword} title="Reset Password" />}
+        />
       </Route>
     </Routes>
   );

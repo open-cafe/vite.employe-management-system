@@ -35,6 +35,7 @@ export default function NavBar() {
     queryClient.removeQueries(['currentUser']);
     deleteCookie(cookieName);
     localStorage.clear();
+
     navigate(`login`);
   };
 

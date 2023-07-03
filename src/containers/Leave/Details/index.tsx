@@ -6,16 +6,13 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Button, Grid } from '@mui/material';
 import useLeave from '@/hooks/useLeave';
 import useCurrentUser from '@/hooks/useCurrentUser';
+import { useState } from 'react';
 
 export default function LeaveDetails() {
   const { leaveId } = useParams();
   const { currentUserData } = useCurrentUser();
   const role = currentUserData?.data?.data?.role;
-
-  let isEmployee = false;
-  if (role === 'Employee') {
-    isEmployee = true;
-  }
+  const [isEmployee] = useState(role === 'Employee');
 
   const navigate = useNavigate();
   const leaveIds = { leaveId };

@@ -64,10 +64,7 @@ const CheckInOut: React.FC = () => {
   const { currentUserData } = useCurrentUser();
   const role = currentUserData?.data?.data?.role;
 
-  let isEmployee = false;
-  if (role === 'Employee') {
-    isEmployee = true;
-  }
+  const [isEmployee] = useState(role === 'Employee');
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const pagination = { page: page + 1, rowsPerPage, isEmployee };

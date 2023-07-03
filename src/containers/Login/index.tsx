@@ -13,13 +13,12 @@ import {
 } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import { setCookie } from '../../utils/authCookies';
-
 import { cookieName } from '../../constants/environment';
 import { useEffect, useState } from 'react';
 import LoginLayout from '@/layout/LoginLayout';
 import useAuth from '@/hooks/useAuth';
 
-const Login = () => {
+const Login: React.FC = () => {
   const navigate = useNavigate();
   const { loginAction, loginLoading } = useAuth();
   const [enteredEmail, setEnteredEmail] = useState('');
@@ -65,6 +64,7 @@ const Login = () => {
   };
 
   return (
+    // <Page title="Home">
     <LoginLayout>
       <Card
         variant="outlined"
@@ -140,6 +140,7 @@ const Login = () => {
         </Alert>
       </Snackbar>
     </LoginLayout>
+    // </Page>
   );
 };
 
