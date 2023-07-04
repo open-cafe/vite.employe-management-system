@@ -1,4 +1,3 @@
-import { FC, ReactElement, useEffect } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
 import PrivateRoutes from '@/components/PrivateRoutes';
@@ -8,15 +7,12 @@ import DashboardLayout from '@/layout/DashboardLayout';
 import Employees from './Employee';
 import Leave from './Leave';
 import Project from './Project';
-
 import LeaveDetails from './Leave/Details';
 import CheckInOut from './CheckInOut';
-
 import Login from './Login/index';
 import AddUser from './AddUser';
 import ChangePassword from './ChangePassword';
 import AddProject from './AddProject';
-
 import LeaveAdd from './LeaveAdd';
 import ResetPassowrdMailForm from './ResetPassowrdMailForm';
 import ResetPassword from './ResetPassword';
@@ -26,19 +22,7 @@ import EmployeeOnBoarding from './EmployeeOnBorading';
 import EmployeeProjects from './EmployeeProjects';
 import EmployeeEdits from './EmployeeEdits';
 import AddCheckInOut from './AddCheckInOut';
-
-interface PageProps {
-  title?: string;
-  component: React.ComponentType;
-}
-
-const Page = ({ title, component: Component }: PageProps) => {
-  useEffect(() => {
-    document.title = 'EMS: '.concat(title || '');
-  }, [title]);
-
-  return <Component />;
-};
+import Page from './Page';
 
 const Router: React.FC = () => {
   return (

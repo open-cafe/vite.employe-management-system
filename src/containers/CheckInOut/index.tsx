@@ -97,7 +97,7 @@ const CheckInOut: React.FC = () => {
             <TableHead>
               <TableRow>
                 <TableCell align="center" colSpan={5}>
-                  Checkinout Details
+                  <h2>Checkinout Details</h2>
                 </TableCell>
               </TableRow>
               <TableRow>
