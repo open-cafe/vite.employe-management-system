@@ -26,7 +26,7 @@ const useAdminDashboard = () => {
   } = useQuery({
     queryKey: ['employeeOnLeaveToday'],
     queryFn: () => fetchEmployeeOnLeaveToday(),
-    enabled: false,
+    enabled: true,
   });
   const {
     isSuccess: employeeApplyLeaveTodaySuccess,
@@ -36,7 +36,7 @@ const useAdminDashboard = () => {
   } = useQuery({
     queryKey: ['employeeApplyLeaveToday'],
     queryFn: () => fetchEmployeeApplyLeaveToday(),
-    enabled: false,
+    enabled: true,
   });
 
   const {
@@ -47,7 +47,7 @@ const useAdminDashboard = () => {
   } = useQuery({
     queryKey: ['employeeCount'],
     queryFn: () => fetchEmployeeCount(),
-    enabled: false,
+    enabled: true,
   });
 
   return {
