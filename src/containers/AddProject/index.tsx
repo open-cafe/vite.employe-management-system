@@ -11,8 +11,8 @@ import MainLayout from '@/layout/MainLayout';
 
 import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';
-import useProject from '@/hooks/useProject';
 import ProjectStyles from '@/style/Project.styles';
+import useProject from '@/hooks/useProject';
 
 const AddProject = () => {
   const navigate = useNavigate();

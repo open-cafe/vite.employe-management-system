@@ -19,14 +19,34 @@ import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';
 import useAddEmployee from '@/hooks/useAddEmployee';
 import EmployeeOnboardingStyles from '@/style/EmployeeOnboarding.styles';
+import { useForm } from 'react-hook-form';
+import { DevTool } from '@hookform/devtools';
+import schema from './onboardingSchema';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 const EmployeeOnboarding = () => {
+  type formValues = {
+    employeeName: string;
+    phoneNumber: string;
+  };
+
+  const form = useForm<formValues>({
+    defaultValues: {
+      employeeName: '',
+      phoneNumber: '+977',
+    },
+    resolver: yupResolver(schema),
+    mode: 'onChange',
+  });
+
+  const { register, control, handleSubmit, formState, reset } = form;
+  const { errors, isSubmitting, isValid } = formState;
+
   const navigate = useNavigate();
   const { addEmployeeAction, addEmployeeLoading } = useAddEmployee();
   //herne
   const [designation, setDesignation] = useState('');
-  const [enteredName, setEnteredName] = useState('');
-  const [phone, setPhone] = useState('+977');
+
   // const [hireDate, setHireDate] = useState('');
 
   const [alertOpen, setAlertOpen] = useState(false);
@@ -45,11 +65,11 @@ const EmployeeOnboarding = () => {
       setAlertMessage('Add Designation');
     }
   };
-  const handleSubmit = async () => {
+  const onSubmit = async (data: formValues) => {
     const employeeDetails = {
-      name: enteredName,
+      name: data.employeeName,
       designation: designation,
-      phone: phone,
+      phone: data.phoneNumber,
       // hireDate: hireDate,
     };
 
@@ -65,9 +85,8 @@ const EmployeeOnboarding = () => {
         setAlertOpen(true);
       },
     });
-    setEnteredName('');
+    reset();
     setDesignation('');
-    setPhone('');
   };
 
   return (
@@ -80,67 +99,67 @@ const EmployeeOnboarding = () => {
       >
         <Container component="main" maxWidth="sm">
           <Paper variant="outlined" sx={EmployeeOnboardingStyles.container}>
-            <Typography component="h1" variant="h4" align="center">
-              Employee Details
-            </Typography>
-            <TextField
-              margin="normal"
-              id="employee"
-              name="employee"
-              label="Employee Name"
-              placeholder="George Bush"
-              autoComplete="employee"
-              value={enteredName}
-              onChange={(e) => setEnteredName(e.target.value)}
-              fullWidth
-              required
-            />
+            <form onSubmit={handleSubmit(onSubmit)} noValidate>
+              <Typography component="h1" variant="h4" align="center">
+                Employee Details
+              </Typography>
+              <TextField
+                margin="normal"
+                id="employee"
+                label="Employee Name"
+                placeholder="George Bush"
+                autoComplete="employee"
+                fullWidth
+                {...register('employeeName')}
+                helperText={errors.employeeName?.message}
 
-            <Box /* sx={{ minWidth: 120 }} */>
-              <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">
-                  Designation
-                </InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={designation}
-                  label="Designation"
-                  onChange={handleDesignation}
-                >
-                  <MenuItem value="Frontend">Frontend</MenuItem>
-                  <MenuItem value="Backend ">Backend</MenuItem>
-                  <MenuItem value="Fullstack">Fullstack</MenuItem>
-                  <MenuItem value="Designer">Designer</MenuItem>
-                  <MenuItem value="ProductManager">ProductManager</MenuItem>
-                  <MenuItem value="ProjectManager">ProjectManager</MenuItem>
-                  <MenuItem value="SEO">SEO</MenuItem>
-                </Select>
-              </FormControl>
-            </Box>
+                // required
+              />
 
-            <TextField
-              margin="normal"
-              id="phone"
-              name="phone"
-              label="Phone Number "
-              value={phone}
-              placeholder="+977(10 digit numbers)"
-              onChange={(e) => setPhone(e.target.value)}
-              variant="outlined"
-              fullWidth
-              required
-            />
+              <Box /* sx={{ minWidth: 120 }} */>
+                <FormControl fullWidth>
+                  <InputLabel id="demo-simple-select-label">
+                    Designation
+                  </InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={designation}
+                    label="Designation"
+                    onChange={handleDesignation}
+                  >
+                    <MenuItem value="Frontend">Frontend</MenuItem>
+                    <MenuItem value="Backend ">Backend</MenuItem>
+                    <MenuItem value="Fullstack">Fullstack</MenuItem>
+                    <MenuItem value="Designer">Designer</MenuItem>
+                    <MenuItem value="ProductManager">ProductManager</MenuItem>
+                    <MenuItem value="ProjectManager">ProjectManager</MenuItem>
+                    <MenuItem value="SEO">SEO</MenuItem>
+                  </Select>
+                </FormControl>
+              </Box>
 
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-              onClick={() => handleSubmit()}
-            >
-              Add employee
-            </Button>
+              <TextField
+                margin="normal"
+                id="phone"
+                label="Phone Number "
+                placeholder="+977(10 digit numbers)"
+                variant="outlined"
+                fullWidth
+                {...register('phoneNumber')}
+                helperText={errors.phoneNumber?.message}
+              />
+
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+                // onClick={() => handleSubmit()}
+              >
+                Add employee
+              </Button>
+            </form>
           </Paper>
         </Container>
       </Grid>
@@ -157,6 +176,7 @@ const EmployeeOnboarding = () => {
           {alertMessage}
         </Alert>
       </Snackbar>
+      <DevTool control={control} />
     </MainLayout>
   );
 };

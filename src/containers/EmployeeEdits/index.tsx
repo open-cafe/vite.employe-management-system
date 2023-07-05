@@ -22,12 +22,24 @@ import useEmployeeById from '@/hooks/useEmployeeeById';
 
 import useUpdateEmployee from '@/hooks/useUpdateEmployee';
 import EmployeeOnboardingStyles from '@/style/EmployeeOnboarding.styles';
+import { useForm } from 'react-hook-form';
+import { DevTool } from '@hookform/devtools';
+import schema from './employeeEditSchema';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 const EmployeeEdits = () => {
+  type formValues = {
+    employeeName: string;
+    phoneNumber: string;
+  };
+
   const navigate = useNavigate();
   const { employeeByIdData } = useEmployeeById();
   const employeeData = employeeByIdData?.data.data;
   //   const employeeId = employeeData?.employeeId;
+  const [isEmployeeClicked, setIsEmployeeClicked] = useState(false);
+  const [isPhoneClicked, setIsPhoneClicked] = useState(false);
+
   const name = employeeData?.name;
   const designation = employeeData?.designation;
   const phone = employeeData?.phone;
@@ -42,6 +54,20 @@ const EmployeeEdits = () => {
     setDesignationValue(designation);
     setPhoneValue(phone);
   }, [name, designation, phone]);
+
+  console.log(nameValue);
+
+  const form = useForm<formValues>({
+    defaultValues: {
+      employeeName: '',
+      phoneNumber: '',
+    },
+    resolver: yupResolver(schema),
+    mode: 'onChange',
+  });
+
+  const { register, control, handleSubmit, formState, reset } = form;
+  const { errors, isSubmitting, isValid } = formState;
 
   const [alertOpen, setAlertOpen] = useState(false);
   const [alertSeverity, setAlertSeverity] = useState<
@@ -59,11 +85,11 @@ const EmployeeEdits = () => {
       setAlertMessage('Add Designation');
     }
   };
-  const handleSubmit = async () => {
+  const onSubmit = async (data: formValues) => {
     const employeeDetails = {
-      name: nameValue,
+      name: data.employeeName,
       designation: designationValue,
-      phone: phoneValue,
+      phone: data.phoneNumber,
     };
 
     updateEmployeeAction(employeeDetails, {
@@ -84,6 +110,14 @@ const EmployeeEdits = () => {
     });
   };
 
+  const handleTextFieldClick = () => {
+    setIsEmployeeClicked(true);
+  };
+
+  const handlePhoneFieldClick = () => {
+    setIsPhoneClicked(true);
+  };
+
   return (
     <MainLayout>
       <Grid
@@ -94,66 +128,70 @@ const EmployeeEdits = () => {
       >
         <Container component="main" maxWidth="sm">
           <Paper variant="outlined" sx={EmployeeOnboardingStyles.container}>
-            <Typography component="h1" variant="h4" align="center">
-              Employee Profile
-            </Typography>
-            <TextField
-              margin="normal"
-              id="employee"
-              name="employee"
-              label="Employee Name"
-              placeholder="George Bush"
-              autoComplete="employee"
-              value={nameValue}
-              onChange={(e) => setNameValue(e.target.value)}
-              fullWidth
-              required
-            />
 
-            {/* <Box /* sx={{ minWidth: 120 }} */}
-            <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Designation</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={designationValue}
-                label="Designation"
-                onChange={handleDesignation}
+            <form onSubmit={handleSubmit(onSubmit)} noValidate>
+              <Typography component="h1" variant="h4" align="center">
+                Employee Details
+              </Typography>
+              <TextField
+                margin="normal"
+                id="employee"
+                label={isEmployeeClicked ? 'Enter Employee Name' : name}
+                onClick={handleTextFieldClick}
+                placeholder={name}
+                autoComplete="employee"
+                fullWidth
+                {...register('employeeName')}
+                helperText={errors.employeeName?.message}
+              />
+
+              {/* <Box /* sx={{ minWidth: 120 }} */}
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">
+                  Designation
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={designationValue}
+                  label="Designation"
+                  onChange={handleDesignation}
+                  required
+                >
+                  <MenuItem value="Frontend">Frontend</MenuItem>
+                  <MenuItem value="Backend ">Backend</MenuItem>
+                  <MenuItem value="Fullstack">Fullstack</MenuItem>
+                  <MenuItem value="Designer">Designer</MenuItem>
+                  <MenuItem value="ProductManager">ProductManager</MenuItem>
+                  <MenuItem value="ProjectManager">ProjectManager</MenuItem>
+                  <MenuItem value="SEO">SEO</MenuItem>
+                </Select>
+              </FormControl>
+              {/* </Box> */}
+
+              <TextField
+                margin="normal"
+                id="phone"
+                label={isPhoneClicked ? 'Enter Phone Number' : phone}
+                placeholder={phone}
+                onClick={handlePhoneFieldClick}
+                variant="outlined"
+                fullWidth
+                {...register('phoneNumber')}
+
                 required
+                helperText={errors.phoneNumber?.message}
+              />
+
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
               >
-                <MenuItem value="Frontend">Frontend</MenuItem>
-                <MenuItem value="Backend ">Backend</MenuItem>
-                <MenuItem value="Fullstack">Fullstack</MenuItem>
-                <MenuItem value="Designer">Designer</MenuItem>
-                <MenuItem value="ProductManager">ProductManager</MenuItem>
-                <MenuItem value="ProjectManager">ProjectManager</MenuItem>
-                <MenuItem value="SEO">SEO</MenuItem>
-              </Select>
-            </FormControl>
-            {/* </Box> */}
-
-            <TextField
-              margin="normal"
-              id="phone"
-              name="phone"
-              label="Phone Number "
-              value={phoneValue}
-              //   placeholder="+977(10 digit numbers)"
-              onChange={(e) => setPhoneValue(e.target.value)}
-              variant="outlined"
-              fullWidth
-              required
-            />
-
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-              onClick={() => handleSubmit()}
-            >
-              Update employee
-            </Button>
+                Update employee
+              </Button>
+            </form>
           </Paper>
         </Container>
       </Grid>
@@ -170,6 +208,7 @@ const EmployeeEdits = () => {
           {alertMessage}
         </Alert>
       </Snackbar>
+      <DevTool control={control} />
     </MainLayout>
   );
 };

@@ -10,6 +10,7 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  Typography,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
@@ -19,6 +20,10 @@ import CommonStyles from '@/style/Common.styles';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { useForm, Controller } from 'react-hook-form';
+import { DevTool } from '@hookform/devtools';
+import schema from './LeaveEditSchema';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 interface LeaveEditProps {
   leaveId: string;
@@ -34,6 +39,26 @@ const LeaveEdit = ({
   startDate,
   endDate,
 }: LeaveEditProps) => {
+  type formValues = {
+    type: String;
+    reason: String;
+    startDate: dayjs.Dayjs | null;
+    endDate: dayjs.Dayjs | null;
+  };
+
+  const form = useForm<formValues>({
+    defaultValues: {
+      type: leaveType,
+      reason: '',
+      startDate: startDate,
+      endDate: endDate,
+    },
+    resolver: yupResolver(schema),
+    mode: 'onChange',
+  });
+
+  const { register, control, handleSubmit, formState, reset } = form;
+  const { errors, isSubmitting, isValid } = formState;
   const queryClient = useQueryClient();
 
   const [open, setOpen] = useState(false);
@@ -59,12 +84,12 @@ const LeaveEdit = ({
   const yesterday = dayjs().add(365, 'day');
   const { updateLeaveAction, updateLeaveLoading } = useLeave();
 
-  const handleSubmit = async () => {
+  const onSubmit = async (data: any) => {
     const leaveDetails = {
-      leaveType: leaveTypeValue,
-      startDate: startDateValue,
-      endDate: endDateValue,
-      reason: reasonValue,
+      leaveType: data.type,
+      startDate: data.startDate,
+      endDate: data.endDate,
+      reason: data.reason,
       leaveId,
     };
 
@@ -88,67 +113,92 @@ const LeaveEdit = ({
         Edit
       </Button>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Update Leave</DialogTitle>
-        <DialogContent>
-          <Box paddingTop={2}>
-            <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Type</InputLabel>
-              <Select
-                margin="dense"
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={leaveTypeValue}
-                label="Leave Type"
-                onChange={(newValue) =>
-                  setLeaveTypeValue(newValue.target.value)
-                }
-                required
-              >
-                <MenuItem value="SICK">SICK</MenuItem>
-                <MenuItem value="PERSONAL">PERSONAL</MenuItem>
-              </Select>
-            </FormControl>
-          </Box>
+        <form onSubmit={handleSubmit(onSubmit)} noValidate>
+          <DialogTitle>Update Leave</DialogTitle>
+          <DialogContent>
+            <Box paddingTop={2}>
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">
+                  {leaveType}
+                </InputLabel>
+                <Select
+                  margin="dense"
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  {...register('type')}
+                  required
+                >
+                  <MenuItem value="SICK">SICK</MenuItem>
+                  <MenuItem value="PERSONAL">PERSONAL</MenuItem>
+                </Select>
+              </FormControl>
+            </Box>
 
-          <TextField
-            margin="normal"
-            id="reason"
-            value={reasonValue}
-            label="Reason"
-            multiline
-            rows={5}
-            onChange={(newValue) => setReasonValue(newValue.target.value)}
-            fullWidth
-            required
-          />
+            <TextField
+              margin="normal"
+              id="reason"
+              label={reason}
+              multiline
+              rows={5}
+              fullWidth
+              placeholder="Add Your Leave Reason"
+              {...register('reason')}
+              required
+            />
 
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DemoContainer components={['DatePicker']} sx={{ my: 1 }}>
-              <DemoItem component="DatePicker">
-                <DatePicker
-                  label="Start Date"
-                  minDate={today}
-                  maxDate={yesterday}
-                  value={startDateValue}
-                  onChange={(newVal) => setStartDateValue(newVal)}
-                />
-              </DemoItem>
-              <DemoItem component="DatePicker">
-                <DatePicker
-                  label="End Date"
-                  minDate={today}
-                  maxDate={yesterday}
-                  value={endDateValue}
-                  onChange={(newVal) => setEndDateValue(newVal)}
-                />
-              </DemoItem>
-            </DemoContainer>
-          </LocalizationProvider>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleSubmit}>Update</Button>
-        </DialogActions>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DemoContainer components={['DatePicker']} sx={{ my: 1 }}>
+                <DemoItem component="DatePicker">
+                  <Controller
+                    control={control}
+                    name="startDate"
+                    render={({ field }) => (
+                      <DatePicker
+                        label="Start Date"
+                        minDate={today}
+                        maxDate={yesterday}
+                        value={startDateValue}
+                        onChange={(newValue) => field.onChange(newValue)}
+                      />
+                    )}
+                  />
+                  <Typography
+                    variant="h6"
+                    sx={{ fontSize: '11px', color: 'red' }}
+                  >
+                    {errors.startDate?.message}
+                  </Typography>
+                </DemoItem>
+                <DemoItem component="DatePicker">
+                  <Controller
+                    control={control}
+                    name="endDate"
+                    render={({ field }) => (
+                      <DatePicker
+                        label="End Date"
+                        minDate={today}
+                        maxDate={yesterday}
+                        value={endDateValue}
+                        onChange={(newValue) => field.onChange(newValue)}
+                      />
+                    )}
+                  />
+                  <Typography
+                    variant="h6"
+                    sx={{ fontSize: '11px', color: 'red' }}
+                  >
+                    {errors.endDate?.message}
+                  </Typography>
+                </DemoItem>
+              </DemoContainer>
+            </LocalizationProvider>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>Cancel</Button>
+            <Button type="submit">Update</Button>
+          </DialogActions>
+        </form>
+        <DevTool control={control} />
       </Dialog>
     </>
   );

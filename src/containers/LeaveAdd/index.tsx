@@ -27,9 +27,40 @@ import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import LeaveStyles from '@/style/LeaveStyles';
+
+import { AxiosError } from 'axios';
+import { useForm, Controller } from 'react-hook-form';
+import { DevTool } from '@hookform/devtools';
+import schema from './leaveAddSchema';
+import { yupResolver } from '@hookform/resolvers/yup';
+
+// interface ErrorData {
+//   errorObj: {
+//     message: string;
+//     // other properties, if applicable
+//   };
+// }
+
 
 const LeaveAdd = () => {
+  type formValues = {
+    type: String;
+    reason: String;
+    startDate: Object;
+    endDate: Object;
+  };
+
+  const form = useForm<formValues>({
+    defaultValues: {
+      type: '',
+      reason: '',
+    },
+    resolver: yupResolver(schema),
+    mode: 'onChange',
+  });
+
+  const { register, control, handleSubmit, formState, reset } = form;
+  const { errors, isSubmitting, isValid } = formState;
   const navigate = useNavigate();
   const { addLeaveAction } = useLeave();
 
@@ -56,12 +87,13 @@ const LeaveAdd = () => {
     setLeaveType(event.target.value as string);
   };
 
-  const handleSubmit = async () => {
+  const onSubmit = async (data: any) => {
+    console.log(data);
     const leaveDetails = {
-      leaveType: leaveType,
-      reason: reason,
-      startDate: startDate || dayjs(),
-      endDate: endDate || dayjs(),
+      leaveType: data.type,
+      reason: data.reason,
+      startDate: data.startDate || dayjs(),
+      endDate: data.endDate || dayjs(),
     };
 
     addLeaveAction(leaveDetails, {
@@ -85,72 +117,117 @@ const LeaveAdd = () => {
     <>
       <MainLayout>
         <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
-          <Paper variant="outlined" sx={LeaveStyles.container}>
-            <Typography component="h1" variant="h4" align="center">
-              Apply Leave
-            </Typography>
 
-            <Box>
-              <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">Type</InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={leaveType}
-                  label="Leave Type"
-                  onChange={handleLeaveChange}
-                  required
+          <Paper
+            variant="outlined"
+            sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
+          >
+            <form onSubmit={handleSubmit(onSubmit)} noValidate>
+              <Typography component="h1" variant="h4" align="center">
+                Apply Leave
+              </Typography>
+
+              <Box /* sx={{ minWidth: 120 }} */>
+                <FormControl fullWidth>
+                  <InputLabel id="demo-simple-select-label">Type</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    label="Leave Type"
+                    required
+                    {...register('type')}
+                  >
+                    <MenuItem value="SICK">SICK</MenuItem>
+                    <MenuItem value="PERSONAL">PERSONAL</MenuItem>
+                  </Select>
+                </FormControl>
+                <Typography
+                  variant="h6"
+                  sx={{ fontSize: '11px', color: 'red' }}
                 >
-                  <MenuItem value="SICK">SICK</MenuItem>
-                  <MenuItem value="PERSONAL">PERSONAL</MenuItem>
-                </Select>
-              </FormControl>
-            </Box>
+                  {errors.type?.message}
+                </Typography>
+              </Box>
 
-            <TextField
-              margin="normal"
-              id="reason"
-              value={reason}
-              label="Reason"
-              multiline
-              rows={5}
-              onChange={handleChange}
-              fullWidth
-              required
-            />
+              {/* <Grid item spacing={6}> */}
+              <TextField
+                margin="normal"
+                id="reason"
+                label="Reason"
+                multiline
+                rows={5}
+                fullWidth
+                {...register('reason')}
+                helperText={errors.reason?.message}
+              />
+              {/* </Grid> */}
 
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DemoContainer components={['DatePicker']} sx={{ my: 1 }}>
-                <DemoItem component="DatePicker">
-                  <DatePicker
-                    label="Start Date"
-                    minDate={today}
-                    maxDate={yesterday}
-                    value={startDate}
-                    onChange={(newValue) => setStartDate(newValue)}
-                  />
-                </DemoItem>
-                <DemoItem component="DatePicker">
-                  <DatePicker
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DemoContainer components={['DatePicker']} sx={{ my: 1 }}>
+                  <DemoItem component="DatePicker">
+                    <Controller
+                      control={control}
+                      name="startDate"
+                      render={({ field }) => (
+                        <DatePicker
+                          label="Start Date"
+                          minDate={today}
+                          maxDate={yesterday}
+                          value={field.value}
+                          onChange={(newValue) => field.onChange(newValue)}
+                        />
+                      )}
+                    />
+                    <Typography
+                      variant="h6"
+                      sx={{ fontSize: '11px', color: 'red' }}
+                    >
+                      {errors.startDate?.message}
+                    </Typography>
+                  </DemoItem>
+                  <DemoItem component="DatePicker">
+                    <Controller
+                      control={control}
+                      name="endDate"
+                      render={({ field }) => (
+                        <DatePicker
+                          label="End Date"
+                          minDate={today}
+                          maxDate={yesterday}
+                          value={field.value}
+                          onChange={(newVal) => field.onChange(newVal)}
+                        />
+                      )}
+                    />
+                    <Typography
+                      variant="h6"
+                      sx={{ fontSize: '11px', color: 'red' }}
+                    >
+                      {errors.endDate?.message}
+                    </Typography>
+
+                    {/* <DatePicker
+
                     label="End Date"
                     minDate={today}
                     maxDate={yesterday}
                     value={endDate}
                     onChange={(newVal) => setEndDate(newVal)}
-                  />
-                </DemoItem>
-              </DemoContainer>
-            </LocalizationProvider>
+                  /> */}
+                  </DemoItem>
+                </DemoContainer>
+              </LocalizationProvider>
 
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-              onClick={() => handleSubmit()}
-            >
-              Add Leave
-            </Button>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+                // onClick={() => onSubmit()}
+              >
+                Add Leave
+              </Button>
+            </form>
           </Paper>
         </Container>
         <Snackbar
@@ -166,6 +243,7 @@ const LeaveAdd = () => {
             {alertMessage}
           </Alert>
         </Snackbar>
+        <DevTool control={control} />
       </MainLayout>
     </>
   );

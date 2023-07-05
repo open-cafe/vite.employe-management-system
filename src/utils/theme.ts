@@ -15,5 +15,15 @@ const theme = createTheme({
   typography: {
     fontFamily: 'Nunito, sans-serif',
   },
+  components: {
+    MuiFormHelperText: {
+      styleOverrides: {
+        root: {
+          marginLeft: '5px',
+          color: 'red !important',
+        },
+      },
+    },
+  },
 });
 export default theme;
