@@ -50,9 +50,6 @@ interface Project {
 
 const EmployeeProjects: React.FC = () => {
   const navigate = useNavigate();
-  // const { currentUserError, currentUserData, currentUserLoading } =
-  // useCurrentUser();
-  // const role = currentUserData?.data?.data?.getCurrentUser.role;
   const navigateToConfirmed = (project: Project) => {
     navigate(`/projectdetail`, { state: project });
   };

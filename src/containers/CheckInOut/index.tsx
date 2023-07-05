@@ -10,6 +10,7 @@ import { TableHead, TablePagination } from '@mui/material';
 import useCheckInOut from '@/hooks/useCheckinout';
 import { useEffect, useState } from 'react';
 import CommonStyles from '@/style/Common.styles';
+import useCurrentUser from '@/hooks/useCurrentUser';
 
 interface Column {
   id: 'name' | 'phone' | 'check_in_time' | 'check_out_time' | 'current_date';
@@ -56,13 +57,17 @@ interface CheckInOut {
   checkoutTime: Date;
   timeId: string;
   employee: Employees;
-  currenDate: Date;
+  currentDate: Date;
 }
 
 const CheckInOut: React.FC = () => {
+  const { currentUserData } = useCurrentUser();
+  const role = currentUserData?.data?.data?.role;
+
+  const [isEmployee] = useState(role === 'Employee');
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const pagination = { page: page + 1, rowsPerPage };
+  const pagination = { page: page + 1, rowsPerPage, isEmployee };
   const { checkInOutSuccess, checkInOutData } = useCheckInOut(pagination);
   const [checkinoutDetail, setCheckInOutDetail] = useState(
     checkInOutData?.data?.data?.data
@@ -92,7 +97,7 @@ const CheckInOut: React.FC = () => {
             <TableHead>
               <TableRow>
                 <TableCell align="center" colSpan={5}>
-                  Checkinout Details
+                  <h2>Checkinout Details</h2>
                 </TableCell>
               </TableRow>
               <TableRow>
@@ -127,7 +132,7 @@ const CheckInOut: React.FC = () => {
                           : '-'}
                       </TableCell>
                       <TableCell align="right" sx={{ minWidth: 170 }}>
-                        {check.currenDate.toLocaleString().slice(0, 10)}
+                        {check.currentDate.toLocaleString().slice(0, 10)}
                       </TableCell>
                     </TableRow>
                   );

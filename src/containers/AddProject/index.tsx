@@ -11,12 +11,12 @@ import MainLayout from '@/layout/MainLayout';
 
 import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';
-import useAddProject from '@/hooks/useAddProject';
+import useProject from '@/hooks/useProject';
 import ProjectStyles from '@/style/Project.styles';
 
 const AddProject = () => {
   const navigate = useNavigate();
-  const { addProjectAction, addProjectLoading } = useAddProject();
+  const { addProjectAction, addProjectLoading } = useProject();
 
   const [description, setDescription] = useState('');
   const [projectStatus, setProjectStatus] = useState('');
