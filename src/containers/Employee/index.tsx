@@ -97,7 +97,7 @@ const Employees: React.FC = () => {
               <TableHead>
                 <TableRow>
                   <TableCell align="center" colSpan={4}>
-                    Employee Details
+                    <h2>Employee Details</h2>
                   </TableCell>
                 </TableRow>
                 <TableRow>

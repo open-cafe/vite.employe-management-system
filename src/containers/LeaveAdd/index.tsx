@@ -3,7 +3,6 @@ import {
   Box,
   Button,
   FormControl,
-  Grid,
   InputLabel,
   //   FormControl,
   //   InputLabel,
@@ -15,7 +14,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import MainLayout from '@/layout/MainLayout';
 
@@ -28,6 +27,7 @@ import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+
 import { AxiosError } from 'axios';
 import { useForm, Controller } from 'react-hook-form';
 import { DevTool } from '@hookform/devtools';
@@ -40,6 +40,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 //     // other properties, if applicable
 //   };
 // }
+
 
 const LeaveAdd = () => {
   type formValues = {
@@ -61,7 +62,7 @@ const LeaveAdd = () => {
   const { register, control, handleSubmit, formState, reset } = form;
   const { errors, isSubmitting, isValid } = formState;
   const navigate = useNavigate();
-  const { addLeaveAction, addLeaveLoading } = useLeave();
+  const { addLeaveAction } = useLeave();
 
   const [alertOpen, setAlertOpen] = useState(false);
   const [alertSeverity, setAlertSeverity] = useState<
@@ -72,7 +73,7 @@ const LeaveAdd = () => {
     setAlertOpen(false);
   };
 
-  const today = dayjs();
+  const today = dayjs().add(1, 'day');
   const yesterday = dayjs().add(365, 'day');
 
   const [leaveType, setLeaveType] = useState('');
@@ -102,27 +103,9 @@ const LeaveAdd = () => {
         }
       },
       onError: (data) => {
-        if (data !== null) {
-          setAlertSeverity('error');
-          setAlertOpen(true);
-          if (reason.trim() === '') {
-            setAlertMessage('Please enter a reason');
-          }
-          if (leaveType === '') {
-            setAlertMessage('Please select a leave type.');
-          }
-          if (startDate !== null && endDate !== null) {
-            if (startDate > endDate) {
-              setAlertMessage('Start date cannot be greater Than End date');
-            }
-          } else {
-            setAlertMessage('Fill in the date fields');
-          }
-        } else {
-          setAlertSeverity('error');
-          // setAlertMessage('Fill in all the fields');
-          setAlertOpen(true);
-        }
+        setAlertMessage('Already a leave in pending. ');
+        setAlertSeverity('error');
+        setAlertOpen(true);
       },
     });
     setLeaveType('');
@@ -134,6 +117,7 @@ const LeaveAdd = () => {
     <>
       <MainLayout>
         <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
+
           <Paper
             variant="outlined"
             sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
@@ -223,11 +207,11 @@ const LeaveAdd = () => {
                     </Typography>
 
                     {/* <DatePicker
+
                     label="End Date"
                     minDate={today}
                     maxDate={yesterday}
                     value={endDate}
-                    // onBeforeInput={(e) => e.preventDefault()}
                     onChange={(newVal) => setEndDate(newVal)}
                   /> */}
                   </DemoItem>

@@ -11,7 +11,6 @@ import MainLayout from '@/layout/MainLayout';
 
 import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';
-
 import ProjectStyles from '@/style/Project.styles';
 import useProject from '@/hooks/useProject';
 

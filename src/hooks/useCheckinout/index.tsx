@@ -9,9 +9,10 @@ import {
 interface CheckProps {
   page?: number;
   rowsPerPage?: number;
+  isEmployee?: boolean;
 }
 
-const useCheckInOut = ({ page, rowsPerPage }: CheckProps = {}) => {
+const useCheckInOut = ({ page, rowsPerPage, isEmployee }: CheckProps = {}) => {
   const {
     isSuccess: checkInOutSuccess,
     data: checkInOutData,
@@ -32,9 +33,9 @@ const useCheckInOut = ({ page, rowsPerPage }: CheckProps = {}) => {
     data: latestCheckinData,
     isLoading: latestCheckInLoading,
   } = useQuery({
-    queryKey: ['checkinoutlatest'],
+    queryKey: ['checkinoutlatest', isEmployee],
     queryFn: () => fetchLatestCheckIn(),
-    // enabled: false,
+    enabled: isEmployee,
   });
 
   const { mutate: updateCheckInAction, isLoading: updateCheckInLoading } =

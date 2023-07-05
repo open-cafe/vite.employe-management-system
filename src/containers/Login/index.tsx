@@ -13,7 +13,9 @@ import {
 } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import { setCookie } from '../../utils/authCookies';
+
 import { useForm } from 'react-hook-form';
+
 import { cookieName } from '../../constants/environment';
 import { useEffect, useState } from 'react';
 import LoginLayout from '@/layout/LoginLayout';
@@ -40,6 +42,9 @@ const Login = () => {
 
   const { register, control, handleSubmit, formState } = form;
   const { errors, isSubmitting, isValid } = formState;
+
+
+
 
   const navigate = useNavigate();
   const { loginAction, loginLoading } = useAuth();
@@ -84,6 +89,7 @@ const Login = () => {
   };
 
   return (
+    // <Page title="Home">
     <LoginLayout>
       <Card
         variant="outlined"
@@ -174,6 +180,7 @@ const Login = () => {
       </Snackbar>
       <DevTool control={control} />
     </LoginLayout>
+    // </Page>
   );
 };
 

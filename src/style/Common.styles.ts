@@ -11,7 +11,7 @@ const CommonStyles = {
   },
 
   paperLayout: {
-    height: 'calc(90vh)',
+    height: 'calc(91vh)',
   },
   paperAndCard: {
     width: '100%',

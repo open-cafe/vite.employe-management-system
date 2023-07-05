@@ -128,6 +128,7 @@ const EmployeeEdits = () => {
       >
         <Container component="main" maxWidth="sm">
           <Paper variant="outlined" sx={EmployeeOnboardingStyles.container}>
+
             <form onSubmit={handleSubmit(onSubmit)} noValidate>
               <Typography component="h1" variant="h4" align="center">
                 Employee Details
@@ -177,6 +178,7 @@ const EmployeeEdits = () => {
                 variant="outlined"
                 fullWidth
                 {...register('phoneNumber')}
+
                 required
                 helperText={errors.phoneNumber?.message}
               />
