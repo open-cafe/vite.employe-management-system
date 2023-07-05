@@ -55,13 +55,18 @@ const ProjectDetail = () => {
   const queryClient = useQueryClient();
   const { state } = useLocation();
   const { currentUserData, currentUserLoading } = useCurrentUser();
+  const projectAssignmentProps = {
+    projectId: state.projectId,
+    page: 1,
+    limit: 10,
+  };
   const {
     projectAssignmentLoading,
     projectAssignmentData,
     projectAssignmentError,
     addProjectAssignmentAction,
     deleteProjectAssignmentAction,
-  } = useProjectAssignments(state.projectId, 1, 10);
+  } = useProjectAssignments(projectAssignmentProps);
 
   const navigate = useNavigate();
   const { allEmployeeData, allEmployeeDataLoading } = useAllEmployee();
@@ -104,7 +109,7 @@ const ProjectDetail = () => {
     if (value) setEnteredEmployee(value.id);
     else setEnteredEmployee('');
   };
-  const Role = currentUserData?.data?.data?.getCurrentUser.role;
+  const Role = currentUserData?.data?.data?.role;
   let isAdmin = false;
   if (Role === 'SuperAdmin' || Role === 'Admin') {
     isAdmin = true;

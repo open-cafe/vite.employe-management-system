@@ -16,6 +16,7 @@ import {
 } from '@mui/material';
 import useEmployee from '@/hooks/useEmployee';
 import { useEffect, useState } from 'react';
+import CommonStyles from '@/style/Common.styles';
 
 interface Column {
   id: 'name' | 'designation' | 'phone' | 'hireDate';
@@ -77,7 +78,7 @@ const Employees: React.FC = () => {
   const total = data?.data.data;
 
   return (
-    <Paper sx={{ height: 'calc(100vh - 80px)', background: '#f7f7f7' }}>
+    <Paper sx={CommonStyles.paperLayout}>
       {employeeLoading ? (
         <Box
           display="flex"
@@ -96,7 +97,7 @@ const Employees: React.FC = () => {
               <TableHead>
                 <TableRow>
                   <TableCell align="center" colSpan={4}>
-                    Employee Details
+                    <h2>Employee Details</h2>
                   </TableCell>
                 </TableRow>
                 <TableRow>

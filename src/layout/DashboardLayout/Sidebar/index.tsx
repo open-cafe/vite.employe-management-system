@@ -1,4 +1,3 @@
-import List from '@mui/material/List';
 import * as React from 'react';
 import ListItemButton from '@mui/material/ListItemButton';
 import {
@@ -13,7 +12,6 @@ import Grid from '@mui/material/Grid';
 import { useNavigate } from 'react-router-dom';
 import useCurrentUser from '@/hooks/useCurrentUser';
 import SideBarStyles from '@/style/SideBar.styles';
-
 import useSidebarContext from '@/context/sidebar/useSidebarContext';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
@@ -23,18 +21,20 @@ const SideBar = () => {
   const navigate = useNavigate();
   const { currentUserError, currentUserData, currentUserLoading } =
     useCurrentUser();
-  const role = currentUserData?.data?.data?.getCurrentUser.role;
+  const role = currentUserData?.data?.data?.role;
   const toggleSidebar = useSidebarContext();
 
   const [state, action] = toggleSidebar;
 
   const renderSidebarItems = () => {
-    if (role === 'SuperAdmin') {
+    if (role === 'SuperAdmin' || role === 'Admin') {
       return (
         <Box>
           <ListItemButton
             sx={SideBarStyles.listButtonStyle}
-            onClick={() => action?.setShowSidebar(false)}
+            onClick={() =>
+              action?.setShowSidebar && action?.setShowSidebar(false)
+            }
           >
             <ListItemIcon sx={{ color: 'white' }}>
               <ArrowBackIcon sx={{ fontSize: 18 }} />
@@ -46,7 +46,7 @@ const SideBar = () => {
           <ListItemButton
             onClick={() => {
               navigate('employee');
-              action?.setShowSidebar(false);
+              action?.setShowSidebar && action?.setShowSidebar(false);
             }}
           >
             <ListItemText
@@ -57,7 +57,7 @@ const SideBar = () => {
           <ListItemButton
             onClick={() => {
               navigate('leave');
-              action?.setShowSidebar(false);
+              action?.setShowSidebar && action?.setShowSidebar(false);
             }}
           >
             <ListItemText sx={SideBarStyles.listTextStyle} primary="Leave" />
@@ -65,18 +65,15 @@ const SideBar = () => {
           <ListItemButton
             onClick={() => {
               navigate('project');
-              action?.setShowSidebar(false);
+              action?.setShowSidebar && action?.setShowSidebar(false);
             }}
           >
-            <ListItemText
-              sx={{ width: 200, color: 'white' }}
-              primary="Project"
-            />
+            <ListItemText sx={SideBarStyles.listTextStyle} primary="Project" />
           </ListItemButton>
           <ListItemButton
             onClick={() => {
               navigate('checkinout');
-              action?.setShowSidebar(false);
+              action?.setShowSidebar && action?.setShowSidebar(false);
             }}
           >
             <ListItemText
@@ -87,7 +84,7 @@ const SideBar = () => {
           <ListItemButton
             onClick={() => {
               navigate('adduser');
-              action?.setShowSidebar(false);
+              action?.setShowSidebar && action?.setShowSidebar(false);
             }}
           >
             <ListItemText sx={SideBarStyles.listTextStyle} primary="AddUser" />
@@ -95,7 +92,7 @@ const SideBar = () => {
           <ListItemButton
             onClick={() => {
               navigate('addproject');
-              action?.setShowSidebar(false);
+              action?.setShowSidebar && action?.setShowSidebar(false);
             }}
           >
             <ListItemText
@@ -110,7 +107,9 @@ const SideBar = () => {
         <Box>
           <ListItemButton
             sx={SideBarStyles.listButtonStyle}
-            onClick={() => action?.setShowSidebar(false)}
+            onClick={() =>
+              action?.setShowSidebar && action?.setShowSidebar(false)
+            }
           >
             <ListItemIcon sx={{ color: 'white' }}>
               <ArrowBackIcon sx={{ fontSize: 18 }} />
@@ -119,20 +118,43 @@ const SideBar = () => {
               Back
             </Typography>
           </ListItemButton>
-          <ListItemButton sx={SideBarStyles.listButtonStyle}>
+          <ListItemButton
+            onClick={() => {
+              navigate('leaveadd');
+              action?.setShowSidebar && action?.setShowSidebar(false);
+            }}
+          >
             <ListItemText
               sx={SideBarStyles.listTextStyle}
               primary="ApplyLeave"
             />
           </ListItemButton>
-          <ListItemButton>
+          <ListItemButton
+            onClick={() => {
+              navigate('project');
+              action?.setShowSidebar && action?.setShowSidebar(false);
+            }}
+          >
             <ListItemText sx={SideBarStyles.listTextStyle} primary="Project" />
           </ListItemButton>
-          <ListItemButton>
+          <ListItemButton
+            onClick={() => {
+              navigate('employeeprojects');
+              action?.setShowSidebar && action?.setShowSidebar(false);
+            }}
+          >
             <ListItemText
               sx={SideBarStyles.listTextStyle}
-              primary="CheckInOut"
+              primary="My Projects"
             />
+          </ListItemButton>
+          <ListItemButton
+            onClick={() => {
+              navigate('leave');
+              action?.setShowSidebar && action?.setShowSidebar(false);
+            }}
+          >
+            <ListItemText sx={SideBarStyles.listTextStyle} primary="Leave" />
           </ListItemButton>
         </Box>
       );
@@ -149,8 +171,10 @@ const SideBar = () => {
           },
         }}
         anchor={'left'}
-        open={state.showSidebar}
-        onClose={() => action?.setShowSidebar(false)}
+        open={state?.showSidebar ?? false}
+        onClose={() => {
+          action?.setShowSidebar && action.setShowSidebar(false);
+        }}
       >
         {renderSidebarItems()}
       </Drawer>

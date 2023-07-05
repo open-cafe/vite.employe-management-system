@@ -11,11 +11,12 @@ import MainLayout from '@/layout/MainLayout';
 
 import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';
-import useAddProject from '@/hooks/useAddProject';
+import ProjectStyles from '@/style/Project.styles';
+import useProject from '@/hooks/useProject';
 
 const AddProject = () => {
   const navigate = useNavigate();
-  const { addProjectAction, addProjectLoading } = useAddProject();
+  const { addProjectAction, addProjectLoading } = useProject();
 
   const [description, setDescription] = useState('');
   const [projectStatus, setProjectStatus] = useState('');
@@ -69,10 +70,7 @@ const AddProject = () => {
   return (
     <MainLayout>
       <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
-        <Paper
-          variant="outlined"
-          sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
-        >
+        <Paper variant="outlined" sx={ProjectStyles.container}>
           <Typography component="h1" variant="h4" align="center">
             Add Project
           </Typography>
@@ -93,8 +91,8 @@ const AddProject = () => {
             required
           />
           <Autocomplete
-            sx={{ mt: 2, mb: 2 }}
-            disablePortal
+            sx={{ my: 2 }}
+            // disablePortal
             id="projectstatus-combo-box"
             options={['Active', 'Completed', 'Cancelled', 'OnHold']}
             fullWidth

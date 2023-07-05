@@ -3,11 +3,10 @@ import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import { Button, Grid, IconButton } from '@mui/material';
+import { IconButton } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { cookieName } from '@/constants/environment';
 import { deleteCookie } from '@/utils/authCookies';
-import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import axios from 'axios';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -16,19 +15,32 @@ import PersonIcon from '@mui/icons-material/Person';
 import NavbarStyles from '@/style/Navbar.styles';
 import MenuIcon from '@mui/icons-material/Menu';
 import useSidebarContext from '@/context/sidebar/useSidebarContext';
+import AddCheckInOut from '@/containers/AddCheckInOut';
+import useCurrentUser from '@/hooks/useCurrentUser';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function NavBar() {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const { currentUserData } = useCurrentUser();
+  const role = currentUserData?.data?.data?.role;
+
+  let isEmployee = false;
+  if (role === 'Employee') {
+    isEmployee = true;
+  }
 
   const routeChange = async () => {
-    // const res = await axios.post('http://localhost:3000/user/logout');
+    await axios.post('http://localhost:3000/user/logout');
+    queryClient.removeQueries(['currentUser']);
     deleteCookie(cookieName);
+    localStorage.clear();
+
     navigate(`login`);
   };
 
   const toggleSidebar = useSidebarContext();
   const [state, action] = toggleSidebar;
-  console.log(state, action);
 
   return (
     <Box sx={{ position: 'relative', flexGrow: 1, zIndex: 999 }}>
@@ -41,7 +53,10 @@ export default function NavBar() {
             aria-label="menu"
             sx={{ mr: 2, alignContent: 'items-center' }}
             onClick={() => {
-              action?.setShowSidebar(!state.showSidebar);
+              if (state) {
+                action?.setShowSidebar &&
+                  action?.setShowSidebar(!state.showSidebar);
+              }
             }}
           >
             <MenuIcon />
@@ -57,6 +72,8 @@ export default function NavBar() {
           </Typography>
 
           {/* <Grid item xs={12} sm={1} md={1} lg={1} xl={1}> */}
+          {isEmployee && <AddCheckInOut />}
+
           <PopupState variant="popover" popupId="demo-popup-menu">
             {(popupState) => (
               <React.Fragment>
@@ -68,7 +85,12 @@ export default function NavBar() {
                 </IconButton>
 
                 <Menu {...bindMenu(popupState)}>
-                  <MenuItem onClick={popupState.close}>Profile</MenuItem>
+                  {isEmployee && (
+                    <MenuItem onClick={() => navigate('employeeedit')}>
+                      Profile
+                    </MenuItem>
+                  )}
+
                   <MenuItem onClick={() => navigate('changepassword')}>
                     Change Password
                   </MenuItem>
