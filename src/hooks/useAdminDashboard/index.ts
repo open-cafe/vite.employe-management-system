@@ -6,7 +6,7 @@ import {
   fetchProjectByStatus,
 } from './request';
 
-const useAdminDashboard = () => {
+const useAdminDashboard = (isAdmin: boolean = false) => {
   const {
     isSuccess: projectBystatusSuccess,
     data: projectBystatusData,
@@ -15,7 +15,7 @@ const useAdminDashboard = () => {
   } = useQuery({
     queryKey: ['allprojectbystatus'],
     queryFn: () => fetchProjectByStatus(),
-    enabled: true,
+    enabled: isAdmin,
   });
 
   const {
@@ -26,7 +26,7 @@ const useAdminDashboard = () => {
   } = useQuery({
     queryKey: ['employeeOnLeaveToday'],
     queryFn: () => fetchEmployeeOnLeaveToday(),
-    enabled: true,
+    enabled: isAdmin,
   });
   const {
     isSuccess: employeeApplyLeaveTodaySuccess,
@@ -36,7 +36,7 @@ const useAdminDashboard = () => {
   } = useQuery({
     queryKey: ['employeeApplyLeaveToday'],
     queryFn: () => fetchEmployeeApplyLeaveToday(),
-    enabled: true,
+    enabled: isAdmin,
   });
 
   const {
@@ -47,7 +47,7 @@ const useAdminDashboard = () => {
   } = useQuery({
     queryKey: ['employeeCount'],
     queryFn: () => fetchEmployeeCount(),
-    enabled: true,
+    enabled: isAdmin,
   });
 
   return {
