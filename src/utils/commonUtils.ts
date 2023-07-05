@@ -12,3 +12,18 @@ export const returnTagColor = (tagName: string) => {
       return '#2196f3';
   }
 };
+
+export const returnCardColor = (projectName: string) => {
+  switch (projectName) {
+    case 'Active':
+      return '#1dd1b3';
+    case 'Completed':
+      return '#4caf50';
+    case 'Cancelled':
+      return '#e7413c';
+    case 'OnHold':
+      return '#ff9800';
+    default:
+      return '#9c27b0';
+  }
+};
