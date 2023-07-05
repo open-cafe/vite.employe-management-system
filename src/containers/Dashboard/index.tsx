@@ -283,7 +283,7 @@ const Dashboard = () => {
                       sx={DashboardStyles.dashboardCardTextStyle}
                     >
                       {employeeCountDatas?.totalEmployees -
-                        employeeCountDatas?.totalemployeesCheckin}
+                        employeeCountDatas?.totalemployeesCheckin || 0}
                     </Typography>
                     <Typography
                       variant="body1"
