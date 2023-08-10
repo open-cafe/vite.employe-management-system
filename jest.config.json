@@ -1,0 +1,35 @@
+{
+  "verbose": true,
+  "testEnvironment": "jsdom",
+  "collectCoverage": true,
+  "coverageProvider": "v8",
+  "testTimeout": 20000,
+  "collectCoverageFrom": [
+    "src/**/*.{ts,tsx}",
+    "!src/**/*.d.ts",
+    "!src/**/*.stories.tsx",
+    "!src/**/index.ts",
+    "!src/**/types.ts",
+    "!src/**/*styles.ts",
+    "!src/**/types.tsx",
+    "!src/**/constants.ts",
+    "!src/**/constants.tsx"
+  ],
+  "moduleNameMapper": {
+    "@/(.*)": "<rootDir>/src/$1"
+  },
+  "setupFilesAfterEnv": ["<rootDir>/jest.setup.ts"],
+
+  "transform": {
+    "^.+\\.tsx?$": "ts-jest"
+  },
+
+  "coverageThreshold": {
+    "global": {
+      "branches": 95,
+      "functions": 95,
+      "lines": 95,
+      "statements": -10
+    }
+  }
+}
